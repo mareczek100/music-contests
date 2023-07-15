@@ -1,0 +1,1 @@
+insert into music_competition_role (role) values ('ADMIN'), ('HEADMASTER'), ('TEACHER'), ('STUDENT');
