@@ -24,9 +24,8 @@ public class CompetitionEntity {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "instrument_id")
-    private InstrumentEntity instrument;
+    @Column(name = "instrument")
+    private String instrument;
 
     @Column(name = "online")
     private Boolean online;

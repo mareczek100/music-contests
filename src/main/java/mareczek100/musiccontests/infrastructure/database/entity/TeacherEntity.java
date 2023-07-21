@@ -36,9 +36,8 @@ public class TeacherEntity {
     @JoinColumn(name = "music_school_id")
     private MusicSchoolEntity musicSchool;
 
-    @ManyToOne
-    @JoinColumn(name = "instrument_id")
-    private InstrumentEntity instrument;
+    @Column(name = "instrument")
+    private String instrument;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

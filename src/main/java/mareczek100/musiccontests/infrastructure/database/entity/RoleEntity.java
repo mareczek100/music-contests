@@ -21,7 +21,7 @@ public class RoleEntity {
     private String roleId;
 
     @Column(name = "role")
-    private Role role;
+    private RoleName role;
 
     @OneToMany
     private Set<HeadmasterEntity> headmasters;
@@ -32,12 +32,12 @@ public class RoleEntity {
     @OneToMany
     private Set<StudentEntity> students;
 
-    enum Role {
+    public enum RoleName {
         ADMIN ("ADMIN"),
         HEADMASTER ("HEADMASTER"),
         TEACHER ("TEACHER"),
         STUDENT ("STUDENT");
-        Role(String role) {
+        RoleName(String role) {
         }
     }
 }

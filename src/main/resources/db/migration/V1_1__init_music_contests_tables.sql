@@ -36,37 +36,16 @@ CREATE TABLE headmaster (
     PRIMARY KEY (headmaster_id),
     UNIQUE (pesel)
 );
-CREATE TABLE instrument_category (
-    instrument_category_id VARCHAR(40) NOT NULL,
-    name                   VARCHAR(40) NOT NULL,
-    PRIMARY KEY (instrument_category_id),
-    UNIQUE (name)
-);
-CREATE TABLE instrument (
-    instrument_id           VARCHAR(40) NOT NULL,
-    name                    VARCHAR(20) NOT NULL,
-    category_id             VARCHAR(40) NOT NULL,
-    primary_school_degree   BOOLEAN NOT NULL,
-    secondary_school_degree BOOLEAN NOT NULL,
-    PRIMARY KEY (instrument_id),
-    UNIQUE (name),
-    CONSTRAINT fk_instrument_instrument_category
-        FOREIGN KEY (category_id)
-            REFERENCES instrument_category (instrument_category_id)
-);
 CREATE TABLE teacher (
     teacher_id          VARCHAR(40) NOT NULL,
     name                VARCHAR(30) NOT NULL,
     surname             VARCHAR(40) NOT NULL,
     pesel               VARCHAR(20) NOT NULL,
-    instrument_id       VARCHAR(40) NOT NULL,
+    instrument          VARCHAR(40) NOT NULL,
     music_school_id     VARCHAR(40) NOT NULL,
     role_id             VARCHAR(40) NOT NULL,
     PRIMARY KEY (teacher_id),
     UNIQUE (pesel),
-    CONSTRAINT fk_teacher_instrument
-        FOREIGN KEY (instrument_id)
-            REFERENCES instrument (instrument_id),
     CONSTRAINT fk_teacher_music_school
         FOREIGN KEY (music_school_id)
             REFERENCES music_school (music_school_id),
@@ -83,8 +62,8 @@ CREATE TABLE student (
     education_duration      SMALLINT    NOT NULL,
     music_school_degree     VARCHAR(10) NOT NULL,
     music_school_id         VARCHAR(40) NOT NULL,
-    main_instrument         VARCHAR(20) NOT NULL,
-    second_instrument       VARCHAR(20),
+    main_instrument         VARCHAR(40) NOT NULL,
+    second_instrument       VARCHAR(40),
     teacher_id              VARCHAR(40) NOT NULL,
     role_id                 VARCHAR(40) NOT NULL,
     PRIMARY KEY (student_id),
@@ -92,12 +71,6 @@ CREATE TABLE student (
     CONSTRAINT fk_student_music_school
         FOREIGN KEY (music_school_id)
             REFERENCES music_school (music_school_id),
-    CONSTRAINT fk_student_instrument_main
-        FOREIGN KEY (main_instrument)
-            REFERENCES instrument (instrument_id),
-    CONSTRAINT fk_student_instrument_second
-        FOREIGN KEY (second_instrument)
-            REFERENCES instrument (instrument_id),
     CONSTRAINT fk_student_teacher
         FOREIGN KEY (teacher_id)
             REFERENCES teacher (teacher_id),
@@ -117,7 +90,7 @@ CREATE TABLE competition_location (
 CREATE TABLE competition (
     competition_id           VARCHAR(40)              NOT NULL,
     name                     TEXT                     NOT NULL,
-    instrument_id            VARCHAR(40)              NOT NULL,
+    instrument               VARCHAR(40)              NOT NULL,
     online		             BOOLEAN                  NOT NULL,
     primary_degree           BOOLEAN                  NOT NULL,
     secondary_degree         BOOLEAN                  NOT NULL,
@@ -127,9 +100,6 @@ CREATE TABLE competition (
     organizer_id             VARCHAR(40)              NOT NULL,
     location_id              VARCHAR(40)              NOT NULL,
     PRIMARY KEY (competition_id),
-    CONSTRAINT fk_competition_instrument
-        FOREIGN KEY (instrument_id)
-            REFERENCES instrument (instrument_id),
     CONSTRAINT fk_competition_headmaster
         FOREIGN KEY (organizer_id)
             REFERENCES headmaster (headmaster_id),

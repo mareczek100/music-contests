@@ -1,0 +1,14 @@
+server:
+  servlet:
+    context-path: /music-contests
+
+api:
+  instrument-storage:
+    url: http://localhost:9999
+
+spring:
+  security:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: validate

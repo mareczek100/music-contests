@@ -45,13 +45,11 @@ public class StudentEntity {
     @JoinColumn(name = "music_school_id")
     private MusicSchoolEntity musicSchool;
 
-    @ManyToOne
-    @JoinColumn(name = "instrument_id")
-    private InstrumentEntity mainInstrument;
+    @Column(name = "instrument")
+    private String mainInstrument;
 
-    @ManyToOne
-    @JoinColumn(name = "instrument_id")
-    private InstrumentEntity secondInstrument;
+    @Column(name = "instrument")
+    private String secondInstrument;
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
@@ -67,7 +65,7 @@ public class StudentEntity {
     @OneToMany(mappedBy = "student")
     private Set<ApplicationFormEntity> applicationForms;
 
-    enum Degree {
+    public enum Degree {
         PRIMARY,
         SECONDARY
     }

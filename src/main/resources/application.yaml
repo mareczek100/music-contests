@@ -3,9 +3,9 @@ server:
   servlet:
     context-path: /music-contests
 
-#api:
-#  cepik:
-#    url: https://api.cepik.gov.pl/
+api:
+  instrument-storage:
+    url: http://localhost:8082/instrument-storage/
 
 spring:
   datasource:
