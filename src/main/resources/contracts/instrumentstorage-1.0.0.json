@@ -196,7 +196,7 @@
           "instrument-rest-controller"
         ],
         "summary": "List all instruments by category: \"strunowe\", \"dęte\" (with polish diacritical marks) or \"perkusyjne\".",
-        "operationId": "findInstrumentByCategory",
+        "operationId": "findInstrumentsByCategory",
         "parameters": [
           {
             "name": "instrumentCategory",

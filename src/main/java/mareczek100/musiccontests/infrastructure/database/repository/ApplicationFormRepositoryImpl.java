@@ -1,0 +1,35 @@
+package mareczek100.musiccontests.infrastructure.database.repository;
+
+import lombok.AllArgsConstructor;
+import mareczek100.musiccontests.business.dao.ApplicationFormRepositoryDAO;
+import mareczek100.musiccontests.domain.ApplicationForm;
+import mareczek100.musiccontests.infrastructure.database.entity.ApplicationFormEntity;
+import mareczek100.musiccontests.infrastructure.database.mapper.ApplicationFormEntityMapper;
+import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.ApplicationFormJpaRepository;
+
+import java.util.List;
+@AllArgsConstructor
+public class ApplicationFormRepositoryImpl implements ApplicationFormRepositoryDAO {
+
+    private final ApplicationFormJpaRepository applicationFormJpaRepository;
+    private final ApplicationFormEntityMapper applicationFormEntityMapper;
+
+    @Override
+    public ApplicationForm insertApplicationForm(ApplicationForm applicationForm)
+    {
+        ApplicationFormEntity applicationFormEntity
+                = applicationFormEntityMapper.mapFromDomainToEntity(applicationForm);
+        ApplicationFormEntity savedApplicationFormEntity
+                = applicationFormJpaRepository.saveAndFlush(applicationFormEntity);
+        return applicationFormEntityMapper.mapFromEntityToDomain(savedApplicationFormEntity);
+    }
+
+    @Override
+    public List<ApplicationForm> findAllApplicationForms()
+    {
+        return applicationFormJpaRepository.findAll().stream()
+                .map(applicationFormEntityMapper::mapFromEntityToDomain)
+                .toList();
+    }
+
+}

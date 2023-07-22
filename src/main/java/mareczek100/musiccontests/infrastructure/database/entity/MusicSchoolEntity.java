@@ -32,7 +32,7 @@ public class MusicSchoolEntity {
     @Column(name = "secondary_degree")
     private Boolean secondaryDegree;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 

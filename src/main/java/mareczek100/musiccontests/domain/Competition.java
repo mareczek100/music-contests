@@ -1,7 +1,6 @@
 package mareczek100.musiccontests.domain;
 
 import lombok.Builder;
-import mareczek100.musiccontests.domain.instrument_storage_api.Instrument;
 
 import java.time.OffsetDateTime;
 import java.util.Set;
@@ -9,7 +8,7 @@ import java.util.Set;
 @Builder
 public record Competition (String competitionId,
                            String name,
-                           Instrument instrument,
+                           String instrument,
                            Boolean online,
                            Boolean primaryDegree,
                            Boolean secondaryDegree,

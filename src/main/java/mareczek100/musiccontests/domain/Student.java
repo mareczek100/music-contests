@@ -1,7 +1,7 @@
 package mareczek100.musiccontests.domain;
 
 import lombok.Builder;
-import mareczek100.musiccontests.domain.instrument_storage_api.Instrument;
+import mareczek100.musiccontests.domain.instrument_storage_domain.Instrument;
 import mareczek100.musiccontests.infrastructure.database.entity.RoleEntity;
 import mareczek100.musiccontests.infrastructure.database.entity.StudentEntity;
 
