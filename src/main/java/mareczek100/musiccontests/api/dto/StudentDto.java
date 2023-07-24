@@ -1,9 +1,10 @@
 package mareczek100.musiccontests.api.dto;
 
 import lombok.Builder;
+import lombok.With;
 import mareczek100.musiccontests.infrastructure.database.entity.StudentEntity;
 
-
+@With
 @Builder
 public record StudentDto(String studentId,
                          String name,
@@ -14,7 +15,7 @@ public record StudentDto(String studentId,
                          Short educationDuration,
                          StudentEntity.Degree musicSchoolDegree,
                          MusicSchoolDto musicSchool,
-                         InstrumentDto mainInstrument,
-                         InstrumentDto secondInstrument,
+                         String mainInstrument,
+                         String secondInstrument,
                          TeacherDto teacher) {
 }

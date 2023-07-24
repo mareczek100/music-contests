@@ -7,8 +7,10 @@ import mareczek100.musiccontests.domain.CompetitionLocation;
 import mareczek100.musiccontests.infrastructure.database.entity.CompetitionLocationEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.CompetitionLocationEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.CompetitionLocationJpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+@Repository
 @AllArgsConstructor
 public class CompetitionLocationRepositoryImpl implements CompetitionLocationRepositoryDAO {
 

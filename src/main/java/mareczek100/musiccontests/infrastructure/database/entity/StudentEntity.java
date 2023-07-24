@@ -1,7 +1,9 @@
 package mareczek100.musiccontests.infrastructure.database.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
+import mareczek100.musiccontests.infrastructure.database.entity.security.RoleEntity;
 
 import java.util.Set;
 
@@ -11,9 +13,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "student")
-@EqualsAndHashCode(of = "pesel")
+@EqualsAndHashCode(of = "pesel", callSuper = false)
 @ToString(exclude = {"competitionResults", "applicationForms"})
-public class StudentEntity {
+public non-sealed class StudentEntity extends MusicContestsPortalUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,6 +28,7 @@ public class StudentEntity {
     @Column(name = "surname")
     private String surname;
 
+    @Email
     @Column(name = "email", unique = true)
     private String email;
 
@@ -38,6 +41,7 @@ public class StudentEntity {
     @Column(name = "education_duration")
     private Short educationDuration;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "music_school_degree")
     private Degree musicSchoolDegree;
 
@@ -45,10 +49,10 @@ public class StudentEntity {
     @JoinColumn(name = "music_school_id")
     private MusicSchoolEntity musicSchool;
 
-    @Column(name = "instrument")
+    @Column(name = "main_instrument")
     private String mainInstrument;
 
-    @Column(name = "instrument")
+    @Column(name = "second_instrument")
     private String secondInstrument;
 
     @ManyToOne

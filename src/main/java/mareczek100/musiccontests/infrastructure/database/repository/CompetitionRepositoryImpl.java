@@ -6,8 +6,10 @@ import mareczek100.musiccontests.domain.Competition;
 import mareczek100.musiccontests.infrastructure.database.entity.CompetitionEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.CompetitionEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.CompetitionJpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+@Repository
 @AllArgsConstructor
 public class CompetitionRepositoryImpl implements CompetitionRepositoryDAO {
 
@@ -36,21 +38,21 @@ public class CompetitionRepositoryImpl implements CompetitionRepositoryDAO {
     }
 
     @Override
-    public List<Competition> findCompetitionByOnline(String online) {
+    public List<Competition> findCompetitionByOnline(Boolean online) {
         return competitionJpaRepository.findCompetitionByOnline(online).stream()
                 .map(competitionEntityMapper::mapFromEntityToDomain)
                 .toList();
     }
 
     @Override
-    public List<Competition> findCompetitionByPrimaryDegree(String primaryDegree) {
+    public List<Competition> findCompetitionByPrimaryDegree(Boolean primaryDegree) {
         return competitionJpaRepository.findCompetitionByPrimaryDegree(primaryDegree).stream()
                 .map(competitionEntityMapper::mapFromEntityToDomain)
                 .toList();
     }
 
     @Override
-    public List<Competition> findCompetitionBySecondaryDegree(String secondaryDegree) {
+    public List<Competition> findCompetitionBySecondaryDegree(Boolean secondaryDegree) {
         return competitionJpaRepository.findCompetitionBySecondaryDegree(secondaryDegree).stream()
                 .map(competitionEntityMapper::mapFromEntityToDomain)
                 .toList();

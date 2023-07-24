@@ -7,9 +7,11 @@ import mareczek100.musiccontests.domain.Teacher;
 import mareczek100.musiccontests.infrastructure.database.entity.TeacherEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.TeacherEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.TeacherJpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+@Repository
 @AllArgsConstructor
 public class TeacherRepositoryImpl implements TeacherRepositoryDAO {
 

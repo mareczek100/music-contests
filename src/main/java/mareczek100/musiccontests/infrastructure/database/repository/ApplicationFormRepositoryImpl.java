@@ -6,8 +6,10 @@ import mareczek100.musiccontests.domain.ApplicationForm;
 import mareczek100.musiccontests.infrastructure.database.entity.ApplicationFormEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.ApplicationFormEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.ApplicationFormJpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+@Repository
 @AllArgsConstructor
 public class ApplicationFormRepositoryImpl implements ApplicationFormRepositoryDAO {
 

@@ -7,7 +7,7 @@ import java.time.OffsetDateTime;
 @Builder
 public record CompetitionDto(String competitionId,
                              String name,
-                             InstrumentDto instrument,
+                             String instrument,
                              Boolean online,
                              Boolean primaryDegree,
                              Boolean secondaryDegree,

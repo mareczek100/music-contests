@@ -17,10 +17,12 @@ public class CompetitionResultEntity {
     @Column(name = "competition_result_id")
     private String competitionResultId;
 
-    @Column(name = "competition_id")
+    @ManyToOne
+    @JoinColumn(name = "competition_id")
     private CompetitionEntity competition;
 
-    @Column(name = "student_id")
+    @ManyToOne
+    @JoinColumn(name = "student_id")
     private StudentEntity student;
 
     @Column(name = "competition_place")

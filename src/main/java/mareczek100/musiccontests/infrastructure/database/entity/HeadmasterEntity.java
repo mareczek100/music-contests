@@ -1,7 +1,9 @@
 package mareczek100.musiccontests.infrastructure.database.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
+import mareczek100.musiccontests.infrastructure.database.entity.security.RoleEntity;
 
 import java.util.Set;
 
@@ -11,9 +13,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "headmaster")
-@EqualsAndHashCode(of = "pesel")
+@EqualsAndHashCode(of = "pesel", callSuper = false)
 @ToString(exclude = "competitions")
-public class HeadmasterEntity {
+public non-sealed class HeadmasterEntity extends MusicContestsPortalUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,6 +28,7 @@ public class HeadmasterEntity {
     @Column(name = "surname")
     private String surname;
 
+    @Email
     @Column(name = "email", unique = true)
     private String email;
 
@@ -42,4 +45,5 @@ public class HeadmasterEntity {
 
     @OneToMany(mappedBy = "headmaster")
     private Set<CompetitionEntity> competitions;
+
 }

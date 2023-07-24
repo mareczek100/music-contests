@@ -8,6 +8,9 @@ public class MusicContestsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MusicContestsApplication.class, args);
+
 	}
+
+
 
 }

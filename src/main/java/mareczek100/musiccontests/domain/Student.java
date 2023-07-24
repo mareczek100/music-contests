@@ -1,8 +1,6 @@
 package mareczek100.musiccontests.domain;
 
 import lombok.Builder;
-import mareczek100.musiccontests.domain.instrument_storage_domain.Instrument;
-import mareczek100.musiccontests.infrastructure.database.entity.RoleEntity;
 import mareczek100.musiccontests.infrastructure.database.entity.StudentEntity;
 
 import java.util.Set;
@@ -18,10 +16,9 @@ public record Student(String studentId,
                       Short educationDuration,
                       StudentEntity.Degree musicSchoolDegree,
                       MusicSchool musicSchool,
-                      Instrument mainInstrument,
-                      Instrument secondInstrument,
+                      String mainInstrument,
+                      String secondInstrument,
                       Teacher teacher,
-                      RoleEntity.RoleName role,
                       Set<CompetitionResult> competitionResults,
                       Set<ApplicationForm> applicationForms) {
 }

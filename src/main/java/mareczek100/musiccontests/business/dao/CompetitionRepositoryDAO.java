@@ -1,11 +1,10 @@
 package mareczek100.musiccontests.business.dao;
 
 import mareczek100.musiccontests.domain.Competition;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface CompetitionRepositoryDAO {
 
     Competition insertCompetition(Competition competition);
@@ -14,11 +13,11 @@ public interface CompetitionRepositoryDAO {
 
     List<Competition> findCompetitionByInstrument(String instrument);
 
-    List<Competition> findCompetitionByOnline(String online);
+    List<Competition> findCompetitionByOnline(Boolean online);
 
-    List<Competition> findCompetitionByPrimaryDegree(String primaryDegree);
+    List<Competition> findCompetitionByPrimaryDegree(Boolean primaryDegree);
 
-    List<Competition> findCompetitionBySecondaryDegree(String secondaryDegree);
+    List<Competition> findCompetitionBySecondaryDegree(Boolean secondaryDegree);
 
     List<Competition> findCompetitionByFilters(
             String instrument, Boolean online, Boolean primaryDegree, Boolean secondaryDegree);

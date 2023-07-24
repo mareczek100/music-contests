@@ -6,9 +6,10 @@ import mareczek100.musiccontests.domain.CompetitionResult;
 import mareczek100.musiccontests.infrastructure.database.entity.CompetitionResultEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.CompetitionResultEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.CompetitionResultJpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 @AllArgsConstructor
 public class CompetitionResultRepositoryImpl implements CompetitionResultRepositoryDAO {
 

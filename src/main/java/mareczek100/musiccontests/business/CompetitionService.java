@@ -51,19 +51,19 @@ public class CompetitionService {
     }
 
     @Transactional
-    public List<Competition> findCompetitionByOnline(String online)
+    public List<Competition> findCompetitionByOnline(Boolean online)
     {
         return competitionRepositoryDAO.findCompetitionByOnline(online);
     }
 
     @Transactional
-    public List<Competition> findCompetitionByPrimaryDegree(String primaryDegree)
+    public List<Competition> findCompetitionByPrimaryDegree(Boolean primaryDegree)
     {
         return competitionRepositoryDAO.findCompetitionByPrimaryDegree(primaryDegree);
     }
 
     @Transactional
-    public List<Competition> findCompetitionBySecondaryDegree(String secondaryDegree)
+    public List<Competition> findCompetitionBySecondaryDegree(Boolean secondaryDegree)
     {
         return competitionRepositoryDAO.findCompetitionBySecondaryDegree(secondaryDegree);
     }

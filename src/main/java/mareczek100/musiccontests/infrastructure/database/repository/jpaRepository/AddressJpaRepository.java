@@ -10,9 +10,9 @@ import java.util.Optional;
 public interface AddressJpaRepository extends JpaRepository<AddressEntity, String> {
 
     @Query("""
-    SELECT ms.address FROM MusicSchoolEntity ms
-    JOIN FETCH ms.headmaster head
-    WHERE head.email = :email
+    SELECT hd FROM HeadmasterEntity hd
+    JOIN FETCH hd.musicSchool ms
+    WHERE hd.email = :email
     """)
     Optional<AddressEntity> findAddressByHeadmasterEmail(@Param("email") String email);
 }

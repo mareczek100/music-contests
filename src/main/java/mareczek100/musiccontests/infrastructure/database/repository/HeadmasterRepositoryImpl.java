@@ -7,9 +7,11 @@ import mareczek100.musiccontests.domain.Headmaster;
 import mareczek100.musiccontests.infrastructure.database.entity.HeadmasterEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.HeadmasterEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.HeadmasterJpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+@Repository
 @AllArgsConstructor
 public class HeadmasterRepositoryImpl implements HeadmasterRepositoryDAO {
 

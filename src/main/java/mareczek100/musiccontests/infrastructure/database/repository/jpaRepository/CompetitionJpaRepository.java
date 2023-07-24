@@ -11,11 +11,11 @@ public interface CompetitionJpaRepository extends JpaRepository<CompetitionEntit
 
     List<CompetitionEntity> findCompetitionByInstrument(String instrument);
 
-    List<CompetitionEntity> findCompetitionByOnline(String online);
+    List<CompetitionEntity> findCompetitionByOnline(Boolean online);
 
-    List<CompetitionEntity> findCompetitionByPrimaryDegree(String primaryDegree);
+    List<CompetitionEntity> findCompetitionByPrimaryDegree(Boolean primaryDegree);
 
-    List<CompetitionEntity> findCompetitionBySecondaryDegree(String secondaryDegree);
+    List<CompetitionEntity> findCompetitionBySecondaryDegree(Boolean secondaryDegree);
     @Query("""
     SELECT com FROM CompetitionEntity com
     WHERE com.instrument = :instrument
