@@ -4,6 +4,11 @@ import lombok.Builder;
 
 @Builder
 public record CompetitionLocationDto(String competitionLocationId,
-                                     String name,
-                                     AddressDto address) {
+                                     String competitionLocationName,
+                                     String addressCountry,
+                                     String addressCity,
+                                     String addressPostalCode,
+                                     String addressStreet,
+                                     String addressBuildingNumber,
+                                     String addressAdditionalInfo) {
 }

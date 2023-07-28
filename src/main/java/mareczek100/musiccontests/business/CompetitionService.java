@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.business.dao.CompetitionRepositoryDAO;
 import mareczek100.musiccontests.business.instrument_storage_service.dao.InstrumentDAO;
 import mareczek100.musiccontests.domain.Competition;
+import mareczek100.musiccontests.domain.CompetitionLocation;
 import mareczek100.musiccontests.domain.instrument_storage_domain.Instrument;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +18,17 @@ import java.util.stream.Collectors;
 public class CompetitionService {
 
     private final CompetitionRepositoryDAO competitionRepositoryDAO;
+    private final CompetitionLocationService competitionLocationService;
     private final InstrumentDAO instrumentDAO;
 
     @Transactional
     public Competition insertCompetition(Competition competition)
     {
-        return competitionRepositoryDAO.insertCompetition(competition);
+        CompetitionLocation competitionLocation = competition.competitionLocation();
+        CompetitionLocation insertedCompetitionLocations
+                = competitionLocationService.insertCompetitionLocations(competitionLocation);
+        return competitionRepositoryDAO.insertCompetition(
+                competition.withCompetitionLocation(insertedCompetitionLocations));
     }
 
     @Transactional

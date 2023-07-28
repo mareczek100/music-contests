@@ -10,6 +10,6 @@ public record TeacherDto(String teacherId,
                          String surname,
                          String email,
                          String pesel,
-                         MusicSchoolDto musicSchool,
+                         MusicSchoolWithAddressDto musicSchool,
                          String instrument) {
 }

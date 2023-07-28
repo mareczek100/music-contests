@@ -1,11 +1,12 @@
 package mareczek100.musiccontests.domain;
 
 import lombok.Builder;
+import lombok.With;
 import mareczek100.musiccontests.infrastructure.database.entity.StudentEntity;
 
 import java.util.Set;
 
-
+@With
 @Builder
 public record Student(String studentId,
                       String name,

@@ -14,7 +14,7 @@ public record StudentDto(String studentId,
                          Short classYear,
                          Short educationDuration,
                          StudentEntity.Degree musicSchoolDegree,
-                         MusicSchoolDto musicSchool,
+                         MusicSchoolWithAddressDto musicSchool,
                          String mainInstrument,
                          String secondInstrument,
                          TeacherDto teacher) {

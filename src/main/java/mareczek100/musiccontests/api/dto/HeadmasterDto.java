@@ -10,5 +10,5 @@ public record HeadmasterDto(String headmasterId,
                             String surname,
                             String email,
                             String pesel,
-                            MusicSchoolDto musicSchool) {
+                            MusicSchoolWithAddressDto musicSchool) {
 }

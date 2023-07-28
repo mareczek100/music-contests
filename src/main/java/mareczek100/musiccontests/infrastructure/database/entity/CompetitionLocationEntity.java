@@ -11,7 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "competition_location")
-@EqualsAndHashCode(of = "competitionLocationId")
+@EqualsAndHashCode(exclude = {"competitionLocationId", "competitions"})
 @ToString(exclude = "competitions")
 public class CompetitionLocationEntity {
 

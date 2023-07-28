@@ -36,6 +36,7 @@ public class HeadmasterRepositoryImpl implements HeadmasterRepositoryDAO {
 
     @Override
     public Optional<Headmaster> findHeadmasterByEmail(String email) {
-        return headmasterJpaRepository.findHeadmasterByEmail(email);
+        Optional<HeadmasterEntity> headmasterEntity = headmasterJpaRepository.findHeadmasterByEmail(email);
+        return headmasterEntity.map(headmasterEntityMapper::mapFromEntityToDomain);
     }
 }

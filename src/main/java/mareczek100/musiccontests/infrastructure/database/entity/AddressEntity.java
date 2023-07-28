@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "address")
-@EqualsAndHashCode(of = "addressId")
+@EqualsAndHashCode(exclude = {"addressId", "competitionLocation", "musicSchool"})
 @ToString(exclude = {"competitionLocation", "musicSchool"})
 public class AddressEntity {
 

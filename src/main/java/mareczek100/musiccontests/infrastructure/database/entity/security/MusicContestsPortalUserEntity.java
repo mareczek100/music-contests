@@ -33,7 +33,7 @@ public class MusicContestsPortalUserEntity {
     Boolean active;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Fetch(FetchMode.JOIN)
+    @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "role_id")
     RoleEntity role;
 }

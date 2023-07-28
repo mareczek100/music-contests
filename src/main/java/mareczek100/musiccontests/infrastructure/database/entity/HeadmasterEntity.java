@@ -3,7 +3,6 @@ package mareczek100.musiccontests.infrastructure.database.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
-import mareczek100.musiccontests.infrastructure.database.entity.security.RoleEntity;
 
 import java.util.Set;
 
@@ -38,10 +37,6 @@ public non-sealed class HeadmasterEntity extends MusicContestsPortalUser {
     @OneToOne
     @JoinColumn(name = "music_school_id")
     private MusicSchoolEntity musicSchool;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private RoleEntity role;
 
     @OneToMany(mappedBy = "headmaster")
     private Set<CompetitionEntity> competitions;

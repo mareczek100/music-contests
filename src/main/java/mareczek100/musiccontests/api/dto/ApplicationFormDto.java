@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record ApplicationFormDto(String applicationFormId,
-                                 CompetitionDto competition,
+                                 CompetitionWithLocationDto competition,
                                  TeacherDto teacher,
                                  StudentDto student,
                                  Short classLevel,
