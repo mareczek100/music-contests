@@ -14,10 +14,13 @@ public record Competition (String competitionId,
                            Boolean primaryDegree,
                            Boolean secondaryDegree,
                            OffsetDateTime beginning,
+                           OffsetDateTime end,
                            OffsetDateTime resultAnnouncement,
+                           OffsetDateTime applicationDeadline,
                            String requirementsDescription,
                            Headmaster headmaster,
                            CompetitionLocation competitionLocation,
+                           Boolean finished,
                            Set<ApplicationForm> applicationForms,
                            Set<CompetitionResult> competitionResults){
 }

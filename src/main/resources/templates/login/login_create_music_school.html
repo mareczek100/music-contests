@@ -10,16 +10,15 @@
             crossorigin="anonymous"></script>
 </head>
 <body class="p-3 mb-2 bg-dark-subtle text-emphasis-dark">
-<h1 class="text-center">Stwórz nowe konto dyrektora!</h1><br>
-<h4 class="text-center">To już ostatni krok rejestracji nowego konta, wypełnij pola poniżej.</h4><br>
-<h5 class="text-center text-success">Nauczyciele oraz uczniowie Twojej szkoły będą mogli od teraz rejestrować się w serwisie</h5>
-<h5 class="text-center text-success">Ty będziesz mógł organizować i dodawać na portalu nowe wydarzenia muzyczne.</h5>
+<h1 class="text-center">Stwórz swoją szkołę muzyczną!</h1><br>
 
-<form class="row g-2 was-validated" action="#" th:object="${musicSchoolDto}" th:action="@{/authentication/account/headmaster}" method="POST">
-    <input type="hidden" th:name="name" th:value="${headmasterDto.name}" class="form-control" required>
-    <input type="hidden" th:name="surname" th:value="${headmasterDto.surname}" class="form-control" required>
-    <input type="hidden" th:name="email" th:value="${headmasterDto.email}" class="form-control" required>
-    <input type="hidden" th:name="pesel" th:value="${headmasterDto.pesel}" class="form-control" required>
+<form class="row g-2 was-validated" action="#" th:object="${musicSchoolDto}"
+      th:action="@{/authentication/account/user}" method="POST">
+    <input type="hidden" th:name="name" th:value="${portalUser.name}" class="form-control" required>
+    <input type="hidden" th:name="surname" th:value="${portalUser.surname}" class="form-control" required>
+    <input type="hidden" th:name="email" th:value="${portalUser.email}" class="form-control" required>
+    <input type="hidden" th:name="pesel" th:value="${portalUser.pesel}" class="form-control" required>
+    <input type="hidden" th:name="role" th:value="${portalUser.role}" class="form-control" required>
     <h4>Szkoła muzyczna:</h4>
     <div class="row">
     <div class="col-md-3">

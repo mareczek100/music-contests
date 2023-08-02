@@ -9,6 +9,7 @@ import mareczek100.musiccontests.infrastructure.database.repository.jpaRepositor
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -65,13 +66,21 @@ public class CompetitionRepositoryImpl implements CompetitionRepositoryDAO {
                 .toList();
     }
 
-    @Override
-    public List<Competition> findCompetitionByFilters(String instrument, Boolean online,
-                                                      Boolean primaryDegree, Boolean secondaryDegree)
+    public List<Competition> findCompetitionsByFilters(
+            String instrument, Boolean online, Boolean primaryDegree, Boolean secondaryDegree, String locationCity)
     {
-        return competitionJpaRepository.findCompetitionByFilters(
+        return competitionJpaRepository.findCompetitionsByFilters(
                         instrument, online, primaryDegree, secondaryDegree).stream()
+                .filter(competitionEntity -> locationCity.equalsIgnoreCase(
+                        competitionEntity.getCompetitionLocation().getAddress().getCity()))
                 .map(competitionEntityMapper::mapFromEntityToDomain)
                 .toList();
+    }
+
+    @Override
+    public Optional<Competition> findCompetitionById(String competitionId)
+    {
+        return competitionJpaRepository.findById(competitionId)
+                .map(competitionEntityMapper::mapFromEntityToDomain);
     }
 }

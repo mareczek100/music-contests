@@ -41,4 +41,11 @@ public class TeacherRepositoryImpl implements TeacherRepositoryDAO {
         return teacherJpaRepository.findTeacherByPesel(pesel)
                 .map(teacherEntityMapper::mapFromEntityToDomain);
     }
+
+    @Override
+    public Optional<Teacher> findTeacherByEmail(String email)
+    {
+        return teacherJpaRepository.findTeacherByEmail(email)
+                .map(teacherEntityMapper::mapFromEntityToDomain);
+    }
 }

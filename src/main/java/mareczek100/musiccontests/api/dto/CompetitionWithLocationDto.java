@@ -15,7 +15,11 @@ public record CompetitionWithLocationDto(String competitionId,
                                          @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
                                          LocalDateTime competitionBeginning,
                                          @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+                                         LocalDateTime competitionEnd,
+                                         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
                                          LocalDateTime competitionResultAnnouncement,
+                                         @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+                                         LocalDateTime competitionApplicationDeadline,
                                          String competitionRequirementsDescription,
                                          HeadmasterDto competitionOrganizer,
                                          String competitionLocationName,
@@ -24,6 +28,7 @@ public record CompetitionWithLocationDto(String competitionId,
                                          String addressPostalCode,
                                          String addressStreet,
                                          String addressBuildingNumber,
-                                         String addressAdditionalInfo)
+                                         String addressAdditionalInfo,
+                                         Boolean competitionFinished)
 {
 }

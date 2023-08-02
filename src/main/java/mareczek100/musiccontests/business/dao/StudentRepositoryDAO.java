@@ -14,4 +14,6 @@ public interface StudentRepositoryDAO {
     List<Student> findAllStudents();
 
     Optional<Student> findStudentByPesel(String pesel);
+
+    Optional<Student> findStudentById(String studentId);
 }

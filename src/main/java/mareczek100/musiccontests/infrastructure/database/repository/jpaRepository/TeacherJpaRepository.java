@@ -10,4 +10,6 @@ public interface TeacherJpaRepository extends JpaRepository<TeacherEntity, Strin
 
 
     Optional<TeacherEntity> findTeacherByPesel(String pesel);
+
+    Optional<TeacherEntity> findTeacherByEmail(String email);
 }

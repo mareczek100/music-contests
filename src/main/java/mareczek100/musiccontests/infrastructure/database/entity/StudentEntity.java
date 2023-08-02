@@ -3,6 +3,9 @@ package mareczek100.musiccontests.infrastructure.database.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import mareczek100.musiccontests.domain.enums.ClassLevel;
+import mareczek100.musiccontests.domain.enums.Degree;
+import mareczek100.musiccontests.domain.enums.EducationProgram;
 
 import java.util.Set;
 
@@ -12,9 +15,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "student")
-@EqualsAndHashCode(of = "pesel", callSuper = false)
+@EqualsAndHashCode(of = "pesel")
 @ToString(exclude = {"competitionResults", "applicationForms"})
-public non-sealed class StudentEntity extends MusicContestsPortalUser {
+public class StudentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -34,11 +37,13 @@ public non-sealed class StudentEntity extends MusicContestsPortalUser {
     @Column(name = "pesel", unique = true)
     private String pesel;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "class")
-    private Short classYear;
+    private ClassLevel classYear;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "education_duration")
-    private Short educationDuration;
+    private EducationProgram educationDuration;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "music_school_degree")
@@ -64,8 +69,4 @@ public non-sealed class StudentEntity extends MusicContestsPortalUser {
     @OneToMany(mappedBy = "student")
     private Set<ApplicationFormEntity> applicationForms;
 
-    public enum Degree {
-        PRIMARY,
-        SECONDARY
-    }
 }

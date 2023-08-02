@@ -16,11 +16,25 @@ public class CompetitionResultService {
     private final CompetitionResultRepositoryDAO competitionResultRepositoryDAO;
 
     @Transactional
-    public CompetitionResult insertCompetitionResults(CompetitionResult competitionResult) {
+    public CompetitionResult insertCompetitionResult(CompetitionResult competitionResult)
+    {
         return competitionResultRepositoryDAO.insertCompetitionResult(competitionResult);
     }
     @Transactional
-    public List<CompetitionResult> findAllCompetitionResult() {
-        return competitionResultRepositoryDAO.findAllCompetitionResults();
+    public List<CompetitionResult> insertAllCompetitionResults(List<CompetitionResult> competitionResults)
+    {
+        if (competitionResults.isEmpty()){
+            throw new RuntimeException("There is no competition results!");
+        }
+        return competitionResultRepositoryDAO.insertAllCompetitionResults(competitionResults);
+    }
+    @Transactional
+    public List<CompetitionResult> findAllCompetitionResult()
+    {
+        List<CompetitionResult> competitionResults = competitionResultRepositoryDAO.findAllCompetitionResults();
+        if (competitionResults.isEmpty()){
+            throw new RuntimeException("There is no competition results!");
+        }
+        return competitionResults;
     }
 }

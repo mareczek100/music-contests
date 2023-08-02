@@ -21,34 +21,33 @@ public interface HeadmasterEntityMapper {
                 .surname(headmasterEntity.getSurname())
                 .email(headmasterEntity.getEmail())
                 .pesel(headmasterEntity.getPesel())
-                .musicSchool(getSchool(headmasterEntity.getMusicSchool()))
+                .musicSchool(getMusicSchool(headmasterEntity.getMusicSchool()))
                 .build();
     }
 
-    private MusicSchool getSchool(MusicSchoolEntity musicSchool){
+    private MusicSchool getMusicSchool(MusicSchoolEntity musicSchoolEntity){
         return MusicSchool.builder()
-                .musicSchoolId(musicSchool.getMusicSchoolId())
-                .name(musicSchool.getName())
-                .patron(musicSchool.getPatron())
-                .primaryDegree(musicSchool.getPrimaryDegree())
-                .secondaryDegree(musicSchool.getSecondaryDegree())
-                .address(getAddress(musicSchool.getAddress()))
+                .musicSchoolId(musicSchoolEntity.getMusicSchoolId())
+                .name(musicSchoolEntity.getName())
+                .patron(musicSchoolEntity.getPatron())
+                .primaryDegree(musicSchoolEntity.getPrimaryDegree())
+                .secondaryDegree(musicSchoolEntity.getSecondaryDegree())
+                .address(getAddress(musicSchoolEntity.getAddress()))
                 .build();
     }
 
-    private Address getAddress(AddressEntity address){
+    private Address getAddress(AddressEntity addressEntity){
         return Address.builder()
-                .addressId(address.getAddressId())
-                .country(address.getCountry())
-                .city(address.getCity())
-                .postalCode(address.getPostalCode())
-                .street(address.getStreet())
-                .buildingNumber(address.getBuildingNumber())
-                .additionalInfo(address.getAdditionalInfo())
+                .addressId(addressEntity.getAddressId())
+                .country(addressEntity.getCountry())
+                .city(addressEntity.getCity())
+                .postalCode(addressEntity.getPostalCode())
+                .street(addressEntity.getStreet())
+                .buildingNumber(addressEntity.getBuildingNumber())
+                .additionalInfo(addressEntity.getAdditionalInfo())
                 .build();
     }
 
     @Mapping(target = "competitions", ignore = true)
-    @Mapping(target = "musicSchool.address", ignore = true)
     HeadmasterEntity mapFromDomainToEntity(Headmaster headmaster);
 }

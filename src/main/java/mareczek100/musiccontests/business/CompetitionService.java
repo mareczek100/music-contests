@@ -27,14 +27,28 @@ public class CompetitionService {
         CompetitionLocation competitionLocation = competition.competitionLocation();
         CompetitionLocation insertedCompetitionLocations
                 = competitionLocationService.insertCompetitionLocations(competitionLocation);
-        return competitionRepositoryDAO.insertCompetition(
-                competition.withCompetitionLocation(insertedCompetitionLocations));
+        return competitionRepositoryDAO.insertCompetition(competition
+                .withCompetitionLocation(insertedCompetitionLocations)
+                .withFinished(false));
+    }
+    @Transactional
+    public Competition updateCompetitionAfterResults(Competition competition)
+    {
+        return competitionRepositoryDAO.insertCompetition(competition.withFinished(true));
     }
 
     @Transactional
     public List<Competition> findAllCompetitions()
     {
         return competitionRepositoryDAO.findAllCompetitions();
+    }
+    @Transactional
+    public Competition findCompetitionById(String competitionId)
+    {
+        return competitionRepositoryDAO.findCompetitionById(competitionId).orElseThrow(
+                () -> new RuntimeException("Competition with id [%s] doesn't exist"
+                        .formatted(competitionId))
+        );
     }
 
     @Transactional
@@ -75,19 +89,15 @@ public class CompetitionService {
     }
 
     @Transactional
-    public List<Competition> findCompetitionByFilters(String instrument, String instrumentCategory,
-                                                      Boolean online, Boolean primaryDegree, Boolean secondaryDegree)
+    public List<Competition> findCompetitionsByFilters(
+            String instrument, Boolean online, Boolean primaryDegree, Boolean secondaryDegree, String locationCity)
     {
-
-        Set<String> instrumentNamesSet = instrumentDAO.findInstrumentsByCategoryName(instrumentCategory).stream()
-                .map(Instrument::name)
-                .collect(Collectors.toSet());
-        List<Competition> competitionByFilters
-                = competitionRepositoryDAO.findCompetitionByFilters(instrument, online, primaryDegree, secondaryDegree);
-
-        return competitionByFilters.stream()
-                .filter(competition -> instrumentNamesSet.contains(competition.instrument()))
-                .toList();
+        List<Competition> competitionsByFilters = competitionRepositoryDAO.findCompetitionsByFilters(
+                instrument, online, primaryDegree, secondaryDegree, locationCity);
+        if (competitionsByFilters.isEmpty()){
+            throw new RuntimeException("There is no Competitions with these filter at that moment, sorry!");
+        }
+        return competitionsByFilters;
     }
 
 }

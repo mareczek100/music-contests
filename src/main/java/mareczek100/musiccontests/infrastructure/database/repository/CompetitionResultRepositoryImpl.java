@@ -33,4 +33,15 @@ public class CompetitionResultRepositoryImpl implements CompetitionResultReposit
                 .map(competitionResultEntityMapper::mapFromEntityToDomain)
                 .toList();
     }
+
+    @Override
+    public List<CompetitionResult> insertAllCompetitionResults(List<CompetitionResult> competitionResults)
+    {
+        List<CompetitionResultEntity> competitionResultEntities = competitionResults.stream()
+                .map(competitionResultEntityMapper::mapFromDomainToEntity)
+                .toList();
+        return competitionResultJpaRepository.saveAllAndFlush(competitionResultEntities).stream()
+                .map(competitionResultEntityMapper::mapFromEntityToDomain)
+                .toList();
+    }
 }

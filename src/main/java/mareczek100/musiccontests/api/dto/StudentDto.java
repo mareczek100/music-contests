@@ -2,7 +2,9 @@ package mareczek100.musiccontests.api.dto;
 
 import lombok.Builder;
 import lombok.With;
-import mareczek100.musiccontests.infrastructure.database.entity.StudentEntity;
+import mareczek100.musiccontests.domain.enums.ClassLevel;
+import mareczek100.musiccontests.domain.enums.Degree;
+import mareczek100.musiccontests.domain.enums.EducationProgram;
 
 @With
 @Builder
@@ -11,9 +13,9 @@ public record StudentDto(String studentId,
                          String surname,
                          String email,
                          String pesel,
-                         Short classYear,
-                         Short educationDuration,
-                         StudentEntity.Degree musicSchoolDegree,
+                         ClassLevel classYear,
+                         EducationProgram educationDuration,
+                         Degree musicSchoolDegree,
                          MusicSchoolWithAddressDto musicSchool,
                          String mainInstrument,
                          String secondInstrument,

@@ -22,20 +22,41 @@ public class HeadmasterService {
 
     @Transactional
     public Headmaster insertHeadmaster(Headmaster headmaster) {
+        MusicSchool musicSchool = headmaster.musicSchool();
+        String musicSchoolId = musicSchool.musicSchoolId();
+        boolean schoolHeadmasterAnyMatch = findAllHeadmaster().stream()
+                .map(Headmaster::musicSchool)
+                .map(MusicSchool::musicSchoolId)
+                .anyMatch(musicSchoolId::equals);
+        if (schoolHeadmasterAnyMatch) {
+            throw new RuntimeException("[%s] has already headmaster!"
+                    .formatted(musicSchool.name()));
+        }
+
         RoleEntity.RoleName headmasterRole = RoleEntity.RoleName.HEADMASTER;
         securityService.insertRoleWhileCreateNewUser(headmaster.email(), headmaster.pesel(), headmasterRole);
-        MusicSchool musicSchool = headmaster.musicSchool();
+
+        if (!musicSchool.musicSchoolId().isEmpty()) {
+            return headmasterRepositoryDAO.insertHeadmaster(headmaster.withMusicSchool(musicSchool));
+        }
         MusicSchool insertedMusicSchool = musicSchoolService.insertMusicSchool(musicSchool);
         return headmasterRepositoryDAO.insertHeadmaster(headmaster.withMusicSchool(insertedMusicSchool));
     }
+
     @Transactional
     public List<Headmaster> findAllHeadmaster() {
         return headmasterRepositoryDAO.findAllHeadmasters();
     }
+
     @Transactional
     public Headmaster findHeadmasterByEmail(String email) {
         return headmasterRepositoryDAO.findHeadmasterByEmail(email).orElseThrow(
                 () -> new RuntimeException("Headmaster with email [%s] doesn't exist!".formatted(email))
         );
+    }
+
+    @Transactional
+    public Headmaster findHeadmasterByPesel(String pesel) {
+        return headmasterRepositoryDAO.findHeadmasterByPesel(pesel).orElse(null);
     }
 }

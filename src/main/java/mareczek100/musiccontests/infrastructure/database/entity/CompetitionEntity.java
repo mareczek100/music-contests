@@ -39,8 +39,14 @@ public class CompetitionEntity {
     @Column(name = "beginning_date_time")
     private OffsetDateTime beginning;
 
+    @Column(name = "end_date_time")
+    private OffsetDateTime end;
+
     @Column(name = "result_announcement")
     private OffsetDateTime resultAnnouncement;
+
+    @Column(name = "application_deadline")
+    private OffsetDateTime applicationDeadline;
 
     @Column(name = "requirements_description")
     private String requirementsDescription;
@@ -52,6 +58,9 @@ public class CompetitionEntity {
     @ManyToOne
     @JoinColumn(name = "location_id")
     private CompetitionLocationEntity competitionLocation;
+
+    @Column(name = "finished")
+    private Boolean finished;
 
     @OneToMany(mappedBy = "competition")
     private Set<ApplicationFormEntity> applicationForms;

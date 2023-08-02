@@ -23,8 +23,8 @@ public interface CompetitionJpaRepository extends JpaRepository<CompetitionEntit
     AND com.primaryDegree = :primaryDegree
     AND com.secondaryDegree = :secondaryDegree
     """)
-    List<CompetitionEntity> findCompetitionByFilters(@Param("instrument") String instrument,
-                                                     @Param("online") Boolean online,
-                                                     @Param("primaryDegree") Boolean primaryDegree,
-                                                     @Param("secondaryDegree") Boolean secondaryDegree);
+    List<CompetitionEntity> findCompetitionsByFilters(@Param("instrument") String instrument,
+                                                      @Param("online") Boolean online,
+                                                      @Param("primaryDegree") Boolean primaryDegree,
+                                                      @Param("secondaryDegree") Boolean secondaryDegree);
 }

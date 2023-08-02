@@ -3,6 +3,7 @@ package mareczek100.musiccontests.business.dao;
 import mareczek100.musiccontests.domain.Competition;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface CompetitionRepositoryDAO {
@@ -19,6 +20,8 @@ public interface CompetitionRepositoryDAO {
 
     List<Competition> findCompetitionBySecondaryDegree(Boolean secondaryDegree);
 
-    List<Competition> findCompetitionByFilters(
-            String instrument, Boolean online, Boolean primaryDegree, Boolean secondaryDegree);
+    List<Competition> findCompetitionsByFilters(
+            String instrument, Boolean online, Boolean primaryDegree, Boolean secondaryDegree, String locationCity);
+
+    Optional<Competition> findCompetitionById(String competitionId);
 }

@@ -12,9 +12,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "headmaster")
-@EqualsAndHashCode(of = "pesel", callSuper = false)
+@EqualsAndHashCode(of = "pesel")
 @ToString(exclude = "competitions")
-public non-sealed class HeadmasterEntity extends MusicContestsPortalUser {
+public class HeadmasterEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

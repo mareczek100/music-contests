@@ -12,4 +12,5 @@ public interface CompetitionResultRepositoryDAO {
 
     List<CompetitionResult> findAllCompetitionResults();
 
+    List<CompetitionResult> insertAllCompetitionResults(List<CompetitionResult> competitionResults);
 }

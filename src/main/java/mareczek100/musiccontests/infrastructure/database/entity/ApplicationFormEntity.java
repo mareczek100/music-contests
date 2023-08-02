@@ -2,6 +2,7 @@ package mareczek100.musiccontests.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import mareczek100.musiccontests.domain.enums.ClassLevel;
 
 @Data
 @Entity
@@ -29,9 +30,11 @@ public class ApplicationFormEntity {
     @JoinColumn(name = "student_id")
     private StudentEntity student;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "class_level")
-    private Short classLevel;
+    private ClassLevel classLevel;
 
     @Column(name = "performance_pieces")
     private String performancePieces;
+
 }

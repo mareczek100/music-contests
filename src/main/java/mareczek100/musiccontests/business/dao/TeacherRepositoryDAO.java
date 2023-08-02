@@ -14,4 +14,6 @@ public interface TeacherRepositoryDAO {
     List<Teacher> findAllTeachers();
 
     Optional<Teacher> findTeacherByPesel(String pesel);
+
+    Optional<Teacher> findTeacherByEmail(String email);
 }

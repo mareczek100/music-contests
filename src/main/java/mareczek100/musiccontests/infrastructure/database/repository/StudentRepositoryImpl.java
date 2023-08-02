@@ -40,4 +40,10 @@ public class StudentRepositoryImpl implements StudentRepositoryDAO {
         return studentJpaRepository.findStudentByPesel(pesel)
                 .map(studentEntityMapper::mapFromEntityToDomain);
     }
+
+    @Override
+    public Optional<Student> findStudentById(String studentId) {
+        return studentJpaRepository.findById(studentId)
+                .map(studentEntityMapper::mapFromEntityToDomain);
+    }
 }

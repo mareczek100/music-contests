@@ -39,4 +39,10 @@ public class HeadmasterRepositoryImpl implements HeadmasterRepositoryDAO {
         Optional<HeadmasterEntity> headmasterEntity = headmasterJpaRepository.findHeadmasterByEmail(email);
         return headmasterEntity.map(headmasterEntityMapper::mapFromEntityToDomain);
     }
+
+    @Override
+    public Optional<Headmaster> findHeadmasterByPesel(String pesel) {
+        Optional<HeadmasterEntity> headmasterEntity = headmasterJpaRepository.findHeadmasterByPesel(pesel);
+        return headmasterEntity.map(headmasterEntityMapper::mapFromEntityToDomain);
+    }
 }

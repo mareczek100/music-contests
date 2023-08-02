@@ -13,42 +13,43 @@
 <h1 class="text-center">Utwórz nowe konto!</h1><br>
 
 <form class="row g-1 was-validated" action="#" th:action="@{/authentication/account}" method="POST">
-    <h4>Podaj swoje podstawowe dane i zostaniesz przekierowany do dokończenia procesu na następnej stronie.</h4>
-    <p>
+    <h4>Podaj swoje podstawowe dane i zostaniesz przekierowany do dokończenia procesu na następnej stronie.</h4><p>
     <div class="row justify-content-evenly">
         <div class="col-md-4">
             <label for="validationName" class="form-label">Imię</label>
-            <input type="text" th:name="name" th:value="mmmmmmmmmmmmmm" class="form-control" id="validationName" placeholder="Tutaj wpisz imię"
-                   required>
+            <input type="text" th:name="name" th:value="mmmmmmmmmmmmmm" class="form-control"
+                   id="validationName" placeholder="Tutaj wpisz imię" required>
             <div class="valid-feedback">Ok!</div>
+            <div class="invalid-feedback">Podaj swoje imię.</div>
         </div>
         <div class="col-md-4">
             <label for="validationSurname" class="form-label">Nazwisko</label>
             <input type="text" th:name="surname" th:value="mmmmmmmmmmmmmm" class="form-control" id="validationSurname"
                    placeholder="Tutaj wpisz nazwisko" required>
             <div class="valid-feedback">Ok!</div>
+            <div class="invalid-feedback">Podaj swoje nazwisko.</div>
         </div>
-    </div>
-    <p>
+    </div><p>
     <div class="row justify-content-evenly">
         <div class="col-md-4">
             <label for="validationEmail" class="form-label">Email</label>
             <input type="text" th:name="email" class="form-control" id="validationEmail" placeholder="Tutaj wpisz email" required>mmmmmmmm@mm.pl
             <div class="valid-feedback">Ok!</div>
+            <div class="invalid-feedback">Podaj swój adres email.</div>
         </div>
         <div class="col-md-4">
             <label for="validationPeselNumber" class="form-label">Numer pesel</label>
             <input type="text" th:name="pesel" th:value="mmmmmmmmmmmmm0" class="form-control" id="validationPeselNumber"
                    placeholder="Tutaj wpisz pesel" required>
             <div class="valid-feedback">Ok!</div>
+            <div class="invalid-feedback">Podaj swój numer pesel (11 cyfr).</div>
         </div>
     </div>
-    </p>
     <div class="row justify-content-evenly">
         <div class="col-md-4">
             <label for="validationRole" class="form-label">Rola</label>
-            <select th:name="role" class="form-select text-muted" id="validationRole" required>
-                <option selected disabled value="">Tutaj wybierz swoją rolę</option>
+            <select th:name="role" class="form-select" id="validationRole" required>
+                <option class="text-muted" selected disabled value="">Tutaj wybierz swoją rolę</option>
                 <span th:each="role : ${roleList}">
                 <option th:if="${role == 'HEADMASTER'}" th:value="${role}" th:text="Dyrektor"></option>
                 <option th:if="${role == 'TEACHER'}" th:value="${role}" th:text="Nauczyciel"></option>
@@ -56,14 +57,25 @@
                 </span>
             </select>
             <div class="valid-feedback">Ok!</div>
+            <div class="invalid-feedback">Wybierz swoją rolę w szkole.</div>
         </div>
-        <div class="form-check col-md-4">
-            <label class="form-label">Potwierdź</label>
-            <div class="d-grid gap-2 d-md-block">
-                <button class="btn btn-primary" type="submit">Przechodzę dalej!</button>
-            </div>
+        <div class="col-md-4">
+            <label for="validationMusicSchool" class="form-label">Szkoła Muzyczna</label>
+            <select th:name="musicSchoolId" class="form-select" id="validationMusicSchool" required>
+                <option class="text-muted" selected value="" disabled>Tutaj wybierz swoją szkołę</option>
+                <span th:each="musicSchool : ${musicSchoolDTOs}">
+                <option th:value="${musicSchool.musicSchoolId}"
+                        th:text="${musicSchool.musicSchoolName} + ' ' + ${musicSchool.addressCity}"></option>
+                </span>
+                <option class="text-bg-warning p-3" th:value="NONE">Na liście nie ma mojej szkoły</option>
+            </select>
+            <div class="valid-feedback">Ok!</div>
+            <div class="invalid-feedback">Wybierz swoją szkołę, jeśli znajduje się na liście.</div>
         </div>
-    </div>
+    </div><p>
+        <div class="text-center">
+            <button class="btn btn-primary" type="submit">Przechodzę dalej!</button>
+        </div>
 </form>
 </body>
 </html>

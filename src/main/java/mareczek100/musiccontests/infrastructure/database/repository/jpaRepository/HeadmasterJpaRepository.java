@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface HeadmasterJpaRepository extends JpaRepository<HeadmasterEntity, String> {
 
     Optional<HeadmasterEntity> findHeadmasterByEmail(String email);
+
+    Optional<HeadmasterEntity> findHeadmasterByPesel(String pesel);
 }

@@ -10,6 +10,8 @@ import org.mapstruct.ReportingPolicy;
 public interface MusicSchoolEntityMapper {
 
     @Mapping(target = "headmaster", ignore = true)
+    @Mapping(target = "teachers", ignore = true)
+    @Mapping(target = "students", ignore = true)
     MusicSchool mapFromEntityToDomain(MusicSchoolEntity musicSchoolEntity);
     @Mapping(target = "headmaster", ignore = true)
     @Mapping(target = "teachers", ignore = true)

@@ -31,13 +31,18 @@ public class MusicSchoolRepositoryImpl implements MusicSchoolRepositoryDAO {
         return musicSchoolJpaRepository.findAll().stream()
                 .map(musicSchoolEntityMapper::mapFromEntityToDomain)
                 .toList();
-
     }
 
     @Override
     public Optional<MusicSchool> findMusicSchoolByPatron(String patron)
     {
         return musicSchoolJpaRepository.findMusicSchoolByPatron(patron)
+                .map(musicSchoolEntityMapper::mapFromEntityToDomain);
+    }
+
+    @Override
+    public Optional<MusicSchool> findMusicSchoolById(String musicSchoolId) {
+        return musicSchoolJpaRepository.findById(musicSchoolId)
                 .map(musicSchoolEntityMapper::mapFromEntityToDomain);
     }
 }

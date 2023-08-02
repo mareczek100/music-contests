@@ -46,7 +46,7 @@ public interface MusicSchoolDtoMapper {
                 .addressStreet(musicSchool.address().street())
                 .addressBuildingNumber(musicSchool.address().buildingNumber())
                 .addressAdditionalInfo(musicSchool.address().additionalInfo())
-                .headmaster(getHeadmaster(musicSchool.headmaster()))
+//                .headmaster(getHeadmaster(musicSchool.headmaster()))
                 .build();
     }
 

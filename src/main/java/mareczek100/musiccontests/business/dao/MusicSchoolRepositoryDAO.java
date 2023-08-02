@@ -14,4 +14,6 @@ public interface MusicSchoolRepositoryDAO {
     List<MusicSchool> findAllMusicSchools();
 
     Optional<MusicSchool> findMusicSchoolByPatron(String patron);
+
+    Optional<MusicSchool> findMusicSchoolById(String musicSchoolId);
 }

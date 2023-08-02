@@ -13,9 +13,7 @@ public record Address (String addressId,
                        String postalCode,
                        String street,
                        String buildingNumber,
-                       String additionalInfo,
-                       CompetitionLocation competitionLocation,
-                       MusicSchool musicSchool){
+                       String additionalInfo){
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

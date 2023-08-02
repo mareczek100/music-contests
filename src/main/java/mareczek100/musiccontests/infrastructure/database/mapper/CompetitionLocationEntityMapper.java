@@ -10,8 +10,6 @@ import org.mapstruct.ReportingPolicy;
 public interface CompetitionLocationEntityMapper {
     
     @Mapping(target = "competitions", ignore = true)
-    @Mapping(target = "address.musicSchool", ignore = true)
-    @Mapping(target = "address.competitionLocation", ignore = true)
     CompetitionLocation mapFromEntityToDomain(CompetitionLocationEntity competitionLocationEntity);
 
     CompetitionLocationEntity mapFromDomainToEntity(CompetitionLocation competitionLocation);

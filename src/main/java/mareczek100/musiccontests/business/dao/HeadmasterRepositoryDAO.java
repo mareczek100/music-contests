@@ -8,10 +8,11 @@ import java.util.Optional;
 
 public interface HeadmasterRepositoryDAO {
 
-
     Headmaster insertHeadmaster(Headmaster headmaster);
 
     List<Headmaster> findAllHeadmasters();
 
     Optional<Headmaster> findHeadmasterByEmail(String email);
+
+    Optional<Headmaster> findHeadmasterByPesel(String pesel);
 }
