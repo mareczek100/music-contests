@@ -31,7 +31,10 @@
     </table>
 </div><br>
 <div class="text-center">
-    <form class="row g-2 was-validated" th:object="${resultListDto}" th:action="@{/headmaster/competition/result/announce}" method="POST">
+    <form class="row g-2 was-validated" th:object="${resultListDto}"
+          th:action="@{/headmaster/competition/result/announce}" method="POST">
+        <input type="hidden" class="form-control" th:name="competitionId"
+               th:value="${competitionDto.competitionId}" required>
         <fieldset>
             <div class="text-center" th:if="${studentDTOs.empty}">
                 <p class="text-bg-warning p-3 text-uppercase fs-4 fw-bold">Brak uczniów zgłoszonych do tego konkursu!</p>
@@ -48,12 +51,10 @@
                 <tbody>
                 <tr class="table-success" th:each="student, i : ${studentDTOs}">
                     <div>
-                        <input type="hidden" th:name="competitionId" th:value="${competitionDto.competitionId}"
-                               class="form-control" required>
                         <input type="hidden" th:name="|competitionResultsSupport[${i.index}].studentId|"
                                th:value="${student.studentId}" class="form-control" required>
                     </div>
-                    <td th:text="${student.name} + ' ' + ${student.surname} + ' ' + ${student.pesel}"></td>
+                    <td th:text="${student.name} + ' ' + ${student.surname} + ' ' + ${student.email}"></td>
                     <td>
                         <input type="text" th:field="*{competitionResultsSupport[__${i.index}__].competitionPlace}"
                                class="form-control" required>

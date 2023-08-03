@@ -16,9 +16,42 @@
     </div>
 </form>
 <h1 class="text-center">Tutaj sprawdzisz wyniki zakończonych konkursów!</h1><br>
-<h2 class="text-center">Wybierz jedną z dostępnych funkcjonalności.</h2><br>
+<h2 class="text-center">Podaj kryteria, aby odnaleźć żądane konkursy.</h2><br>
 
-
-
+<div th:if="${#lists.isEmpty(cityDTOs)}" class="text-bg-info p-3">
+    <h4 class="text-center">Aktualnie brak rozstrzygniętych konkursów!</h4>
+</div><br>
+<div class="text-center" th:unless="${#lists.isEmpty(cityDTOs)}">
+    <form class="row g-2 was-validated" action="#" th:action="@{/headmaster/competition/check/result}" method="GET">
+        <div class="row justify-content-evenly">
+            <div class="col-4">
+                <label for="validationCompetitionFrom" class="form-label">Data "od" zakresu wyszukiwania</label>
+                <input type="date" th:name="competitionFrom" class="form-control" id="validationCompetitionFrom" required>
+                <div class="valid-feedback">Ok!</div>
+                <div class="invalid-feedback">Podaj datę, OD której chcesz wyszukać konkursy.</div>
+            </div>
+            <div class="col-4">
+                <label for="validationCompetitionTo" class="form-label">Data "do" zakresu wyszukiwania</label>
+                <input type="date" th:name="competitionTo" class="form-control" id="validationCompetitionTo" required>
+                <div class="valid-feedback">Ok!</div>
+                <div class="invalid-feedback">Podaj datę, DO której chcesz wyszukać konkursy.</div>
+            </div>
+        </div>
+        <div class="col-md-4 offset-md-4">
+            <label for="validationCompetitionCity" class="form-label">Miasto szukanego konkursu</label>
+            <select th:name="competitionCity" class="form-select" id="validationCompetitionCity" required>
+                <option selected disabled value="">Miasto</option>
+                <span th:each="city : ${cityDTOs}">
+               <option th:value="${city}" th:text="${city}"></option>
+               </span>
+            </select>
+            <div class="valid-feedback">Ok!</div>
+            <div class="invalid-feedback">Podaj miasto, w którym odbył się konkurs.</div>
+        </div><br><p>
+        <div class="d-grid gap-2 col-4 mx-auto">
+            <button class="btn btn-info btn-lg" type="submit">Znajdź konkursy</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>
