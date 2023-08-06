@@ -16,7 +16,26 @@
     </div>
 </form>
 <h1 class="text-center">Witaj uczniu!</h1><br>
-
-
+<h2 class="text-center">Wybierz jedną z dostępnych funkcjonalności.</h2><br>
+<div class="row justify-content-evenly">
+    <div class="card" style="width: 18rem;">
+        <a class="btn" th:href="@{/student/competition}" role="button">
+            <img th:src="@{/images/competition/competition_search.jpg}" class="card-img-top" alt="Wyszukaj konkursy">
+            <div class="card-body">
+                <h5 class="card-title">Wyszukiwarka konkursów</h5>
+                <p class="card-text">Sprawdź aktualnie dostępne konkursy muzyczne.</p>
+            </div>
+        </a>
+    </div>
+    <div class="card" style="width: 18rem;">
+        <a class="btn" th:href="@{/student/result}" role="button">
+            <img th:src="@{/images/competition/competition_check.jpg}" class="card-img-top" alt="Sprawdź wyniki">
+            <div class="card-body">
+                <h5 class="card-title">Wyszukiwarka wyników</h5>
+                <p class="card-text">Sprawdź wyniki zakończonych konkursów muzycznych.</p>
+            </div>
+        </a>
+    </div>
+</div>
 </body>
 </html>

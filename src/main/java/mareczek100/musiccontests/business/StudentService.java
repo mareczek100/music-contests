@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.business.dao.StudentRepositoryDAO;
 import mareczek100.musiccontests.domain.MusicSchool;
 import mareczek100.musiccontests.domain.Student;
+import mareczek100.musiccontests.infrastructure.database.entity.security.MusicContestsPortalUserEntity;
 import mareczek100.musiccontests.infrastructure.database.entity.security.RoleEntity;
 import mareczek100.musiccontests.infrastructure.database.entity.security.SecurityService;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,20 @@ public class StudentService {
     @Transactional
     public Student insertStudent(Student student) {
         RoleEntity.RoleName studentRole = RoleEntity.RoleName.STUDENT;
-        securityService.insertRoleWhileCreateNewUser(student.email(), student.pesel(), studentRole);
+        MusicContestsPortalUserEntity studentPortalUserEntity
+                = securityService.insertRoleWhileCreateNewUser(student.email(), student.pesel(), studentRole);
+        String encodedPesel = studentPortalUserEntity.getPassword();
         MusicSchool musicSchool = student.musicSchool();
+
         if (!musicSchool.musicSchoolId().isEmpty()){
-            return studentRepositoryDAO.insertStudent(student.withMusicSchool(musicSchool));
+            return studentRepositoryDAO.insertStudent(student
+                    .withMusicSchool(musicSchool)
+                    .withPesel(encodedPesel));
         }
         MusicSchool insertedMusicSchool = musicSchoolService.insertMusicSchool(musicSchool);
-        return studentRepositoryDAO.insertStudent(student.withMusicSchool(insertedMusicSchool));
+        return studentRepositoryDAO.insertStudent(student
+                .withMusicSchool(insertedMusicSchool)
+                .withPesel(encodedPesel));
     }
 
     @Transactional

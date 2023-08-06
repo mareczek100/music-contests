@@ -15,6 +15,36 @@
         <button class="btn btn-info" type="submit">Wyloguj!</button>
     </div>
 </form>
-<h1 class="text-center">Admin site!</h1><br>
+<h1 class="text-center">Panel administratora!</h1><br>
+<h2 class="text-center">Stąd możesz przejrzeć wszystkie funkcjonalności portalu z podziałem na użytkowników.</h2><br>
+<div class="row justify-content-evenly">
+    <div class="card" style="width: 18rem;">
+        <a class="btn" th:href="@{/headmaster}" role="button">
+            <img class="card-img-top" th:src="@{/images/admin/headmaster.jpg}"  alt="Headmaster">
+            <div class="card-body">
+                <h5 class="card-title">Moduł dyrektora</h5>
+                <p class="card-text">Tutaj przejrzysz cały portal dostępny dla dyrektora!</p>
+            </div>
+        </a>
+    </div>
+    <div class="card" style="width: 18rem;">
+        <a class="btn" th:href="@{/teacher}" role="button">
+            <img th:src="@{/images/admin/teacher.jpg}" class="card-img-top" alt="Teacher">
+            <div class="card-body">
+                <h5 class="card-title">Moduł nauczyciela</h5>
+                <p class="card-text">Tutaj przejrzysz cały portal dostępny dla nauczyciela!</p>
+            </div>
+        </a>
+    </div>
+    <div class="card" style="width: 18rem;">
+        <a class="btn" th:href="@{/student}" role="button">
+            <img th:src="@{/images/admin/student.jpg}" class="card-img-top" alt="Student">
+            <div class="card-body">
+                <h5 class="card-title">Moduł ucznia</h5>
+                <p class="card-text">Tutaj przejrzysz cały portal dostępny dla ucznia!</p>
+            </div>
+        </a>
+    </div>
+</div>
 </body>
 </html>

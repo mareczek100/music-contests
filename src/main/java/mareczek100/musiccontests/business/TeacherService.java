@@ -5,6 +5,7 @@ import mareczek100.musiccontests.business.dao.HeadmasterRepositoryDAO;
 import mareczek100.musiccontests.business.dao.TeacherRepositoryDAO;
 import mareczek100.musiccontests.domain.MusicSchool;
 import mareczek100.musiccontests.domain.Teacher;
+import mareczek100.musiccontests.infrastructure.database.entity.security.MusicContestsPortalUserEntity;
 import mareczek100.musiccontests.infrastructure.database.entity.security.RoleEntity;
 import mareczek100.musiccontests.infrastructure.database.entity.security.SecurityService;
 import org.springframework.stereotype.Service;
@@ -29,13 +30,19 @@ public class TeacherService {
             return teacherRepositoryDAO.insertTeacher(teacher);
         }
         RoleEntity.RoleName teacherRole = RoleEntity.RoleName.TEACHER;
-        securityService.insertRoleWhileCreateNewUser(teacher.email(), teacher.pesel(), teacherRole);
+        MusicContestsPortalUserEntity teacherPortalUserEntity
+                = securityService.insertRoleWhileCreateNewUser(teacher.email(), teacher.pesel(), teacherRole);
+        String encodedPesel = teacherPortalUserEntity.getPassword();
         MusicSchool musicSchool = teacher.musicSchool();
         if (!musicSchool.musicSchoolId().isEmpty()){
-            teacherRepositoryDAO.insertTeacher(teacher.withMusicSchool(musicSchool));
+            teacherRepositoryDAO.insertTeacher(teacher
+                    .withMusicSchool(musicSchool)
+                    .withPesel(encodedPesel));
         }
         MusicSchool insertedMusicSchool = musicSchoolService.insertMusicSchool(musicSchool);
-        return teacherRepositoryDAO.insertTeacher(teacher.withMusicSchool(insertedMusicSchool));
+        return teacherRepositoryDAO.insertTeacher(teacher
+                .withMusicSchool(insertedMusicSchool)
+                .withPesel(encodedPesel));
     }
     @Transactional
     public List<Teacher> findAllTeachers()

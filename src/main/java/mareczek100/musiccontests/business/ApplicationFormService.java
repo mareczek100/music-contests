@@ -21,4 +21,8 @@ public class ApplicationFormService {
     public List<ApplicationForm> findAllApplicationForms() {
         return applicationFormRepositoryDAO.findAllApplicationForms();
     }
+    @Transactional
+    public void deleteApplicationForm(ApplicationForm applicationForm) {
+        applicationFormRepositoryDAO.deleteApplicationForm(applicationForm);
+    }
 }

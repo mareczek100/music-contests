@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
     <title>ERROR main page</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -11,7 +11,16 @@
 </head>
 <body class="p-3 mb-2 bg-dark-subtle text-emphasis-dark">
 <h1 class="text-center">Error site!</h1><br>
-
-
+<div class="container text-center">
+    <h1>Sorry, some problem occurred! Details below:</h1><br>
+    <div class="d-grid gap-2 col-4 mx-auto">
+        <a th:href="@{/authentication/login}" class="btn btn-info btn-lg" role="button">LOGIN MAIN PAGE</a>
+    </div>
+    <b><h2 th:if="${errorMessage}" th:text="${errorMessage}"></h2></b>
+    <br>
+    <div class="col-md-6 offset-md-3">
+        <img th:src="@{/images/error.jpg}" alt="Error" width="auto" height="300px"/><br><br>
+    </div>
+</div>
 </body>
 </html>

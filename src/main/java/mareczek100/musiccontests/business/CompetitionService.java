@@ -92,12 +92,8 @@ public class CompetitionService {
     public List<Competition> findCompetitionsByFilters(
             String instrument, Boolean online, Boolean primaryDegree, Boolean secondaryDegree, String locationCity)
     {
-        List<Competition> competitionsByFilters = competitionRepositoryDAO.findCompetitionsByFilters(
+        return competitionRepositoryDAO.findCompetitionsByFilters(
                 instrument, online, primaryDegree, secondaryDegree, locationCity);
-        if (competitionsByFilters.isEmpty()){
-            throw new RuntimeException("There is no Competitions with these filter at that moment, sorry!");
-        }
-        return competitionsByFilters;
     }
 
 }

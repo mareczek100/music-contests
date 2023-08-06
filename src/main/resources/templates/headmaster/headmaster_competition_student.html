@@ -16,24 +16,36 @@
     </div>
 </form>
 <h1 class="text-center">Tutaj zgłosisz swojego ucznia do konkursu!</h1><br>
+<h2 class="text-center">Możesz również anulować już wysłany formularz zgłoszeniowy!</h2><br>
 <div class="row justify-content-evenly">
     <div class="col-5">
-        <p class="text-start fw-semibold">Aby zgłosić ucznia musisz posiadać uprawnienia nauczyciela.</p>
+        <p class="text-start fw-semibold">Aby zgłosić lub wycofać ucznia musisz posiadać oprócz aktualnego
+            konta dyrektora dodatkowo uprawnienia nauczyciela.</p>
         <p class="text-start fw-semibold">Jeśli już je posiadasz, wpisz email i kliknij "Zgłoś ucznia".</p>
-            <form class="row g-3" th:action="@{/headmaster/competition/student/search}" method="POST">
+            <form class="row g-3" th:action="@{/headmaster/competition/student/search}" method="GET">
                 <input type="text" th:name="headmasterTeacherEmail" class="form-control" required>
                 <button class="btn btn-success" type="submit">Wybierz konkurs i zgłoś ucznia</button>
             </form><br>
+        <p class="text-start fw-semibold">Jeśli chcesz anulować zgłoszenie, wpisz email i kliknij "Wycofaj ucznia".</p>
+            <form class="row g-3" th:action="@{/headmaster/competition/student/cancel}" method="GET">
+                <input type="text" th:name="headmasterTeacherEmail" class="form-control" required>
+                <button class="btn btn-success" type="submit">Wybierz konkurs i wycofaj ucznia</button>
+            </form><br>
         <p class="text-start fw-semibold" style="width: 30rem;">Jeśli jeszcze nie masz przypisanych uprawnień,
             wpisz swój adres email i kliknij "Przypisz uprawnienia".</p>
-            <form class="row g-3" th:action="@{/headmaster/competition/teacher}" method="POST">
+            <form class="row g-3" th:action="@{/headmaster/competition/teacher}" method="GET">
                 <input type="text" th:name="headmasterTeacherEmail" class="form-control" required>
                 <button class="btn btn-info" type="submit">Przypisz uprawnienia</button>
             </form>
     </div>
-    <div class="col-3">
+    <div class="text-center col-3">
         <img th:src="@{/images/headmaster/headmaster_put_student.jpg}" class="img-thumbnail" height="auto" alt="Zgłoś ucznia">
+        <p>
+            <div class="d-grid gap-2 col-3 mx-auto">
+                <a class="btn btn-primary" th:href="@{/headmaster}" role="button">Portal Dyrektora</a>
+            </div>
+        </p>
     </div>
-</div>
+</div><br>
 </body>
 </html>

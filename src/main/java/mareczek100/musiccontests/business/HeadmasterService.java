@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.business.dao.HeadmasterRepositoryDAO;
 import mareczek100.musiccontests.domain.Headmaster;
 import mareczek100.musiccontests.domain.MusicSchool;
+import mareczek100.musiccontests.infrastructure.database.entity.security.MusicContestsPortalUserEntity;
 import mareczek100.musiccontests.infrastructure.database.entity.security.RoleEntity;
 import mareczek100.musiccontests.infrastructure.database.entity.security.SecurityService;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class HeadmasterService {
     public Headmaster insertHeadmaster(Headmaster headmaster) {
         MusicSchool musicSchool = headmaster.musicSchool();
         String musicSchoolId = musicSchool.musicSchoolId();
+
         boolean schoolHeadmasterAnyMatch = findAllHeadmaster().stream()
                 .map(Headmaster::musicSchool)
                 .map(MusicSchool::musicSchoolId)
@@ -34,13 +36,19 @@ public class HeadmasterService {
         }
 
         RoleEntity.RoleName headmasterRole = RoleEntity.RoleName.HEADMASTER;
-        securityService.insertRoleWhileCreateNewUser(headmaster.email(), headmaster.pesel(), headmasterRole);
+        MusicContestsPortalUserEntity headmasterPortalUserEntity
+                = securityService.insertRoleWhileCreateNewUser(headmaster.email(), headmaster.pesel(), headmasterRole);
+        String encodedPesel = headmasterPortalUserEntity.getPassword();
 
         if (!musicSchool.musicSchoolId().isEmpty()) {
-            return headmasterRepositoryDAO.insertHeadmaster(headmaster.withMusicSchool(musicSchool));
+            return headmasterRepositoryDAO.insertHeadmaster(headmaster
+                    .withMusicSchool(musicSchool)
+                    .withPesel(encodedPesel));
         }
         MusicSchool insertedMusicSchool = musicSchoolService.insertMusicSchool(musicSchool);
-        return headmasterRepositoryDAO.insertHeadmaster(headmaster.withMusicSchool(insertedMusicSchool));
+        return headmasterRepositoryDAO.insertHeadmaster(headmaster
+                .withMusicSchool(insertedMusicSchool)
+                .withPesel(encodedPesel));
     }
 
     @Transactional

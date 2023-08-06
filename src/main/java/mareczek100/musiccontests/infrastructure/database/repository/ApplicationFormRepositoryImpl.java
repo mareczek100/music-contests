@@ -34,4 +34,10 @@ public class ApplicationFormRepositoryImpl implements ApplicationFormRepositoryD
                 .toList();
     }
 
+    @Override
+    public void deleteApplicationForm(ApplicationForm applicationForm) {
+        ApplicationFormEntity applicationFormEntity = applicationFormEntityMapper.mapFromDomainToEntity(applicationForm);
+        applicationFormJpaRepository.delete(applicationFormEntity);
+    }
+
 }

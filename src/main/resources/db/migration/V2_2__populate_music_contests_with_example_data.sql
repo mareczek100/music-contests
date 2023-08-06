@@ -11,10 +11,10 @@ insert into music_school (music_school_id, name, patron, primary_degree, seconda
 ('9a0d8162-7818-4332-88ec-3a30d7077d38', 'Szkoła Muzyczna4', 'Marek Jankowski', true, false, '47c66804-7e69-45ef-b67d-aee3c4f87faa');
 
 insert into headmaster (headmaster_id, name, surname, email, pesel, music_school_id) values
-(uuid_generate_v4(), 'Dyrektor1', 'Dyrektorski1', 'dyrektor1@mejl.com', '$2a$12$btLyh6//KkL33FUcf3MU7Obi2Ex1gvVlCEHPegFHuW093GQ.nT/sW', 'cec42d7b-6d45-474f-b69e-d13786ab7ac5'), --00000000001
-(uuid_generate_v4(), 'Dyrektor2', 'Dyrektorski2', 'dyrektor2@mejl.com', '$2a$12$XuSkJ.zqFuAPazkxeDtBaOJWtV//FlHVAJTFQv7jAgS1goIA33VN.', '0e618e04-1ac8-4d94-ad84-5f12b897c50f'), --00000000002
-(uuid_generate_v4(), 'Dyrektor3', 'Dyrektorski3', 'dyrektor3@mejl.com', '$2a$12$iRCevu9EYX2lFSCOjeGgD.15Oel4V//mYvMOOOW6.rPgd.WCfDwK2', '95a5c9bc-a756-4122-9fbc-f87bbd0a3ed4'), --00000000003
-(uuid_generate_v4(), 'Dyrektor4', 'Dyrektorski4', 'dyrektor4@mejl.com', '$2a$12$O5cXYnY6nOpg5VonUe1dW.nPh4/WyTy0oaHNOdglA.0GC/jO5ltG.', '9a0d8162-7818-4332-88ec-3a30d7077d38'); --00000000004
+('79a07cd8-9c49-4a84-9a8e-cddca4f7f7bf', 'Dyrektor1', 'Dyrektorski1', 'dyrektor1@mejl.com', '$2a$12$btLyh6//KkL33FUcf3MU7Obi2Ex1gvVlCEHPegFHuW093GQ.nT/sW', 'cec42d7b-6d45-474f-b69e-d13786ab7ac5'), --00000000001
+('d82ef282-d566-41fa-a9fc-a1167830a385', 'Dyrektor2', 'Dyrektorski2', 'dyrektor2@mejl.com', '$2a$12$XuSkJ.zqFuAPazkxeDtBaOJWtV//FlHVAJTFQv7jAgS1goIA33VN.', '0e618e04-1ac8-4d94-ad84-5f12b897c50f'), --00000000002
+('7aa719c5-269b-4629-8102-2319d25714da', 'Dyrektor3', 'Dyrektorski3', 'dyrektor3@mejl.com', '$2a$12$iRCevu9EYX2lFSCOjeGgD.15Oel4V//mYvMOOOW6.rPgd.WCfDwK2', '95a5c9bc-a756-4122-9fbc-f87bbd0a3ed4'), --00000000003
+('bf69a445-24c8-4749-9ccc-3f4fd9d3be2b', 'Dyrektor4', 'Dyrektorski4', 'dyrektor4@mejl.com', '$2a$12$O5cXYnY6nOpg5VonUe1dW.nPh4/WyTy0oaHNOdglA.0GC/jO5ltG.', '9a0d8162-7818-4332-88ec-3a30d7077d38'); --00000000004
 
 insert into teacher (teacher_id, name, surname, email, pesel, instrument, music_school_id) values
 ('23840207-d3d3-4d52-bcb8-3f977fa2bc8b', 'Nauczyciel1', 'Nauczycielski1', 'nauczyciel1@mejl.com', '$2a$12$KKgtul5ON.ytpMXEKswHaeY9erI3Lq9KiR0G6huBdtjOQS.exCfgW', 'skrzypce', 'cec42d7b-6d45-474f-b69e-d13786ab7ac5'), --00000000011
@@ -33,6 +33,23 @@ insert into student (student_id, name, surname, email, pesel, class, education_d
 (uuid_generate_v4(), 'Uczeń7', 'Uczniowski7', 'uczeń7@mejl.com', '$2a$12$UMlbtO8q3MVUf88eURobueL3rjA1gylkOqegrN9AOcPDmcWrdiTMi', 'THIRD', 'FOUR_YEAR', 'FIRST', '95a5c9bc-a756-4122-9fbc-f87bbd0a3ed4', 'skrzypce', 'grzechotka', '89af8865-9ff5-4949-8d70-03dfebdd116b'), --00000000777
 (uuid_generate_v4(), 'Uczeń8', 'Uczniowski8', 'uczeń8@mejl.com', '$2a$12$EjnTQtI3p546k63Vx/r8B.aNVtI5SgDKtzR7xKleotrDZuPQsFbTC', 'SECOND', 'SIX_YEAR', 'FIRST', '95a5c9bc-a756-4122-9fbc-f87bbd0a3ed4', 'tuba', 'kastaniety', '9fff444d-8ac0-431c-bfe1-049938ef78a1'), --00000000888
 (uuid_generate_v4(), 'Uczeń9', 'Uczniowski9', 'uczeń9@mejl.com', '$2a$12$HzWDgqAuxlNLhmmZGsWtgeNEFlIJtXnhA7n/Hsp6eVq1syzbSWzne', 'FIRST', 'SIX_YEAR', 'SECOND', '9a0d8162-7818-4332-88ec-3a30d7077d38', 'skrzypce', 'kontrafagot', '8b180ade-ec53-43f3-af8b-10583a150f61'); --00000000999
+
+insert into competition_location (competition_location_id, name, address_id) values
+('8ee25de2-92af-453e-b56b-bffeca89b8b6', 'Szkoła Muzyczna1', '79b4f4ce-1d82-48c4-81ef-b28ef85b04f0');
+
+insert into competition (competition_id, name, instrument, online, primary_degree, secondary_degree, beginning_date_time, end_date_time, result_announcement, application_deadline, requirements_description, organizer_id, location_id, finished) values
+(uuid_generate_v4(), 'Konkurs Muzyczny1', 'strunowe', true, false, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', '79a07cd8-9c49-4a84-9a8e-cddca4f7f7bf', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny2', 'gitara', true, false, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', '79a07cd8-9c49-4a84-9a8e-cddca4f7f7bf', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny3', 'altówka', true, false, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', '79a07cd8-9c49-4a84-9a8e-cddca4f7f7bf', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny4', 'fagot', false, true, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', 'd82ef282-d566-41fa-a9fc-a1167830a385', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny5', 'saksofon', false, true, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', 'd82ef282-d566-41fa-a9fc-a1167830a385', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny6', 'obój', false, true, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', 'd82ef282-d566-41fa-a9fc-a1167830a385', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny7', 'organy', false, false, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', '7aa719c5-269b-4629-8102-2319d25714da', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny8', 'waltornia', false, false, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', '7aa719c5-269b-4629-8102-2319d25714da', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny9', 'kotły', false, false, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', '7aa719c5-269b-4629-8102-2319d25714da', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny10', 'czelesta', false, true, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', 'bf69a445-24c8-4749-9ccc-3f4fd9d3be2b', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny11', 'talerze', false, true, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', 'bf69a445-24c8-4749-9ccc-3f4fd9d3be2b', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false),
+(uuid_generate_v4(), 'Konkurs Muzyczny12', 'grzechotka', false, true, true, '2023-08-10 05:05:00+02', '2023-08-10 05:05:00+02', '2023-08-20 05:05:00+02', '2023-08-08 05:05:00+02', 'Wymagania, utwory do zagrania i inne informacje', 'bf69a445-24c8-4749-9ccc-3f4fd9d3be2b', '8ee25de2-92af-453e-b56b-bffeca89b8b6', false);
 
 insert into music_contests_user (user_id, user_name, password, active, role_id) values
 (uuid_generate_v4(), 'dyrektor1@mejl.com', '$2a$12$btLyh6//KkL33FUcf3MU7Obi2Ex1gvVlCEHPegFHuW093GQ.nT/sW', true, 'c6a4911f-32ba-4450-8153-53a29e881618'),

@@ -15,6 +15,36 @@
         <button class="btn btn-info" type="submit">Wyloguj!</button>
     </div>
 </form>
-<h1 class="text-center">Teacher!</h1><br>
+<h1 class="text-center">Witaj nauczycielu!</h1><br>
+<h2 class="text-center">Wybierz jedną z dostępnych funkcjonalności.</h2><br>
+<div class="row justify-content-evenly">
+    <div class="card" style="width: 18rem;">
+        <a class="btn" th:href="@{/teacher/student/competition}" role="button">
+            <img class="card-img-top" th:src="@{/images/competition/competition_put_student.jpg}"  alt="Zgłoś ucznia">
+            <div class="card-body">
+                <h5 class="card-title">Zgłoś ucznia do konkursu</h5>
+                <p class="card-text">Wyszukaj dostępne konkursy i zgłoś do niego swojego ucznia!</p>
+            </div>
+        </a>
+    </div>
+    <div class="card" style="width: 18rem;">
+        <a class="btn" th:href="@{/teacher/student/cancel}" role="button">
+            <img th:src="@{/images/competition/competition-cancel.jpg}" class="card-img-top" alt="Anuluj zgłoszenie">
+            <div class="card-body">
+                <h5 class="card-title">Anuluj zgłoszenie ucznia do konkursu</h5>
+                <p class="card-text">Wycofaj formularz zgłoszeniowy ucznia do wybranego konkursu.</p>
+            </div>
+        </a>
+    </div>
+    <div class="card" style="width: 18rem;">
+        <a class="btn" th:href="@{/teacher/result/competition}" role="button">
+            <img th:src="@{/images/competition/competition_check.jpg}" class="card-img-top" alt="Sprawdź wyniki">
+            <div class="card-body">
+                <h5 class="card-title">Sprawdź wyniki konkursu</h5>
+                <p class="card-text">Wyszukaj zakończone konkursy i sprawdź wyniki swoich i innych uczniów.</p>
+            </div>
+        </a>
+    </div>
+</div>
 </body>
 </html>

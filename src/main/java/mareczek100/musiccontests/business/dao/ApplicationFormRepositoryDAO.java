@@ -12,4 +12,5 @@ public interface ApplicationFormRepositoryDAO {
 
     List<ApplicationForm> findAllApplicationForms();
 
+    void deleteApplicationForm(ApplicationForm applicationForm);
 }
