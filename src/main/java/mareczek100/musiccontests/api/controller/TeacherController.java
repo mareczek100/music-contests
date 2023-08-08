@@ -10,6 +10,7 @@ import mareczek100.musiccontests.domain.enums.ClassLevel;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static mareczek100.musiccontests.api.controller.TeacherController.TEACHER_MAIN_PAGE;
-
+@Validated
 @Controller
 @RequestMapping(TEACHER_MAIN_PAGE)
 @AllArgsConstructor

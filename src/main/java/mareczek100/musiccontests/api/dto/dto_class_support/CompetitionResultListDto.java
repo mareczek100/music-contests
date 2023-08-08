@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mareczek100.musiccontests.api.dto.CompetitionResultDto;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public class CompetitionResultListDto {
 
     private List<CompetitionResultSupport> competitionResultsSupport;
-    private List<CompetitionResultDto> competitionResultsDto;
+
     @Data
     @Builder
     @NoArgsConstructor

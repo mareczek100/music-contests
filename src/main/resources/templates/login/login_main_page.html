@@ -20,6 +20,13 @@
     <h3 class="text-center" th:text="'Gratulacje ' + ${portalUser.name} + ' ' + ${portalUser.surname} + '!'"></h3>
     <h3 class="text-center">Konto utworzone, zaloguj się!</h3>
 </div>
+<div th:if="${accountDeleted==true}" class="text-bg-info p-3">
+    <h3 class="text-center" th:text="'Konto ' + ${portalUser.name} + ' ' + ${portalUser.surname}
+    + ' pomyślnie usunięto!'"></h3>
+</div>
+<div th:if="${accountDeleted==false}" class="text-bg-danger text-white p-3">
+    <h3 class="text-center" th:text="'Błąd usuwania konta: ' + ${portalUser.name} + ' ' + ${portalUser.surname}!"></h3>
+</div>
 
 <form class="row g-3 was-validated" action="#" th:action="@{/authentication/login}" method="POST">
     <h5>Podaj nazwę użytkownika i hasło</h5>

@@ -9,4 +9,6 @@ public interface StudentJpaRepository extends JpaRepository<StudentEntity, Strin
 
 
     Optional<StudentEntity> findStudentByPesel(String pesel);
+
+    Optional<StudentEntity> findStudentByEmail(String email);
 }

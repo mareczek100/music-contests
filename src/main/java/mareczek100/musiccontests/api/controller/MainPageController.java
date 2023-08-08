@@ -18,7 +18,7 @@ import mareczek100.musiccontests.domain.Teacher;
 import mareczek100.musiccontests.domain.enums.ClassLevel;
 import mareczek100.musiccontests.domain.enums.Degree;
 import mareczek100.musiccontests.domain.enums.EducationProgram;
-import mareczek100.musiccontests.infrastructure.database.entity.security.RoleEntity;
+import mareczek100.musiccontests.infrastructure.security.RoleEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static mareczek100.musiccontests.api.controller.MainPageController.MUSIC_CONTESTS_MAIN_PAGE;
 
@@ -43,11 +44,14 @@ public class MainPageController {
     public static final String MUSIC_CONTESTS_FAILURE = "/failure";
     public static final String MUSIC_CONTESTS_ERROR = "/error";
     public static final String MUSIC_CONTESTS_CREATE_ACCOUNT = "/account";
+    public static final String MUSIC_CONTESTS_DELETE_ACCOUNT = "/account/delete";
     public static final String MUSIC_CONTESTS_CREATE_ACCOUNT_USER = "/account/user";
     public static final String MUSIC_CONTESTS_ACCOUNT_STUDENT = "/account/student";
     public static final String MUSIC_CONTESTS_ACCOUNT_TEACHER = "/account/teacher";
     private final static Boolean ACCOUNT_CREATED_SUCCESS = true;
     private final static Boolean ACCOUNT_CREATED_FAILURE = false;
+    private final static Boolean ACCOUNT_DELETED_SUCCESS = true;
+    private final static Boolean ACCOUNT_DELETED_FAILURE = false;
     private final static String NONE_MUSIC_SCHOOL = "NONE";
 
     private final HeadmasterService headmasterService;
@@ -164,7 +168,7 @@ public class MainPageController {
     @PostMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_ACCOUNT_TEACHER)
     public String loginCreateTeacherAccountProcess(
             @Valid @ModelAttribute TeacherDto teacherDto,
-            @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
+            @Valid @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
             Model model
     ) {
         TeacherDto insertedTeacherDto = createTeacher(teacherDto, musicSchoolDto);
@@ -185,6 +189,53 @@ public class MainPageController {
         model.addAttribute("accountCreated", ACCOUNT_CREATED_SUCCESS);
         model.addAttribute("portalUser", insertedStudentDto);
 
+        return "login/login_main_page";
+    }
+
+    @DeleteMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_DELETE_ACCOUNT)
+    public String deleteMusicContestsUserAccount(
+            @Email String userEmail,
+            Model model
+    )
+    {
+        Optional<Headmaster> foundHeadmaster = headmasterService.findAllHeadmaster().stream()
+                .filter(headmaster -> userEmail.equalsIgnoreCase(headmaster.email()))
+                .findAny();
+
+        Optional<Teacher> foundTeacher = teacherService.findAllTeachers().stream()
+                .filter(teacher -> userEmail.equalsIgnoreCase(teacher.email()))
+                .findAny();
+
+        Optional<Student> foundStudent = studentService.findAllStudents().stream()
+                .filter(student -> userEmail.equalsIgnoreCase(student.email()))
+                .findAny();
+
+        if (foundHeadmaster.isPresent()){
+            Headmaster headmaster = foundHeadmaster.get();
+            headmasterService.deleteHeadmaster(headmaster);
+            model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
+            model.addAttribute("portalUser", headmaster);
+            foundTeacher.ifPresent(teacherService::deleteTeacher);
+            return "login/login_main_page";
+        }
+
+        if (foundTeacher.isPresent()){
+            Teacher teacher = foundTeacher.get();
+            teacherService.deleteTeacher(teacher);
+            model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
+            model.addAttribute("portalUser", teacher);
+            return "login/login_main_page";
+        }
+
+        if (foundStudent.isPresent()){
+            Student student = foundStudent.get();
+            studentService.deleteStudent(student);
+            model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
+            model.addAttribute("portalUser", student);
+            return "login/login_main_page";
+        }
+
+        model.addAttribute("accountDeleted", ACCOUNT_DELETED_FAILURE);
         return "login/login_main_page";
     }
 

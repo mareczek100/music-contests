@@ -42,8 +42,20 @@ public class StudentRepositoryImpl implements StudentRepositoryDAO {
     }
 
     @Override
+    public Optional<Student> findStudentByEmail(String email) {
+        return studentJpaRepository.findStudentByEmail(email)
+                .map(studentEntityMapper::mapFromEntityToDomain);
+    }
+
+    @Override
     public Optional<Student> findStudentById(String studentId) {
         return studentJpaRepository.findById(studentId)
                 .map(studentEntityMapper::mapFromEntityToDomain);
+    }
+
+    @Override
+    public void deleteStudent(Student student) {
+        StudentEntity studentEntity = studentEntityMapper.mapFromDomainToEntity(student);
+        studentJpaRepository.delete(studentEntity);
     }
 }

@@ -16,4 +16,5 @@ public interface TeacherRepositoryDAO {
     Optional<Teacher> findTeacherByPesel(String pesel);
 
     Optional<Teacher> findTeacherByEmail(String email);
+    void deleteTeacher(Teacher teacher);
 }

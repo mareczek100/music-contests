@@ -18,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,7 +26,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 import static mareczek100.musiccontests.api.controller.StudentController.STUDENT_MAIN_PAGE;
-
+@Validated
 @Controller
 @RequestMapping(STUDENT_MAIN_PAGE)
 @AllArgsConstructor

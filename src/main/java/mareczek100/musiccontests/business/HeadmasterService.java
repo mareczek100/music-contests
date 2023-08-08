@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.business.dao.HeadmasterRepositoryDAO;
 import mareczek100.musiccontests.domain.Headmaster;
 import mareczek100.musiccontests.domain.MusicSchool;
-import mareczek100.musiccontests.infrastructure.database.entity.security.MusicContestsPortalUserEntity;
-import mareczek100.musiccontests.infrastructure.database.entity.security.RoleEntity;
-import mareczek100.musiccontests.infrastructure.database.entity.security.SecurityService;
+import mareczek100.musiccontests.infrastructure.security.MusicContestsPortalUserEntity;
+import mareczek100.musiccontests.infrastructure.security.RoleEntity;
+import mareczek100.musiccontests.infrastructure.security.SecurityService;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -22,7 +24,10 @@ public class HeadmasterService {
     private final SecurityService securityService;
 
     @Transactional
-    public Headmaster insertHeadmaster(Headmaster headmaster) {
+    public Headmaster insertHeadmaster(Headmaster headmaster)
+    {
+        checkIfHeadmasterExistByPesel(headmaster.pesel());
+
         MusicSchool musicSchool = headmaster.musicSchool();
         String musicSchoolId = musicSchool.musicSchoolId();
 
@@ -45,6 +50,7 @@ public class HeadmasterService {
                     .withMusicSchool(musicSchool)
                     .withPesel(encodedPesel));
         }
+
         MusicSchool insertedMusicSchool = musicSchoolService.insertMusicSchool(musicSchool);
         return headmasterRepositoryDAO.insertHeadmaster(headmaster
                 .withMusicSchool(insertedMusicSchool)
@@ -64,7 +70,20 @@ public class HeadmasterService {
     }
 
     @Transactional
-    public Headmaster findHeadmasterByPesel(String pesel) {
-        return headmasterRepositoryDAO.findHeadmasterByPesel(pesel).orElse(null);
+    public void checkIfHeadmasterExistByPesel(String pesel)
+    {
+        Optional<Headmaster> headmasterByPesel = findAllHeadmaster().stream()
+                .filter(headmaster -> BCrypt.checkpw(pesel, headmaster.pesel()))
+                .findAny();
+
+        if (headmasterByPesel.isPresent()) {
+            throw new RuntimeException("Headmaster with pesel [%s] already exist!".formatted(pesel));
+        }
+    }
+
+    @Transactional
+    public void deleteHeadmaster(Headmaster headmaster) {
+        headmasterRepositoryDAO.deleteHeadmaster(headmaster);
+        securityService.deleteUserByUserName(headmaster.email());
     }
 }

@@ -15,4 +15,6 @@ public interface HeadmasterRepositoryDAO {
     Optional<Headmaster> findHeadmasterByEmail(String email);
 
     Optional<Headmaster> findHeadmasterByPesel(String pesel);
+
+    void deleteHeadmaster(Headmaster headmaster);
 }

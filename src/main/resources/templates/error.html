@@ -13,9 +13,20 @@
 <h1 class="text-center">Error site!</h1><br>
 <div class="container text-center">
     <h1>Sorry, some problem occurred! Details below:</h1><br>
-    <div class="d-grid gap-2 col-4 mx-auto">
-        <a th:href="@{/authentication/login}" class="btn btn-info btn-lg" role="button">LOGIN MAIN PAGE</a>
-    </div>
+    <div class="row justify-content-evenly">
+        <div class="col-3">
+            <a th:href="@{/authentication/login}" class="btn btn-info btn-lg" role="button">LOGIN MAIN PAGE</a>
+        </div>
+        <div class="col-3">
+            <a th:href="@{/headmaster}" class="btn btn-info btn-lg" role="button">HEADMASTER PORTAL</a>
+        </div>
+        <div class="col-3">
+            <a th:href="@{/teacher}" class="btn btn-info btn-lg" role="button">TEACHER PORTAL</a>
+        </div>
+        <div class="col-3">
+            <a th:href="@{/teacher}" class="btn btn-info btn-lg" role="button">STUDENT PORTAL</a>
+        </div>
+    </div><br>
     <b><h2 th:if="${errorMessage}" th:text="${errorMessage}"></h2></b>
     <br>
     <div class="col-md-6 offset-md-3">

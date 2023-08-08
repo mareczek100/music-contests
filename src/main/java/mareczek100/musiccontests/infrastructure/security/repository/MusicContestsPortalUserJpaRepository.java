@@ -1,6 +1,6 @@
-package mareczek100.musiccontests.infrastructure.database.entity.security.repository;
+package mareczek100.musiccontests.infrastructure.security.repository;
 
-import mareczek100.musiccontests.infrastructure.database.entity.security.MusicContestsPortalUserEntity;
+import mareczek100.musiccontests.infrastructure.security.MusicContestsPortalUserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

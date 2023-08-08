@@ -48,4 +48,10 @@ public class TeacherRepositoryImpl implements TeacherRepositoryDAO {
         return teacherJpaRepository.findTeacherByEmail(email)
                 .map(teacherEntityMapper::mapFromEntityToDomain);
     }
+
+    @Override
+    public void deleteTeacher(Teacher teacher) {
+        TeacherEntity teacherEntity = teacherEntityMapper.mapFromDomainToEntity(teacher);
+        teacherJpaRepository.delete(teacherEntity);
+    }
 }

@@ -45,4 +45,10 @@ public class HeadmasterRepositoryImpl implements HeadmasterRepositoryDAO {
         Optional<HeadmasterEntity> headmasterEntity = headmasterJpaRepository.findHeadmasterByPesel(pesel);
         return headmasterEntity.map(headmasterEntityMapper::mapFromEntityToDomain);
     }
+
+    @Override
+    public void deleteHeadmaster(Headmaster headmaster) {
+        HeadmasterEntity headmasterEntity = headmasterEntityMapper.mapFromDomainToEntity(headmaster);
+        headmasterJpaRepository.delete(headmasterEntity);
+    }
 }

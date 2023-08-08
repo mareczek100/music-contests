@@ -15,5 +15,9 @@ public interface StudentRepositoryDAO {
 
     Optional<Student> findStudentByPesel(String pesel);
 
+    Optional<Student> findStudentByEmail(String email);
+
     Optional<Student> findStudentById(String studentId);
+
+    void deleteStudent(Student student);
 }

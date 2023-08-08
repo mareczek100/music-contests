@@ -2,10 +2,10 @@ package mareczek100.musiccontests.infrastructure.configuration.security;
 
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
-import mareczek100.musiccontests.infrastructure.database.entity.security.MusicContestsPortalUserEntity;
-import mareczek100.musiccontests.infrastructure.database.entity.security.RoleEntity;
-import mareczek100.musiccontests.infrastructure.database.entity.security.repository.MusicContestsPortalUserJpaRepository;
-import mareczek100.musiccontests.infrastructure.database.entity.security.repository.RoleJpaRepository;
+import mareczek100.musiccontests.infrastructure.security.MusicContestsPortalUserEntity;
+import mareczek100.musiccontests.infrastructure.security.RoleEntity;
+import mareczek100.musiccontests.infrastructure.security.repository.MusicContestsPortalUserJpaRepository;
+import mareczek100.musiccontests.infrastructure.security.repository.RoleJpaRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

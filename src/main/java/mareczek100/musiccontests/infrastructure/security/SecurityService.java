@@ -1,8 +1,8 @@
-package mareczek100.musiccontests.infrastructure.database.entity.security;
+package mareczek100.musiccontests.infrastructure.security;
 
 import lombok.AllArgsConstructor;
-import mareczek100.musiccontests.infrastructure.database.entity.security.repository.MusicContestsPortalUserJpaRepository;
-import mareczek100.musiccontests.infrastructure.database.entity.security.repository.RoleJpaRepository;
+import mareczek100.musiccontests.infrastructure.security.repository.MusicContestsPortalUserJpaRepository;
+import mareczek100.musiccontests.infrastructure.security.repository.RoleJpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,5 +61,11 @@ public class SecurityService {
                 () -> new RuntimeException("Music Contests Portal user [%s] doesn't exist!"
                         .formatted(userName))
         );
+    }
+    @Transactional
+    public void deleteUserByUserName(String userName)
+    {
+        MusicContestsPortalUserEntity musicContestsPortalUser = findByUserName(userName);
+        portalUserJpaRepository.delete(musicContestsPortalUser);
     }
 }

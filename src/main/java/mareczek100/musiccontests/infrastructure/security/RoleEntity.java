@@ -1,4 +1,4 @@
-package mareczek100.musiccontests.infrastructure.database.entity.security;
+package mareczek100.musiccontests.infrastructure.security;
 
 import jakarta.persistence.*;
 import lombok.*;

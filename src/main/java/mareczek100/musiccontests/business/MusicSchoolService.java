@@ -19,10 +19,12 @@ public class MusicSchoolService {
     public MusicSchool insertMusicSchool(MusicSchool musicSchool) {
         return musicSchoolRepositoryDAO.insertMusicSchool(musicSchool);
     }
+
     @Transactional
     public List<MusicSchool> findAllMusicSchools() {
         return musicSchoolRepositoryDAO.findAllMusicSchools();
     }
+
     @Transactional
     public MusicSchool findMusicSchoolById(String musicSchoolId) {
         return musicSchoolRepositoryDAO.findMusicSchoolById(musicSchoolId).orElseThrow(
@@ -30,6 +32,7 @@ public class MusicSchoolService {
                         .formatted(musicSchoolId))
         );
     }
+
     @Transactional
     public Optional<MusicSchool> findMusicSchoolByPatron(String patron) {
         return musicSchoolRepositoryDAO.findMusicSchoolByPatron(patron);
