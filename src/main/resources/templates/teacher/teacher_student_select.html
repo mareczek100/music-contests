@@ -20,6 +20,7 @@
 <div th:if="${#lists.isEmpty(competitionDTOs)}" class="text-bg-info p-3">
     <h4 class="text-center">Brak konkursów z podanymi kryteriami!</h4>
 </div><br>
+<div th:unless="${#lists.isEmpty(competitionDTOs)}">
     <form class="row g-3 was-validated" th:action="@{/teacher/student/competition/announce}" method="POST">
         <input type="hidden" th:name="teacherEmail" th:value="${teacherEmail}" class="form-control" required>
         <div class="container">
@@ -97,6 +98,7 @@
             </div>
         </div>
     </form><br>
+</div>
         <div class="d-grid gap-2 col-2 mx-auto">
             <a class="btn btn-primary" th:href="@{/teacher}" role="button">Portal Nauczyciela</a>
             <a class="btn btn-success" th:href="@{/teacher/student/competition}" role="button">Wyszukiwanie konkursów</a>

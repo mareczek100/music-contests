@@ -22,7 +22,7 @@
         <p class="text-start fw-semibold">Aby zgłosić lub wycofać ucznia musisz posiadać oprócz aktualnego
             konta dyrektora dodatkowo uprawnienia nauczyciela.</p>
         <p class="text-start fw-semibold">Jeśli już je posiadasz, wpisz email i kliknij "Zgłoś ucznia".</p>
-            <form class="row g-3" th:action="@{/headmaster/competition/student/search}" method="GET">
+            <form class="row g-3" th:action="@{/headmaster/competition/student/search/instrument}" method="GET">
                 <input type="text" th:name="headmasterTeacherEmail" class="form-control" required>
                 <button class="btn btn-success" type="submit">Wybierz konkurs i zgłoś ucznia</button>
             </form><br>

@@ -20,6 +20,7 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 import static mareczek100.musiccontests.api.controller.HeadmasterController.HEADMASTER_MAIN_PAGE;
+
 @Validated
 @Controller
 @AllArgsConstructor
@@ -39,7 +40,8 @@ public class HeadmasterController {
     public static final String HEADMASTER_COMPETITION_STUDENT_CANCEL = "/competition/student/cancel";
     public static final String HEADMASTER_COMPETITION_STUDENT_CANCEL_SELECT = "/competition/student/cancel/select";
     public static final String HEADMASTER_COMPETITION_STUDENT_CANCEL_CONFIRM = "/competition/student/cancel/confirm";
-    public static final String HEADMASTER_COMPETITION_STUDENT_SEARCH = "/competition/student/search";
+    public static final String HEADMASTER_COMPETITION_FILTERS_SEARCH = "/competition/student/search/filters";
+    public static final String HEADMASTER_COMPETITION_INSTRUMENT_SEARCH = "/competition/student/search/instrument";
     public static final String HEADMASTER_COMPETITION_CHECK = "/competition/check";
     public static final String HEADMASTER_COMPETITION_CHECK_RESULT = "/competition/check/result";
 
@@ -84,7 +86,8 @@ public class HeadmasterController {
             @RequestParam("competitionOrganizerEmail") String competitionOrganizerEmail,
             @RequestParam("competitionSchoolLocation") Boolean competitionSchoolLocation,
             Model model
-    ) {
+    )
+    {
         competitionOrganizerEmail = competitionOrganizerEmail.strip();
         model.addAllAttributes(Map.of(
                 "competitionDto", competitionDto,
@@ -106,7 +109,8 @@ public class HeadmasterController {
             @Valid @ModelAttribute CompetitionWithLocationDto competitionDto,
             @RequestParam("competitionOrganizerEmail") String competitionOrganizerEmail,
             Model model
-    ) {
+    )
+    {
         CompetitionWithLocationDto createdCompetitionDto = createCompetition(competitionDto, competitionOrganizerEmail);
         model.addAttribute("createdCompetitionDto", createdCompetitionDto);
         return "headmaster/headmaster_competition_create_done";
@@ -122,7 +126,9 @@ public class HeadmasterController {
     @GetMapping(HEADMASTER_COMPETITION_TEACHER)
     public String headmasterCreateTeacherRightsHomePage(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
-            Model model) {
+            Model model
+    )
+    {
 
         List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
                 .map(instrumentDtoMapper::mapFromDomainToDto)
@@ -141,14 +147,16 @@ public class HeadmasterController {
     @PostMapping(HEADMASTER_COMPETITION_TEACHER_RIGHTS)
     public String headmasterCreateTeacherRights(@ModelAttribute("headmasterTeacherDto") TeacherDto headmasterTeacherDto,
                                                 @RequestParam("musicSchoolId") String musicSchoolId,
-                                                Model model) {
+                                                Model model
+    )
+    {
 
         MusicSchool musicSchool = musicSchoolService.findMusicSchoolById(musicSchoolId);
         Teacher headmasterTeacherToSave = teacherDtoMapper.mapFromDtoToDomain(headmasterTeacherDto);
         Optional<Teacher> anyTeacher = teacherService.findAllTeachers().stream()
                 .filter(teacher -> headmasterTeacherToSave.pesel().equals(teacher.pesel()))
                 .findAny();
-        if (anyTeacher.isPresent()){
+        if (anyTeacher.isPresent()) {
             model.addAttribute("teacherExist", true);
             return "headmaster/headmaster_competition_teacher";
         }
@@ -161,10 +169,12 @@ public class HeadmasterController {
         return "headmaster/headmaster_competition_teacher";
     }
 
-    @GetMapping(HEADMASTER_COMPETITION_STUDENT_SEARCH)
-    public String headmasterSearchCompetitionToPutStudent(
+    @GetMapping(HEADMASTER_COMPETITION_FILTERS_SEARCH)
+    public String headmasterSearchCompetitionToPutStudentByFilters(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
-            Model model) {
+            Model model
+    )
+    {
         List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
                 .map(instrumentDtoMapper::mapFromDomainToDto)
                 .toList();
@@ -176,6 +186,7 @@ public class HeadmasterController {
                 .map(Address::city)
                 .distinct()
                 .toList();
+
         CompetitionWithLocationDto competitionDto = CompetitionWithLocationDto.builder().build();
 
         model.addAttribute("headmasterTeacherEmail", headmasterTeacherEmail);
@@ -183,16 +194,47 @@ public class HeadmasterController {
         model.addAttribute("competitionDto", competitionDto);
         model.addAttribute("cityDTOs", cityDTOs);
 
-        return "headmaster/headmaster_competition_search";
+        return "headmaster/headmaster_competition_search_filters";
     }
 
-    @PostMapping(HEADMASTER_COMPETITION_SELECT_STUDENT)
+    @GetMapping(HEADMASTER_COMPETITION_INSTRUMENT_SEARCH)
+    public String headmasterSearchCompetitionToPutStudentByInstrument(
+            @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
+            Model model
+    )
+    {
+        List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
+                .map(instrumentDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        List<String> cityDTOs = competitionService.findAllCompetitions().stream()
+                .filter(competition -> competition.finished().equals(false))
+                .map(Competition::competitionLocation)
+                .map(CompetitionLocation::address)
+                .map(Address::city)
+                .distinct()
+                .toList();
+
+        CompetitionWithLocationDto competitionDto = CompetitionWithLocationDto.builder().build();
+
+        model.addAttribute("cityDTOs", cityDTOs);
+        model.addAttribute("headmasterTeacherEmail", headmasterTeacherEmail);
+        model.addAttribute("instrumentDTOs", instrumentDTOs);
+        model.addAttribute("competitionDto", competitionDto);
+
+        return "headmaster/headmaster_competition_search_instrument";
+    }
+
+    @GetMapping(HEADMASTER_COMPETITION_SELECT_STUDENT)
     public String headmasterSelectStudentToCompetition(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             @ModelAttribute CompetitionWithLocationDto competitionDto,
-            Model model) {
+            Model model
+    )
+    {
         Teacher headmasterTeacher = teacherService.findTeacherByEmail(headmasterTeacherEmail);
         String teacherId = headmasterTeacher.teacherId();
+
         List<Student> studentList = studentService.findAllStudents().stream()
                 .filter(student ->
                         teacherId.equals(student.teacher().teacherId()))
@@ -201,13 +243,24 @@ public class HeadmasterController {
                 .map(studentDtoMapper::mapFromDomainToDto)
                 .toList();
 
-        List<Competition> competitionsByFilters = competitionService.findCompetitionsByFilters(
-                competitionDto.competitionInstrument(),
-                competitionDto.competitionOnline(),
-                competitionDto.competitionPrimaryDegree(),
-                competitionDto.competitionSecondaryDegree(),
-                competitionDto.addressCity());
-        List<CompetitionWithLocationDto> competitionDTOs = competitionsByFilters.stream()
+        List<Competition> foundCompetitions;
+
+        if (Objects.isNull(competitionDto.competitionOnline())
+                && Objects.isNull(competitionDto.competitionPrimaryDegree())
+                && Objects.isNull(competitionDto.competitionSecondaryDegree())
+                && Objects.isNull(competitionDto.addressCity())) {
+            foundCompetitions = competitionService.findCompetitionsByInstrument(
+                    competitionDto.competitionInstrument());
+        } else {
+            foundCompetitions = competitionService.findCompetitionsByFilters(
+                    competitionDto.competitionInstrument(),
+                    competitionDto.competitionOnline(),
+                    competitionDto.competitionPrimaryDegree(),
+                    competitionDto.competitionSecondaryDegree(),
+                    competitionDto.addressCity());
+        }
+
+        List<CompetitionWithLocationDto> competitionDTOs = foundCompetitions.stream()
                 .filter(competition -> !competition.finished())
                 .filter(competition -> OffsetDateTime.now().isBefore(competition.applicationDeadline()))
                 .map(competitionDtoMapper::mapFromDomainToDto)
@@ -232,7 +285,9 @@ public class HeadmasterController {
             @RequestParam("competitionId") String competitionId,
             @RequestParam("classLevel") String classLevel,
             @RequestParam("performancePieces") String performancePieces,
-            Model model) {
+            Model model
+    )
+    {
 
         Competition competition = competitionService.findCompetitionById(competitionId);
         Teacher teacher = teacherService.findTeacherByEmail(headmasterTeacherEmail);
@@ -257,7 +312,9 @@ public class HeadmasterController {
 
     @GetMapping(HEADMASTER_COMPETITION_STUDENT_CANCEL)
     public String headmasterCancelStudent(Model model,
-                                          @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail) {
+                                          @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail
+    )
+    {
 
         List<String> cityDTOs = competitionService.findAllCompetitions().stream()
                 .filter(competition -> !competition.finished())
@@ -279,7 +336,9 @@ public class HeadmasterController {
             @RequestParam("competitionDateTo") @DateTimeFormat LocalDate competitionDateTo,
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             @RequestParam("competitionCity") String competitionCity,
-            Model model) {
+            Model model
+    )
+    {
 
         List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
                 .filter(competition -> !competition.finished())
@@ -300,7 +359,9 @@ public class HeadmasterController {
     public String headmasterCancelStudentConfirm(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             @RequestParam("competitionId") String competitionId,
-            Model model) {
+            Model model
+    )
+    {
 
         Teacher headmasterTeacher = teacherService.findTeacherByEmail(headmasterTeacherEmail);
         String headmasterTeacherId = headmasterTeacher.teacherId();
@@ -327,7 +388,9 @@ public class HeadmasterController {
     public String headmasterCancelStudentConfirmDone(
             Model model,
             @RequestParam("competitionId") String competitionId,
-            @RequestParam("studentId") String studentId) {
+            @RequestParam("studentId") String studentId
+    )
+    {
         Student student = studentService.findStudentById(studentId);
         StudentDto studentDto = studentDtoMapper.mapFromDomainToDto(student);
         Competition competition = competitionService.findCompetitionById(competitionId);
@@ -365,7 +428,9 @@ public class HeadmasterController {
     @PostMapping(HEADMASTER_COMPETITION_RESULT)
     public String headmasterPickCompetitionToAnnounceResult(
             @RequestParam("headmasterEmail") String headmasterEmail,
-            Model model) {
+            Model model
+    )
+    {
 
         List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
                 .filter(competition -> !competition.finished())
@@ -387,7 +452,9 @@ public class HeadmasterController {
     @GetMapping(HEADMASTER_COMPETITION_ANNOUNCE_RESULT)
     public String headmasterAnnounceCompetitionHomePage(
             @RequestParam("competitionId") String competitionId,
-            Model model) {
+            Model model
+    )
+    {
         Competition competition = competitionService.findCompetitionById(competitionId);
         CompetitionWithLocationDto competitionDto = competitionDtoMapper.mapFromDomainToDto(competition);
 
@@ -420,7 +487,9 @@ public class HeadmasterController {
     public String headmasterAnnounceCompetitionResult(
             @RequestParam("competitionId") String competitionId,
             @ModelAttribute("resultListDto") CompetitionResultListDto resultListDto,
-            Model model) {
+            Model model
+    )
+    {
 
         List<CompetitionResultDto> resultDTOs = createCompetitionResults(competitionId, resultListDto);
         String competitionName = resultDTOs.stream()
@@ -453,7 +522,9 @@ public class HeadmasterController {
             Model model,
             @RequestParam("competitionFrom") @DateTimeFormat LocalDate competitionFrom,
             @RequestParam("competitionTo") @DateTimeFormat LocalDate competitionTo,
-            @RequestParam("competitionCity") String competitionCity) {
+            @RequestParam("competitionCity") String competitionCity
+    )
+    {
 
         List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
                 .filter(Competition::finished)
@@ -470,7 +541,8 @@ public class HeadmasterController {
 
     @PostMapping(HEADMASTER_COMPETITION_CHECK_RESULT)
     public String headmasterCheckCompetitionResult(Model model,
-                                                   @RequestParam("competitionId") String competitionId)
+                                                   @RequestParam("competitionId") String competitionId
+    )
     {
         Competition competition = competitionService.findCompetitionById(competitionId);
         String competitionName = competition.name();
@@ -489,7 +561,9 @@ public class HeadmasterController {
 
 
     private CompetitionWithLocationDto createCompetition(CompetitionWithLocationDto competitionDto,
-                                                         String organizerEmail) {
+                                                         String organizerEmail
+    )
+    {
         Headmaster competitionOrganizer = headmasterService.findHeadmasterByEmail(organizerEmail);
         Competition competition = competitionDtoMapper.mapFromDtoToDomain(competitionDto);
         if (Objects.nonNull(competitionDto.competitionLocationName())) {
@@ -512,7 +586,9 @@ public class HeadmasterController {
 
     private ApplicationFormDto createStudentApplicationForm(
             Competition competition, Teacher teacher, Student student,
-            String classLevel, String performancePieces) {
+            String classLevel, String performancePieces
+    )
+    {
         ApplicationForm applicationForm = ApplicationForm.builder()
                 .competition(competition)
                 .teacher(teacher)

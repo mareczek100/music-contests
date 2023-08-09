@@ -1,6 +1,7 @@
 package mareczek100.musiccontests.test_configuration;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import mareczek100.musiccontests.MusicContestsApplication;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.Assertions;
@@ -16,10 +17,11 @@ import org.springframework.test.context.ActiveProfiles;
 		classes = {MusicContestsApplication.class},
 		properties = "spring.flyway.clean-disabled=false",
 		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 abstract class MusicContestsApplicationTests {
 
-	private final Flyway flyway;
+	private Flyway flyway;
 	@BeforeEach
 	void setUp() {
 		Assertions.assertNotNull(flyway);

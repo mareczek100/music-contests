@@ -52,7 +52,7 @@ public class CompetitionService {
     }
 
     @Transactional
-    public List<Competition> findCompetitionByInstrument(String instrument)
+    public List<Competition> findCompetitionsByInstrument(String instrument)
     {
         return competitionRepositoryDAO.findCompetitionByInstrument(instrument);
     }

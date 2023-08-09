@@ -12,10 +12,6 @@ import javax.sql.DataSource;
 @Testcontainers
 @TestConfiguration(proxyBeanMethods = false)
 public class PersistenceTestConfig {
-
-    private static final String USERNAME = "test";
-    private static final String PASSWORD = "test";
-    private static final String POSTGRESQL = "postgres";
     private static final String POSTGRESQL_CONTAINER = "postgres:latest";
 
     @Bean
@@ -23,13 +19,6 @@ public class PersistenceTestConfig {
     PostgreSQLContainer<?> postgresContainer() {
         return new PostgreSQLContainer<>(POSTGRESQL_CONTAINER);
     }
-//    @Bean
-//    @Qualifier(POSTGRESQL)
-//    public PostgreSQLContainer<?> postgreSQLContainer(){
-//        return new PostgreSQLContainer<>(POSTGRESQL_CONTAINER)
-//                .withUsername(USERNAME)
-//                .withPassword(PASSWORD);
-//    }
 
     @Bean
     DataSource dataSource (PostgreSQLContainer<?> postgreSQLContainer){

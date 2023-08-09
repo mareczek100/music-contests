@@ -85,5 +85,18 @@ public class AllUsersRestUtils {
 
         return CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
     }
+    public CompetitionsDto findAvailableCompetitionsByInstrument(String competitionInstrument)
+    {
+        List<Competition> competitionsByInstrument
+                = competitionService.findCompetitionsByInstrument(competitionInstrument);
+
+        List<CompetitionWithLocationDto> competitionDTOs = competitionsByInstrument.stream()
+                .filter(competition -> !competition.finished())
+                .filter(competition -> OffsetDateTime.now().isBefore(competition.applicationDeadline()))
+                .map(competitionDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        return CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
+    }
 
 }

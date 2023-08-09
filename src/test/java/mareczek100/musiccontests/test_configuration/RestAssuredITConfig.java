@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 @TestConfiguration
-public class RestAssuredITConfig {
+public class RestAssuredITConfig extends MusicContestsApplicationTests{
     @LocalServerPort
     private int serverPort;
     @Value("${server.servlet.context-path}")

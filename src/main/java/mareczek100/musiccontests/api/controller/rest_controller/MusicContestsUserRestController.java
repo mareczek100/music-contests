@@ -132,7 +132,7 @@ public class MusicContestsUserRestController  {
     }
     @DeleteMapping(MUSIC_CONTESTS_USER_DELETE_ACCOUNT)
     @Operation(summary = "Delete music contests user account by email.")
-    public ResponseEntity<?> deleteMusicContestsUserAccount(@Email String userEmail)
+    public ResponseEntity<?> deleteMusicContestsUserAccount(@RequestParam("userEmail") @Email String userEmail)
     {
         Optional<Headmaster> foundHeadmaster = headmasterService.findAllHeadmaster().stream()
                 .filter(headmaster -> userEmail.equalsIgnoreCase(headmaster.email()))

@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static mareczek100.musiccontests.api.controller.StudentController.STUDENT_MAIN_PAGE;
+
 @Validated
 @Controller
 @RequestMapping(STUDENT_MAIN_PAGE)
@@ -33,7 +35,8 @@ import static mareczek100.musiccontests.api.controller.StudentController.STUDENT
 public class StudentController {
 
     public static final String STUDENT_MAIN_PAGE = "/student";
-    public static final String STUDENT_COMPETITION = "/competition";
+    public static final String STUDENT_COMPETITION_FILTERS = "/competition/instrument";
+    public static final String STUDENT_COMPETITION_INSTRUMENT = "/competition/filters";
     public static final String STUDENT_COMPETITION_SHOW = "/competition/show";
     public static final String STUDENT_RESULT = "/result";
     public static final String STUDENT_RESULT_SEARCH = "/result/search";
@@ -45,6 +48,7 @@ public class StudentController {
     private final CompetitionResultDtoMapper competitionResultDtoMapper;
     private final InstrumentApiService instrumentApiService;
     private final InstrumentDtoMapper instrumentDtoMapper;
+
     @GetMapping
     public String studentHomePage(Model model) {
 
@@ -52,7 +56,30 @@ public class StudentController {
         return "student/student";
     }
 
-    @GetMapping(STUDENT_COMPETITION)
+    @GetMapping(STUDENT_COMPETITION_INSTRUMENT)
+    public String studentSearchCompetitionsByInstrument(Model model) {
+
+        List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
+                .map(instrumentDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        List<String> cityDTOs = competitionService.findAllCompetitions().stream()
+                .filter(competition -> !competition.finished())
+                .map(Competition::competitionLocation)
+                .map(CompetitionLocation::address)
+                .map(Address::city)
+                .distinct()
+                .toList();
+
+        CompetitionWithLocationDto competitionDto = CompetitionWithLocationDto.builder().build();
+
+        model.addAttribute("instrumentDTOs", instrumentDTOs);
+        model.addAttribute("competitionDto", competitionDto);
+        model.addAttribute("cityDTOs", cityDTOs);
+
+        return "student/student_competition";
+    }
+    @GetMapping(STUDENT_COMPETITION_FILTERS)
     public String studentSearchCompetitionsByFilters(Model model) {
 
         List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
@@ -66,6 +93,7 @@ public class StudentController {
                 .map(Address::city)
                 .distinct()
                 .toList();
+
         CompetitionWithLocationDto competitionDto = CompetitionWithLocationDto.builder().build();
 
         model.addAttribute("instrumentDTOs", instrumentDTOs);
@@ -82,14 +110,24 @@ public class StudentController {
     )
     {
 
-        List<Competition> competitionsByFilters = competitionService.findCompetitionsByFilters(
-                competitionDto.competitionInstrument(),
-                competitionDto.competitionOnline(),
-                competitionDto.competitionPrimaryDegree(),
-                competitionDto.competitionSecondaryDegree(),
-                competitionDto.addressCity());
+        List<Competition> foundCompetitions;
 
-        List<CompetitionWithLocationDto> competitionDTOs = competitionsByFilters.stream()
+        if (Objects.isNull(competitionDto.competitionOnline())
+                && Objects.isNull(competitionDto.competitionPrimaryDegree())
+                && Objects.isNull(competitionDto.competitionSecondaryDegree())
+                && Objects.isNull(competitionDto.addressCity())) {
+            foundCompetitions = competitionService.findCompetitionsByInstrument(
+                    competitionDto.competitionInstrument());
+        } else {
+            foundCompetitions = competitionService.findCompetitionsByFilters(
+                    competitionDto.competitionInstrument(),
+                    competitionDto.competitionOnline(),
+                    competitionDto.competitionPrimaryDegree(),
+                    competitionDto.competitionSecondaryDegree(),
+                    competitionDto.addressCity());
+        }
+
+        List<CompetitionWithLocationDto> competitionDTOs = foundCompetitions.stream()
                 .filter(competition -> !competition.finished())
                 .filter(competition -> OffsetDateTime.now().isBefore(competition.applicationDeadline()))
                 .map(competitionDtoMapper::mapFromDomainToDto)

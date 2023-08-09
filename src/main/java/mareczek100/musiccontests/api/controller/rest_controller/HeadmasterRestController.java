@@ -84,7 +84,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
 
     @PostMapping(CREATE_COMPETITION_AT_SCHOOL)
     @Operation(summary = "Create new competition at headmaster's music school.")
-    public CompetitionWithLocationDto createCompetitionAtSchool(
+    public ResponseEntity<CompetitionWithLocationDto> createCompetitionAtSchool(
             @RequestParam("headmasterOrganizerEmail") String headmasterOrganizerEmail,
             @RequestParam("competitionName") String competitionName,
             @RequestParam("competitionInstrument") String competitionInstrument,
@@ -112,18 +112,25 @@ public class HeadmasterRestController implements ControllerRestSupport {
                 .competitionRequirementsDescription(competitionRequirementsDescription)
                 .build();
 
-        return createCompetitionAtSchool(competitionDto, headmasterOrganizerEmail);
+        CompetitionWithLocationDto competitionAtSchool
+                = createCompetitionAtSchool(competitionDto, headmasterOrganizerEmail);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(competitionAtSchool);
 
     }
 
     @PostMapping(CREATE_COMPETITION_AT_OTHER_LOCATION)
     @Operation(summary = "Create new competition at other location.")
-    public CompetitionWithLocationDto createCompetitionAtOtherLocation(
+    public ResponseEntity<CompetitionWithLocationDto> createCompetitionAtOtherLocation(
             @RequestBody @Valid CompetitionWithLocationDto competitionDto,
             @RequestParam("headmasterOrganizerEmail") String headmasterOrganizerEmail
     )
     {
-        return createCompetitionAtOtherPlace(competitionDto, headmasterOrganizerEmail);
+        CompetitionWithLocationDto competitionAtOtherPlace
+                = createCompetitionAtOtherPlace(competitionDto, headmasterOrganizerEmail);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(competitionAtOtherPlace);
+
     }
 
 
@@ -148,6 +155,15 @@ public class HeadmasterRestController implements ControllerRestSupport {
                 competitionInstrument, competitionOnline, competitionPrimaryDegree,
                 competitionSecondaryDegree, competitionCity
         );
+    }
+
+    @GetMapping(FIND_ALL_COMPETITIONS_BY_INSTRUMENT)
+    @Operation(summary = "Find list of all available music competitions for chosen instrument.")
+    public CompetitionsDto findAllAvailableCompetitionsByInstrument(
+            @RequestParam("competitionInstrument") String competitionInstrument
+    )
+    {
+        return allUsersRestUtils.findAvailableCompetitionsByInstrument(competitionInstrument);
     }
 
     @GetMapping(FIND_FINISHED_COMPETITIONS_BY_FILTERS)

@@ -17,9 +17,11 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static mareczek100.musiccontests.api.controller.TeacherController.TEACHER_MAIN_PAGE;
+
 @Validated
 @Controller
 @RequestMapping(TEACHER_MAIN_PAGE)
@@ -27,7 +29,8 @@ import static mareczek100.musiccontests.api.controller.TeacherController.TEACHER
 public class TeacherController {
 
     public static final String TEACHER_MAIN_PAGE = "/teacher";
-    public static final String TEACHER_STUDENT_COMPETITION = "/student/competition";
+    public static final String TEACHER_STUDENT_COMPETITION_FILTERS = "/student/competition/filters";
+    public static final String TEACHER_STUDENT_COMPETITION_INSTRUMENT = "/student/competition/instrument";
     public static final String TEACHER_STUDENT_SELECT = "/student/competition/select";
     public static final String TEACHER_STUDENT_ANNOUNCE = "/student/competition/announce";
     public static final String TEACHER_STUDENT_CANCEL = "/student/cancel";
@@ -55,7 +58,31 @@ public class TeacherController {
         return "teacher/teacher";
     }
 
-    @GetMapping(TEACHER_STUDENT_COMPETITION)
+    @GetMapping(TEACHER_STUDENT_COMPETITION_INSTRUMENT)
+    public String teacherSearchCompetitionsByInstrument(Model model) {
+
+        List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
+                .map(instrumentDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        List<String> cityDTOs = competitionService.findAllCompetitions().stream()
+                .filter(competition -> !competition.finished())
+                .map(Competition::competitionLocation)
+                .map(CompetitionLocation::address)
+                .map(Address::city)
+                .distinct()
+                .toList();
+
+        CompetitionWithLocationDto competitionDto = CompetitionWithLocationDto.builder().build();
+
+        model.addAttribute("instrumentDTOs", instrumentDTOs);
+        model.addAttribute("competitionDto", competitionDto);
+        model.addAttribute("cityDTOs", cityDTOs);
+
+        return "teacher/teacher_student_competition_instrument";
+    }
+
+    @GetMapping(TEACHER_STUDENT_COMPETITION_FILTERS)
     public String teacherSearchCompetitionsByFilters(Model model) {
 
         List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
@@ -69,19 +96,23 @@ public class TeacherController {
                 .map(Address::city)
                 .distinct()
                 .toList();
+
         CompetitionWithLocationDto competitionDto = CompetitionWithLocationDto.builder().build();
 
         model.addAttribute("instrumentDTOs", instrumentDTOs);
         model.addAttribute("competitionDto", competitionDto);
         model.addAttribute("cityDTOs", cityDTOs);
 
-        return "teacher/teacher_student_competition";
+        return "teacher/teacher_student_competition_filters";
     }
 
     @GetMapping(TEACHER_STUDENT_SELECT)
-    public String teacherSelectStudentToCompetition(Model model,
-                                                    @RequestParam("teacherEmail") String teacherEmail,
-                                                    @ModelAttribute CompetitionWithLocationDto competitionDto) {
+    public String teacherSelectStudentToCompetition(
+            Model model,
+            @RequestParam("teacherEmail") String teacherEmail,
+            @ModelAttribute CompetitionWithLocationDto competitionDto
+    )
+    {
         Teacher teacher = teacherService.findTeacherByEmail(teacherEmail);
         String teacherId = teacher.teacherId();
         List<Student> studentList = studentService.findAllStudents().stream()
@@ -92,13 +123,24 @@ public class TeacherController {
                 .map(studentDtoMapper::mapFromDomainToDto)
                 .toList();
 
-        List<Competition> competitionsByFilters = competitionService.findCompetitionsByFilters(
-                competitionDto.competitionInstrument(),
-                competitionDto.competitionOnline(),
-                competitionDto.competitionPrimaryDegree(),
-                competitionDto.competitionSecondaryDegree(),
-                competitionDto.addressCity());
-        List<CompetitionWithLocationDto> competitionDTOs = competitionsByFilters.stream()
+        List<Competition> foundCompetitions;
+
+        if (Objects.isNull(competitionDto.competitionOnline())
+                && Objects.isNull(competitionDto.competitionPrimaryDegree())
+                && Objects.isNull(competitionDto.competitionSecondaryDegree())
+                && Objects.isNull(competitionDto.addressCity())) {
+            foundCompetitions = competitionService.findCompetitionsByInstrument(
+                    competitionDto.competitionInstrument());
+        } else {
+            foundCompetitions = competitionService.findCompetitionsByFilters(
+                    competitionDto.competitionInstrument(),
+                    competitionDto.competitionOnline(),
+                    competitionDto.competitionPrimaryDegree(),
+                    competitionDto.competitionSecondaryDegree(),
+                    competitionDto.addressCity());
+        }
+
+        List<CompetitionWithLocationDto> competitionDTOs = foundCompetitions.stream()
                 .filter(competition -> !competition.finished())
                 .filter(competition -> OffsetDateTime.now().isBefore(competition.applicationDeadline()))
                 .map(competitionDtoMapper::mapFromDomainToDto)
@@ -123,7 +165,9 @@ public class TeacherController {
             @RequestParam("competitionId") String competitionId,
             @RequestParam("classLevel") String classLevel,
             @RequestParam("performancePieces") String performancePieces,
-            Model model) {
+            Model model
+    )
+    {
 
         Competition competition = competitionService.findCompetitionById(competitionId);
         Teacher teacher = teacherService.findTeacherByEmail(teacherEmail);
@@ -168,7 +212,9 @@ public class TeacherController {
             @RequestParam("competitionDateTo") @DateTimeFormat LocalDate competitionDateTo,
             @RequestParam("teacherEmail") String teacherEmail,
             @RequestParam("competitionCity") String competitionCity,
-            Model model) {
+            Model model
+    )
+    {
 
         List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
                 .filter(competition -> !competition.finished())
@@ -189,7 +235,9 @@ public class TeacherController {
     public String teacherCancelStudentConfirm(
             @RequestParam("teacherEmail") String teacherEmail,
             @RequestParam("competitionId") String competitionId,
-            Model model) {
+            Model model
+    )
+    {
 
         Teacher teacher = teacherService.findTeacherByEmail(teacherEmail);
         String teacherId = teacher.teacherId();
@@ -216,7 +264,9 @@ public class TeacherController {
     public String teacherCancelStudentConfirmDone(
             Model model,
             @RequestParam("competitionId") String competitionId,
-            @RequestParam("studentId") String studentId) {
+            @RequestParam("studentId") String studentId
+    )
+    {
         Student student = studentService.findStudentById(studentId);
         StudentDto studentDto = studentDtoMapper.mapFromDomainToDto(student);
         Competition competition = competitionService.findCompetitionById(competitionId);
@@ -261,7 +311,9 @@ public class TeacherController {
     public String teacherCheckCompetitionResultByFilters(Model model,
                                                          @RequestParam("competitionFrom") @DateTimeFormat LocalDate competitionFrom,
                                                          @RequestParam("competitionTo") @DateTimeFormat LocalDate competitionTo,
-                                                         @RequestParam("competitionCity") String competitionCity) {
+                                                         @RequestParam("competitionCity") String competitionCity
+    )
+    {
 
         List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
                 .filter(Competition::finished)
@@ -278,7 +330,9 @@ public class TeacherController {
 
     @PostMapping(TEACHER_RESULT_SHOW)
     public String teacherCheckCompetitionResult(Model model,
-                                                @RequestParam("competitionId") String competitionId) {
+                                                @RequestParam("competitionId") String competitionId
+    )
+    {
         Competition competition = competitionService.findCompetitionById(competitionId);
         String competitionName = competition.name();
 
@@ -297,7 +351,9 @@ public class TeacherController {
 
     private ApplicationFormDto createStudentApplicationForm(
             Competition competition, Teacher teacher, Student student,
-            String classLevel, String performancePieces) {
+            String classLevel, String performancePieces
+    )
+    {
         ApplicationForm applicationForm = ApplicationForm.builder()
                 .competition(competition)
                 .teacher(teacher)

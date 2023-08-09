@@ -62,6 +62,14 @@ public class StudentRestController implements ControllerRestSupport {
     {
         return allUsersRestUtils.findAllAvailableCompetitions();
     }
+    @GetMapping(FIND_ALL_COMPETITIONS_BY_INSTRUMENT)
+    @Operation(summary = "Find list of all available music competitions for chosen instrument.")
+    public CompetitionsDto findAllAvailableCompetitionsByInstrument(
+            @RequestParam("competitionInstrument") String competitionInstrument
+    )
+    {
+        return allUsersRestUtils.findAvailableCompetitionsByInstrument(competitionInstrument);
+    }
 
     @GetMapping(FIND_AVAILABLE_COMPETITIONS_BY_FILTERS)
     @Operation(summary = "Find list of available music competitions by filters.")
