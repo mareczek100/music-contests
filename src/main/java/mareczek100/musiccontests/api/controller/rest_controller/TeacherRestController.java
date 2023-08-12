@@ -8,7 +8,6 @@ import mareczek100.musiccontests.api.controller.rest_controller.controller_rest_
 import mareczek100.musiccontests.api.controller.rest_controller.controller_rest_support.TeacherRestUtils;
 import mareczek100.musiccontests.api.dto.ApplicationFormDto;
 import mareczek100.musiccontests.api.dto.dto_rest_support.*;
-import mareczek100.musiccontests.domain.ApplicationForm;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +74,7 @@ public class TeacherRestController implements ControllerRestSupport {
         );
     }
 
-    @GetMapping(FIND_ALL_COMPETITIONS_BY_INSTRUMENT)
+    @GetMapping(FIND_AVAILABLE_COMPETITIONS_BY_INSTRUMENT)
     @Operation(summary = "Find list of all available music competitions for chosen instrument.")
     public CompetitionsDto findAllAvailableCompetitionsByInstrument(
             @RequestParam("competitionInstrument") String competitionInstrument
@@ -132,7 +131,7 @@ public class TeacherRestController implements ControllerRestSupport {
 
     @DeleteMapping(ANNOUNCE_STUDENT_CANCEL)
     @Operation(summary = "Cancel student's application to competition.")
-    public ResponseEntity<ApplicationForm> announceStudentToCompetitionCancel(
+    public ResponseEntity<?> announceStudentToCompetitionCancel(
             @RequestParam("competitionId") String competitionId,
             @RequestParam("studentId") String studentId
     )

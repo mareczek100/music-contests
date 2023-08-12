@@ -44,7 +44,7 @@ public class MusicContestsUserRestController  {
     public static final String CREATE_HEADMASTER = "/create/headmaster";
     public static final String CREATE_TEACHER = "/create/teacher";
     public static final String CREATE_STUDENT = "/create/student";
-    public static final String FIND_MUSIC_SCHOOL = "/school";
+    public static final String FIND_MUSIC_SCHOOL_BY_ID = "/school";
     public static final String FIND_MUSIC_SCHOOL_BY_PATRON = "/school/patron";
     public static final String FIND_ALL_MUSIC_SCHOOLS = "/school/all";
     public static final String CREATE_MUSIC_SCHOOL = "/create/school";
@@ -84,7 +84,7 @@ public class MusicContestsUserRestController  {
         Student insertedStudent = studentService.insertStudent(student);
         return studentDtoMapper.mapFromDomainToDto(insertedStudent);
     }
-    @GetMapping(FIND_MUSIC_SCHOOL)
+    @GetMapping(FIND_MUSIC_SCHOOL_BY_ID)
     @Operation(summary = "Find music school by id number.")
     public MusicSchoolWithAddressDto findMusicSchoolById(@RequestParam String musicSchoolId)
     {
@@ -100,8 +100,8 @@ public class MusicContestsUserRestController  {
         Optional<MusicSchool> musicSchoolByPatron = musicSchoolService.findMusicSchoolByPatron(patron);
 
         if (musicSchoolByPatron.isEmpty()){
-            ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
-                    "Music school with patron [%s] doesn't exist!".formatted(patron)));
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                    "Music school with patron [%s] doesn't exist!".formatted(patron))).build();
         }
 
         MusicSchoolWithAddressDto musicSchoolWithAddressDto

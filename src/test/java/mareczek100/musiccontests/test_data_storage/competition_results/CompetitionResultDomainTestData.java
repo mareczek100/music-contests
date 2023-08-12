@@ -21,7 +21,8 @@ public class CompetitionResultDomainTestData {
     public static CompetitionResult competitionResultSaved1() {
         return CompetitionResult.builder()
                 .competitionResultId("09c79493-b897-4d79-952e-6824b0561c24")
-                .competition(CompetitionDomainTestData.competitionAtOrganizerSchoolSaved1())
+                .competition(CompetitionDomainTestData
+                        .competitionAtOrganizerSchoolSaved1().withFinished(true))
                 .student(StudentDomainTestData.studentSaved1())
                 .competitionPlace("competitionPlace1")
                 .specialAward("specialAward1")
@@ -41,7 +42,8 @@ public class CompetitionResultDomainTestData {
     public static CompetitionResult competitionResultSaved2() {
         return CompetitionResult.builder()
                 .competitionResultId("1319cbb6-8a7f-47ee-9997-ce1733899458")
-                .competition(CompetitionDomainTestData.competitionAtOrganizerSchoolSaved1())
+                .competition(CompetitionDomainTestData
+                        .competitionAtOrganizerSchoolSaved1().withFinished(true))
                 .student(StudentDomainTestData.studentSaved2())
                 .competitionPlace("competitionPlace2")
                 .specialAward("specialAward2")
@@ -61,7 +63,8 @@ public class CompetitionResultDomainTestData {
     public static CompetitionResult competitionResultSaved3() {
         return CompetitionResult.builder()
                 .competitionResultId("4ec4c5fc-731f-4c35-9f3a-68db90959cc0")
-                .competition(CompetitionDomainTestData.competitionAtOrganizerSchoolSaved1())
+                .competition(CompetitionDomainTestData
+                        .competitionAtOrganizerSchoolSaved1().withFinished(true))
                 .student(StudentDomainTestData.studentSaved3())
                 .competitionPlace("competitionPlace3")
                 .specialAward("specialAward3")

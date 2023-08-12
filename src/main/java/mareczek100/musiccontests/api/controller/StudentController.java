@@ -77,7 +77,7 @@ public class StudentController {
         model.addAttribute("competitionDto", competitionDto);
         model.addAttribute("cityDTOs", cityDTOs);
 
-        return "student/student_competition";
+        return "student/student_competition_instrument";
     }
     @GetMapping(STUDENT_COMPETITION_FILTERS)
     public String studentSearchCompetitionsByFilters(Model model) {
@@ -100,13 +100,13 @@ public class StudentController {
         model.addAttribute("competitionDto", competitionDto);
         model.addAttribute("cityDTOs", cityDTOs);
 
-        return "student/student_competition";
+        return "student/student_competition_filters";
     }
 
     @GetMapping(STUDENT_COMPETITION_SHOW)
     public String studentShowAvailableCompetitions(
             Model model,
-            @ModelAttribute CompetitionWithLocationDto competitionDto
+            @ModelAttribute ("competitionDto") CompetitionWithLocationDto competitionDto
     )
     {
 
@@ -167,6 +167,7 @@ public class StudentController {
                 .filter(competitionResult ->
                         BCrypt.checkpw(studentPesel, competitionResult.student().pesel()))
                 .map(CompetitionResult::competition)
+                .filter(Competition::finished)
                 .filter(competition -> competitionFrom.isBefore(competition.beginning().toLocalDate())
                         && competitionTo.isAfter(competition.beginning().toLocalDate()))
                 .filter(competition -> competitionCity.equals(competition.competitionLocation().address().city()))

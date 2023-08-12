@@ -1,10 +1,11 @@
 package mareczek100.musiccontests.api.dto;
 
 import lombok.Builder;
+import lombok.With;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-
+@With
 @Builder
 public record CompetitionWithLocationDto(String competitionId,
                                          String competitionName,

@@ -157,7 +157,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
         );
     }
 
-    @GetMapping(FIND_ALL_COMPETITIONS_BY_INSTRUMENT)
+    @GetMapping(FIND_AVAILABLE_COMPETITIONS_BY_INSTRUMENT)
     @Operation(summary = "Find list of all available music competitions for chosen instrument.")
     public CompetitionsDto findAllAvailableCompetitionsByInstrument(
             @RequestParam("competitionInstrument") String competitionInstrument
@@ -309,7 +309,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
 
     @DeleteMapping(ANNOUNCE_STUDENT_CANCEL)
     @Operation(summary = "Cancel student's application to competition.")
-    public ResponseEntity<ApplicationForm> announceStudentToCompetitionCancel(
+    public ResponseEntity<?> announceStudentToCompetitionCancel(
             @RequestParam("competitionId") String competitionId,
             @RequestParam("studentId") String studentId
     )

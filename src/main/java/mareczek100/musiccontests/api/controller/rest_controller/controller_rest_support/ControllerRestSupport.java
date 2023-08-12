@@ -5,7 +5,7 @@ public interface ControllerRestSupport {
     String FIND_ALL_CITIES = "/cities";
     String FIND_ALL_COMPETITIONS = "/competitions/all";
     String FIND_AVAILABLE_COMPETITIONS_BY_FILTERS = "/competitions/available/filters";
-    String FIND_ALL_COMPETITIONS_BY_INSTRUMENT = "/competitions/available/instrument";
+    String FIND_AVAILABLE_COMPETITIONS_BY_INSTRUMENT = "/competitions/available/instrument";
     String FIND_FINISHED_COMPETITIONS_BY_FILTERS = "/competitions/finished";
     String FIND_ALL_TEACHER_STUDENTS = "/students";
     String FIND_AVAILABLE_CLASS_LEVELS = "/classes";

@@ -46,8 +46,8 @@
         <select th:name="instrument" class="form-select" id="validationTeacherInstrument" required>
             <option class="text-muted" selected disabled value="">Tutaj wybierz swój instrument</option>
             <span th:each="instrument : ${instrumentDTOs}">
-                <option th:value="${instrument.name}" th:text="${instrument.name}"></option>
-                </span>
+            <option th:value="${instrument.name}" th:text="${instrument.name}"></option>
+            </span>
         </select>
         <div class="valid-feedback">Ok!</div>
         <div class="invalid-feedback">Wybierz instrument, którego uczysz.</div><br>

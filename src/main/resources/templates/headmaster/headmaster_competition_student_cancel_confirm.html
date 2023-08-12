@@ -33,7 +33,7 @@
             <td class="fs-3 fw-bold text-uppercase" th:text="${competitionDto.competitionName}"></td>
         </tr>
     </table>
-    <form class="row g-2 was-validated" action="#" th:action="@{/headmaster/competition/student/cancel/confirm}" method="POST">
+    <form class="row g-2 was-validated" action="#" th:action="@{/headmaster/competition/student/cancel/confirm}" method="DELETE">
         <input type="hidden" th:name="competitionId" th:value="${competitionId}" class="form-control" required>
         <div class="col-md-6 offset-md-3">
             <label for="validationStudentId" class="form-label">Uczeń do wycofania</label>

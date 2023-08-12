@@ -103,7 +103,25 @@ public class CompetitionResultDtoTestData {
                 competitionResultToSave3().specialAward())
         );
     }
-
-
+    public static CompetitionResultListDto competitionResultsDtoEmpty() {
+        return CompetitionResultListDto.builder()
+                .competitionResultsSupport(competitionResultSupportEmptyList()).build();
+    }
+    public static List<CompetitionResultListDto.CompetitionResultSupport> competitionResultSupportEmptyList() {
+        return List.of(
+                new CompetitionResultListDto.CompetitionResultSupport(
+                        null,
+                        null,
+                        null),
+        new CompetitionResultListDto.CompetitionResultSupport(
+                null,
+                null,
+                null),
+        new CompetitionResultListDto.CompetitionResultSupport(
+                null,
+                null,
+                null)
+        );
+    }
 
 }

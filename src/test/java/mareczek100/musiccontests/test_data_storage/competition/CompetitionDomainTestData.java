@@ -1,6 +1,8 @@
 package mareczek100.musiccontests.test_data_storage.competition;
 
 
+import lombok.Getter;
+import mareczek100.musiccontests.api.dto.dto_rest_support.CitiesDto;
 import mareczek100.musiccontests.domain.Address;
 import mareczek100.musiccontests.domain.Competition;
 import mareczek100.musiccontests.domain.CompetitionLocation;
@@ -9,7 +11,7 @@ import mareczek100.musiccontests.test_data_storage.headmaster.HeadmasterDomainTe
 
 import java.time.*;
 import java.util.List;
-
+@Getter
 public class CompetitionDomainTestData {
 
     private static final ZoneOffset ZONE_OFFSET
@@ -18,7 +20,7 @@ public class CompetitionDomainTestData {
         return Competition.builder()
                 .competitionId(null)
                 .name("competitionAtOrganizerSchoolName1")
-                .instrument("competitionInstrument1")
+                .instrument("competitionInstrument")
                 .online(false)
                 .primaryDegree(true)
                 .secondaryDegree(false)
@@ -36,7 +38,7 @@ public class CompetitionDomainTestData {
         return Competition.builder()
                 .competitionId("c7972d7f-c099-4801-b74c-4a20a0a0c70b")
                 .name("competitionAtOrganizerSchoolName1")
-                .instrument("competitionInstrument1")
+                .instrument("competitionInstrument")
                 .online(false)
                 .primaryDegree(true)
                 .secondaryDegree(false)
@@ -54,7 +56,7 @@ public class CompetitionDomainTestData {
         return Competition.builder()
                 .competitionId(null)
                 .name("competitionAtOrganizerSchoolName2")
-                .instrument("competitionInstrument2")
+                .instrument("competitionInstrument")
                 .online(false)
                 .primaryDegree(true)
                 .secondaryDegree(false)
@@ -72,7 +74,7 @@ public class CompetitionDomainTestData {
         return Competition.builder()
                 .competitionId("c246bef2-3ea0-42dc-920d-51a119e2a6f3")
                 .name("competitionAtOrganizerSchoolName2")
-                .instrument("competitionInstrument2")
+                .instrument("competitionInstrument")
                 .online(false)
                 .primaryDegree(true)
                 .secondaryDegree(false)
@@ -90,7 +92,7 @@ public class CompetitionDomainTestData {
         return Competition.builder()
                 .competitionId(null)
                 .name("competitionAtOrganizerSchoolName3")
-                .instrument("competitionInstrument3")
+                .instrument("competitionInstrument")
                 .online(false)
                 .primaryDegree(true)
                 .secondaryDegree(false)
@@ -108,7 +110,7 @@ public class CompetitionDomainTestData {
         return Competition.builder()
                 .competitionId("aa24b3e9-8368-44d2-9135-d175c52565d2")
                 .name("competitionAtOrganizerSchoolName3")
-                .instrument("competitionInstrument3")
+                .instrument("competitionInstrument")
                 .online(false)
                 .primaryDegree(true)
                 .secondaryDegree(false)
@@ -165,6 +167,17 @@ public class CompetitionDomainTestData {
                 competitionAtOrganizerSchoolSaved2(),
                 competitionAtOrganizerSchoolSaved3()
         );
+    }
+    public static List<String> competitionCityList() {
+        return List.of(
+                competitionAtOrganizerSchoolSaved1().competitionLocation().address().city(),
+                competitionAtOrganizerSchoolSaved2().competitionLocation().address().city(),
+                competitionAtOrganizerSchoolSaved3().competitionLocation().address().city()
+        );
+    }
+
+    public static CitiesDto competitionCities() {
+        return CitiesDto.builder().competitionCitiesDtoList(competitionCityList()).build();
     }
 
     private static CompetitionLocation getLocationAtSchoolToSave() {
@@ -240,7 +253,7 @@ public class CompetitionDomainTestData {
         return OffsetDateTime.of(localDate, localTime, ZONE_OFFSET);
     }
     private static OffsetDateTime deadlineDateTime(){
-        LocalDate localDate = LocalDate.of(2030, 2, 21);
+        LocalDate localDate = LocalDate.of(3030, 2, 21);
         LocalTime localTime = LocalTime.of(23, 59);
         return OffsetDateTime.of(localDate, localTime, ZONE_OFFSET);
     }

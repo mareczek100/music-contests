@@ -1,10 +1,11 @@
 package mareczek100.musiccontests.test_data_storage.headmaster;
 
 
+import lombok.Getter;
 import mareczek100.musiccontests.domain.Headmaster;
 import mareczek100.musiccontests.domain.Teacher;
 import mareczek100.musiccontests.test_data_storage.music_school.MusicSchoolDomainTestData;
-
+@Getter
 public class HeadmasterDomainTestData {
     public static Headmaster headmasterToSave1() {
         return Headmaster.builder()

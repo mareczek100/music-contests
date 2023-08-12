@@ -11,10 +11,18 @@
 </head>
 <body class="p-3 mb-2 bg-dark-subtle text-emphasis-dark">
 <h1 class="text-center">Witaj na Portalu Konkursów Muzycznych!</h1><br>
-<h2 class="text-center">Tutaj stworzysz konto oraz zalogujesz się!</h2><br><br>
-
-<div class="d-grid gap-2 col-4 mx-auto">
-<a class="btn btn-outline-success btn-lg" th:href="@{/authentication/account}" role="button">Utwórz konto</a>
+<h2 class="text-center">Tutaj stworzysz lub usuniesz konto oraz zalogujesz się!</h2><br><br>
+<div class="row">
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <a class="btn btn-outline-success btn-lg" th:href="@{/authentication/account}" role="button">Utwórz konto</a>
+    </div>
+    <div class="d-grid gap-2 col-2 mx-auto">
+        <form class="row g-1" th:action="@{/authentication/account/delete}" method="DELETE">
+            <input type="text" th:name="userEmail" class="form-control text-center" id="deleteAccount"
+                   placeholder="Email użytkownika" required>
+            <button class="btn btn-outline-danger" type="submit">Skasuj konto</button>
+        </form>
+    </div>
 </div><br>
 <div th:if="${accountCreated==true}" class="text-bg-info p-3">
     <h3 class="text-center" th:text="'Gratulacje ' + ${portalUser.name} + ' ' + ${portalUser.surname} + '!'"></h3>
@@ -27,7 +35,6 @@
 <div th:if="${accountDeleted==false}" class="text-bg-danger text-white p-3">
     <h3 class="text-center" th:text="'Błąd usuwania konta: ' + ${portalUser.name} + ' ' + ${portalUser.surname}!"></h3>
 </div>
-
 <form class="row g-3 was-validated" action="#" th:action="@{/authentication/login}" method="POST">
     <h5>Podaj nazwę użytkownika i hasło</h5>
     <div class="col-md-3">

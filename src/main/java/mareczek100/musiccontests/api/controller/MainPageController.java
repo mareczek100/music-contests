@@ -19,6 +19,7 @@ import mareczek100.musiccontests.domain.enums.ClassLevel;
 import mareczek100.musiccontests.domain.enums.Degree;
 import mareczek100.musiccontests.domain.enums.EducationProgram;
 import mareczek100.musiccontests.infrastructure.security.RoleEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static mareczek100.musiccontests.api.controller.MainPageController.MUSIC_CONTESTS_MAIN_PAGE;
@@ -89,7 +91,7 @@ public class MainPageController {
 
     @PostMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_CREATE_ACCOUNT)
     public ModelAndView loginCreateAccountProcess(
-            @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDtoId,
+            @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
             @RequestParam("name") String name,
             @RequestParam("surname") String surname,
             @RequestParam("email") @Email String email,
@@ -110,47 +112,16 @@ public class MainPageController {
                 .map(instrumentDtoMapper::mapFromDomainToDto)
                 .toList();
 
-        if (musicSchoolDtoId.musicSchoolId().equals(NONE_MUSIC_SCHOOL)) {
-            MusicSchoolWithAddressDto musicSchoolDto = MusicSchoolWithAddressDto.builder().build();
+        String musicSchoolId = Objects.requireNonNullElse(musicSchoolDto.musicSchoolId(), "");
+
+        if (musicSchoolId.equals(NONE_MUSIC_SCHOOL)) {
+            MusicSchoolWithAddressDto musicSchoolToCreateDto = MusicSchoolWithAddressDto.builder().build();
             ModelAndView musicSchoolModelView = new ModelAndView("login/login_create_music_school");
             musicSchoolModelView.addObject("portalUser", portalUser);
-            musicSchoolModelView.addObject("musicSchoolDto", musicSchoolDto);
+            musicSchoolModelView.addObject("musicSchoolDto", musicSchoolToCreateDto);
             return musicSchoolModelView;
         }
 
-
-        return switch (roleName) {
-            case HEADMASTER -> createHeadmaster(portalUser, musicSchoolDtoId);
-            case TEACHER -> prepareTeacher(portalUser, musicSchoolDtoId, instrumentDTOs);
-            case STUDENT -> prepareStudent(portalUser, musicSchoolDtoId, instrumentDTOs);
-            default -> {
-                ModelAndView failureModelView = new ModelAndView("login/login_failure");
-                failureModelView.addObject("accountCreated", ACCOUNT_CREATED_FAILURE);
-                yield failureModelView;
-            }
-        };
-    }
-
-    @PostMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_CREATE_ACCOUNT_USER)
-    public ModelAndView loginCreateUserAccountProcess(
-            @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
-            @RequestParam("name") String name,
-            @RequestParam("surname") String surname,
-            @RequestParam("email") @Email String email,
-            @RequestParam("pesel") @Valid String pesel,
-            @RequestParam("role") String role
-    ) {
-        RoleEntity.RoleName roleName = RoleEntity.RoleName.valueOf(role);
-        MusicContestsPortalUserDto portalUser = MusicContestsPortalUserDto.builder()
-                .name(name)
-                .surname(surname)
-                .email(email)
-                .pesel(pesel)
-                .build();
-
-        List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
-                .map(instrumentDtoMapper::mapFromDomainToDto)
-                .toList();
 
         return switch (roleName) {
             case HEADMASTER -> createHeadmaster(portalUser, musicSchoolDto);
@@ -163,6 +134,39 @@ public class MainPageController {
             }
         };
     }
+
+//    @PostMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_CREATE_ACCOUNT_USER)
+//    public ModelAndView loginCreateUserAccountProcess(
+//            @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
+//            @RequestParam("name") String name,
+//            @RequestParam("surname") String surname,
+//            @RequestParam("email") @Email String email,
+//            @RequestParam("pesel") @Valid String pesel,
+//            @RequestParam("role") String role
+//    ) {
+//        RoleEntity.RoleName roleName = RoleEntity.RoleName.valueOf(role);
+//        MusicContestsPortalUserDto portalUser = MusicContestsPortalUserDto.builder()
+//                .name(name)
+//                .surname(surname)
+//                .email(email)
+//                .pesel(pesel)
+//                .build();
+//
+//        List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
+//                .map(instrumentDtoMapper::mapFromDomainToDto)
+//                .toList();
+//
+//        return switch (roleName) {
+//            case HEADMASTER -> createHeadmaster(portalUser, musicSchoolDto);
+//            case TEACHER -> prepareTeacher(portalUser, musicSchoolDto, instrumentDTOs);
+//            case STUDENT -> prepareStudent(portalUser, musicSchoolDto, instrumentDTOs);
+//            default -> {
+//                ModelAndView failureModelView = new ModelAndView("login/login_failure");
+//                failureModelView.addObject("accountCreated", ACCOUNT_CREATED_FAILURE);
+//                yield failureModelView;
+//            }
+//        };
+//    }
 
 
     @PostMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_ACCOUNT_TEACHER)
@@ -194,7 +198,7 @@ public class MainPageController {
 
     @DeleteMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_DELETE_ACCOUNT)
     public String deleteMusicContestsUserAccount(
-            @Email String userEmail,
+            @RequestParam("userEmail") @Email String userEmail,
             Model model
     )
     {
@@ -279,6 +283,7 @@ public class MainPageController {
         }
         headmasterModelView.addObject("portalUser", headmasterDto);
         headmasterModelView.addObject("accountCreated", ACCOUNT_CREATED_SUCCESS);
+        headmasterModelView.setStatus(HttpStatus.CREATED);
 
         return headmasterModelView;
     }
@@ -297,7 +302,8 @@ public class MainPageController {
     }
 
     private TeacherDto createTeacher(TeacherDto teacherDto,
-                                     MusicSchoolWithAddressDto musicSchoolDto) {
+                                     MusicSchoolWithAddressDto musicSchoolDto
+    ) {
         Teacher teacher = teacherDtoMapper.mapFromDtoToDomain(teacherDto);
         TeacherDto insertedTeacherDto;
 

@@ -110,7 +110,7 @@ public class TeacherController {
     public String teacherSelectStudentToCompetition(
             Model model,
             @RequestParam("teacherEmail") String teacherEmail,
-            @ModelAttribute CompetitionWithLocationDto competitionDto
+            @ModelAttribute ("competitionDto") CompetitionWithLocationDto competitionDto
     )
     {
         Teacher teacher = teacherService.findTeacherByEmail(teacherEmail);
@@ -260,7 +260,7 @@ public class TeacherController {
         return "teacher/teacher_student_cancel_confirm";
     }
 
-    @PostMapping(TEACHER_STUDENT_CANCEL_CONFIRM)
+    @DeleteMapping(TEACHER_STUDENT_CANCEL_CONFIRM)
     public String teacherCancelStudentConfirmDone(
             Model model,
             @RequestParam("competitionId") String competitionId,

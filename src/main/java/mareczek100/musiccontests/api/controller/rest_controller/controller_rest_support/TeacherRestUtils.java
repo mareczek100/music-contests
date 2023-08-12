@@ -130,7 +130,7 @@ public class TeacherRestUtils {
         return CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
     }
 
-    public ResponseEntity<ApplicationForm> announceStudentToCompetitionCancel(
+    public ResponseEntity<?> announceStudentToCompetitionCancel(
             String competitionId,
             String studentId
     )

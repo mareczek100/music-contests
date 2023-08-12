@@ -317,7 +317,6 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
 
     @Test
     void findAllCompetitionStudentsExists() throws Exception {
-
         //given
         CompetitionWithLocationDto competitionDto = CompetitionDtoTestData.competitionAtOrganizerSchoolSavedDto1();
         String competitionId = competitionDto.competitionId();

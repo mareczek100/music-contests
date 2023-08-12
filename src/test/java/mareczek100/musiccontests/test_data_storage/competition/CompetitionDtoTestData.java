@@ -15,7 +15,7 @@ public class CompetitionDtoTestData {
         return CompetitionWithLocationDto.builder()
                 .competitionId(null)
                 .competitionName("competitionAtOrganizerSchoolName1")
-                .competitionInstrument("competitionInstrument1")
+                .competitionInstrument("competitionInstrument")
                 .competitionOnline(false)
                 .competitionPrimaryDegree(true)
                 .competitionSecondaryDegree(false)
@@ -39,7 +39,7 @@ public class CompetitionDtoTestData {
         return CompetitionWithLocationDto.builder()
                 .competitionId("c7972d7f-c099-4801-b74c-4a20a0a0c70b")
                 .competitionName("competitionAtOrganizerSchoolName1")
-                .competitionInstrument("competitionInstrument1")
+                .competitionInstrument("competitionInstrument")
                 .competitionOnline(false)
                 .competitionPrimaryDegree(true)
                 .competitionSecondaryDegree(false)
@@ -63,7 +63,7 @@ public class CompetitionDtoTestData {
         return CompetitionWithLocationDto.builder()
                 .competitionId(null)
                 .competitionName("competitionAtOrganizerSchoolName2")
-                .competitionInstrument("competitionInstrument2")
+                .competitionInstrument("competitionInstrument")
                 .competitionOnline(false)
                 .competitionPrimaryDegree(true)
                 .competitionSecondaryDegree(false)
@@ -87,7 +87,7 @@ public class CompetitionDtoTestData {
         return CompetitionWithLocationDto.builder()
                 .competitionId("c246bef2-3ea0-42dc-920d-51a119e2a6f3")
                 .competitionName("competitionAtOrganizerSchoolName2")
-                .competitionInstrument("competitionInstrument2")
+                .competitionInstrument("competitionInstrument")
                 .competitionOnline(false)
                 .competitionPrimaryDegree(true)
                 .competitionSecondaryDegree(false)
@@ -111,7 +111,7 @@ public class CompetitionDtoTestData {
         return CompetitionWithLocationDto.builder()
                 .competitionId(null)
                 .competitionName("competitionAtOrganizerSchoolName3")
-                .competitionInstrument("competitionInstrument3")
+                .competitionInstrument("competitionInstrument")
                 .competitionOnline(false)
                 .competitionPrimaryDegree(true)
                 .competitionSecondaryDegree(false)
@@ -135,7 +135,7 @@ public class CompetitionDtoTestData {
         return CompetitionWithLocationDto.builder()
                 .competitionId("aa24b3e9-8368-44d2-9135-d175c52565d2")
                 .competitionName("competitionAtOrganizerSchoolName3")
-                .competitionInstrument("competitionInstrument3")
+                .competitionInstrument("competitionInstrument")
                 .competitionOnline(false)
                 .competitionPrimaryDegree(true)
                 .competitionSecondaryDegree(false)
@@ -159,7 +159,7 @@ public class CompetitionDtoTestData {
         return CompetitionWithLocationDto.builder()
                 .competitionId(null)
                 .competitionName("competitionAtOtherLocationName1")
-                .competitionInstrument("competitionInstrument1")
+                .competitionInstrument("competitionInstrument")
                 .competitionOnline(false)
                 .competitionPrimaryDegree(true)
                 .competitionSecondaryDegree(false)
@@ -183,7 +183,7 @@ public class CompetitionDtoTestData {
         return CompetitionWithLocationDto.builder()
                 .competitionId("5e457d48-eae7-45ce-b3a6-a0706a8deb83")
                 .competitionName("competitionAtOtherLocationName1")
-                .competitionInstrument("competitionInstrument1")
+                .competitionInstrument("competitionInstrument")
                 .competitionOnline(false)
                 .competitionPrimaryDegree(true)
                 .competitionSecondaryDegree(false)
@@ -232,7 +232,7 @@ public class CompetitionDtoTestData {
         return LocalDateTime.of(localDate, localTime);
     }
     private static LocalDateTime deadlineDateTime(){
-        LocalDate localDate = LocalDate.of(2030, 2, 21);
+        LocalDate localDate = LocalDate.of(3030, 2, 21);
         LocalTime localTime = LocalTime.of(23, 59);
         return LocalDateTime.of(localDate, localTime);
     }

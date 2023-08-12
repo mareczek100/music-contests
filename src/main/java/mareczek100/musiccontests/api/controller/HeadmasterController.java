@@ -170,7 +170,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_FILTERS_SEARCH)
-    public String headmasterSearchCompetitionToPutStudentByFilters(
+    public String headmasterSearchCompetitionByFiltersToPutStudent(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             Model model
     )
@@ -198,7 +198,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_INSTRUMENT_SEARCH)
-    public String headmasterSearchCompetitionToPutStudentByInstrument(
+    public String headmasterSearchCompetitionByInstrumentToPutStudent(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             Model model
     )
@@ -228,7 +228,7 @@ public class HeadmasterController {
     @GetMapping(HEADMASTER_COMPETITION_SELECT_STUDENT)
     public String headmasterSelectStudentToCompetition(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
-            @ModelAttribute CompetitionWithLocationDto competitionDto,
+            @ModelAttribute ("competitionDto") CompetitionWithLocationDto competitionDto,
             Model model
     )
     {
@@ -384,7 +384,7 @@ public class HeadmasterController {
         return "headmaster/headmaster_competition_student_cancel_confirm";
     }
 
-    @PostMapping(HEADMASTER_COMPETITION_STUDENT_CANCEL_CONFIRM)
+    @DeleteMapping(HEADMASTER_COMPETITION_STUDENT_CANCEL_CONFIRM)
     public String headmasterCancelStudentConfirmDone(
             Model model,
             @RequestParam("competitionId") String competitionId,
@@ -490,7 +490,6 @@ public class HeadmasterController {
             Model model
     )
     {
-
         List<CompetitionResultDto> resultDTOs = createCompetitionResults(competitionId, resultListDto);
         String competitionName = resultDTOs.stream()
                 .map(result -> result.competition().competitionName())

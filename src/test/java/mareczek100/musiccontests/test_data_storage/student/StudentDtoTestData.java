@@ -17,7 +17,7 @@ public class StudentDtoTestData {
                 .name("name1")
                 .surname("surname1")
                 .email("student1@music-school.com")
-                .pesel("13333333333")
+                .pesel("$2a$12$/iK7.k0Weo3rpCdRlvaDouun/6nHI75KTPVMptxeg8KY3ov.vqTvC")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -26,6 +26,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //pesel 13333333333
     }
 
     public static StudentDto studentDtoSaved1() {
@@ -34,7 +35,7 @@ public class StudentDtoTestData {
                 .name("name1")
                 .surname("surname1")
                 .email("student1@music-school.com")
-                .pesel("13333333333")
+                .pesel("$2a$12$/iK7.k0Weo3rpCdRlvaDouun/6nHI75KTPVMptxeg8KY3ov.vqTvC")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -43,6 +44,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //pesel 13333333333
     }
 
     public static StudentDto studentDtoToSave2() {
@@ -51,7 +53,7 @@ public class StudentDtoTestData {
                 .name("name2")
                 .surname("surname2")
                 .email("student2@music-school.com")
-                .pesel("33333333332")
+                .pesel("$2a$12$b/IcsSSIyzsDNR93EhzElutbCoV7b7fZScZTVEfs6lss7NhiHdjIC")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -60,6 +62,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //33333333332
     }
 
     public static StudentDto studentDtoSaved2() {
@@ -68,7 +71,7 @@ public class StudentDtoTestData {
                 .name("name2")
                 .surname("surname2")
                 .email("student2@music-school.com")
-                .pesel("33333333332")
+                .pesel("$2a$12$b/IcsSSIyzsDNR93EhzElutbCoV7b7fZScZTVEfs6lss7NhiHdjIC")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -77,6 +80,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //33333333332
     }
 
     public static StudentDto studentDtoToSave3() {
@@ -85,7 +89,7 @@ public class StudentDtoTestData {
                 .name("name3")
                 .surname("surname3")
                 .email("student3@music-school.com")
-                .pesel("33333333333")
+                .pesel("$2a$12$X8YYtELB8O0CKBMhWgT4cOiYsA4KMy3TUQOwdy8hIDd077Bq6mHJS")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -94,6 +98,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //33333333333
     }
 
     public static StudentDto studentDtoSaved3() {
@@ -102,7 +107,7 @@ public class StudentDtoTestData {
                 .name("name3")
                 .surname("surname3")
                 .email("student3@music-school.com")
-                .pesel("33333333333")
+                .pesel("$2a$12$X8YYtELB8O0CKBMhWgT4cOiYsA4KMy3TUQOwdy8hIDd077Bq6mHJS")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -111,6 +116,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //33333333333
     }
 
     public static StudentDto studentDtoToSave4() {
@@ -119,7 +125,7 @@ public class StudentDtoTestData {
                 .name("name4")
                 .surname("surname4")
                 .email("student4@music-school.com")
-                .pesel("43333333333")
+                .pesel("$2a$12$JOvKXxmRzgI5EvUsbGhCs.1y2HJIwTPpxSO9QdbPaYiAsha.sMyba")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -128,6 +134,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //43333333333
     }
 
     public static StudentDto studentDtoSaved4() {
@@ -136,7 +143,7 @@ public class StudentDtoTestData {
                 .name("name4")
                 .surname("surname4")
                 .email("student4@music-school.com")
-                .pesel("43333333333")
+                .pesel("$2a$12$JOvKXxmRzgI5EvUsbGhCs.1y2HJIwTPpxSO9QdbPaYiAsha.sMyba")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -145,6 +152,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //43333333333
     }
 
     public static StudentDto studentDtoToSave5() {
@@ -153,7 +161,7 @@ public class StudentDtoTestData {
                 .name("name5")
                 .surname("surname5")
                 .email("student5@music-school.com")
-                .pesel("53333333333")
+                .pesel("$2a$12$4Dh/bAeEus0eJyv9/SAZ/OOCMVLstIvZdLjD.emdh8J/oCIGfrXu.")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -162,6 +170,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //53333333333
     }
 
     public static StudentDto studentDtoSaved5() {
@@ -170,7 +179,7 @@ public class StudentDtoTestData {
                 .name("name5")
                 .surname("surname5")
                 .email("student5@music-school.com")
-                .pesel("53333333333")
+                .pesel("$2a$12$4Dh/bAeEus0eJyv9/SAZ/OOCMVLstIvZdLjD.emdh8J/oCIGfrXu.")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -179,6 +188,7 @@ public class StudentDtoTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDtoTestData.teacherDtoSaved1())
                 .build();
+        //53333333333
     }
 
     public static List<StudentDto> studentDtoList() {

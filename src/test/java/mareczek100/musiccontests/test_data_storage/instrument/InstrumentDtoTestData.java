@@ -12,6 +12,7 @@ public class InstrumentDtoTestData {
 
     public static InstrumentDto instrumentDto1(){
         return InstrumentDto.builder()
+                .instrumentId("a88e00d8-ef55-4fb0-80cf-d7b454230b0b")
                 .name("testInstrument1")
                 .category(buildCategoryStrunoweDto())
                 .primarySchoolDegree(true)
@@ -20,6 +21,7 @@ public class InstrumentDtoTestData {
     }
     public static InstrumentDto instrumentDto2(){
         return InstrumentDto.builder()
+                .instrumentId("6cd043a4-0495-4b0e-80da-e0b8c7fdacd3")
                 .name("testInstrument2")
                 .category(buildCategoryStrunoweDto())
                 .primarySchoolDegree(true)
@@ -28,6 +30,7 @@ public class InstrumentDtoTestData {
     }
     public static InstrumentDto instrumentDto3(){
         return InstrumentDto.builder()
+                .instrumentId("f8ec2ded-c4ef-428e-83f8-c5f83bcdacd8")
                 .name("testInstrument3")
                 .category(buildCategoryDęteDto())
                 .primarySchoolDegree(true)
@@ -36,6 +39,7 @@ public class InstrumentDtoTestData {
     }
     public static InstrumentDto instrumentDto4(){
         return InstrumentDto.builder()
+                .instrumentId("53c60873-330f-4cb2-8979-0779519db27d")
                 .name("testInstrument4")
                 .category(buildCategoryPerkusyjneDto())
                 .primarySchoolDegree(true)
@@ -44,6 +48,7 @@ public class InstrumentDtoTestData {
     }
     public static InstrumentDto instrumentDto5() {
         return InstrumentDto.builder()
+                .instrumentId("9c4f2de1-a848-4bf6-bf11-a40715507bb0")
                 .name("testInstrument5")
                 .category(buildCategoryPerkusyjneDto())
                 .primarySchoolDegree(true)

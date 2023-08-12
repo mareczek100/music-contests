@@ -13,7 +13,7 @@
 <h1 class="text-center">Stwórz swoją szkołę muzyczną!</h1><br>
 
 <form class="row g-2 was-validated" action="#" th:object="${musicSchoolDto}"
-      th:action="@{/authentication/account/user}" method="POST">
+      th:action="@{/authentication/account}" method="POST">
     <input type="hidden" th:name="name" th:value="${portalUser.name}" class="form-control" required>
     <input type="hidden" th:name="surname" th:value="${portalUser.surname}" class="form-control" required>
     <input type="hidden" th:name="email" th:value="${portalUser.email}" class="form-control" required>
