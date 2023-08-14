@@ -11,8 +11,6 @@ public interface InstrumentDAO {
 
     Instrument updateInstrument(String oldName, String newName);
 
-//    Instrument findInstrumentById(Integer instrumentId);
-
     Instrument findInstrumentByName(String instrumentName);
 
     List<Instrument> findInstrumentsByCategoryName(String instrumentCategory);

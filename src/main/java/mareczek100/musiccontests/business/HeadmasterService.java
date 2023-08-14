@@ -31,7 +31,7 @@ public class HeadmasterService {
         MusicSchool musicSchool = headmaster.musicSchool();
         String musicSchoolId = musicSchool.musicSchoolId();
 
-        boolean schoolHeadmasterAnyMatch = findAllHeadmaster().stream()
+        boolean schoolHeadmasterAnyMatch = findAllHeadmasters().stream()
                 .map(Headmaster::musicSchool)
                 .map(MusicSchool::musicSchoolId)
                 .anyMatch(musicSchoolId::equals);
@@ -58,7 +58,7 @@ public class HeadmasterService {
     }
 
     @Transactional
-    public List<Headmaster> findAllHeadmaster() {
+    public List<Headmaster> findAllHeadmasters() {
         return headmasterRepositoryDAO.findAllHeadmasters();
     }
 
@@ -72,7 +72,7 @@ public class HeadmasterService {
     @Transactional
     public void checkIfHeadmasterExistByPesel(String pesel)
     {
-        Optional<Headmaster> headmasterByPesel = findAllHeadmaster().stream()
+        Optional<Headmaster> headmasterByPesel = findAllHeadmasters().stream()
                 .filter(headmaster -> BCrypt.checkpw(pesel, headmaster.pesel()))
                 .findAny();
 

@@ -14,13 +14,6 @@ import org.springframework.test.context.ActiveProfiles;
 		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 abstract class MusicContestsApplicationTests {
 
-//	private Flyway flyway;
-//	@BeforeEach
-//	void setUp() {
-//		Assertions.assertNotNull(flyway);
-//		flyway.clean();
-//		flyway.migrate();
-//	}
 	@Test
 	void contextLoads() {
 	}

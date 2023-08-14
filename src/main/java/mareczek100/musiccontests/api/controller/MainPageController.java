@@ -202,7 +202,7 @@ public class MainPageController {
             Model model
     )
     {
-        Optional<Headmaster> foundHeadmaster = headmasterService.findAllHeadmaster().stream()
+        Optional<Headmaster> foundHeadmaster = headmasterService.findAllHeadmasters().stream()
                 .filter(headmaster -> userEmail.equalsIgnoreCase(headmaster.email()))
                 .findAny();
 

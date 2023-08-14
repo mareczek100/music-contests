@@ -18,7 +18,7 @@ public class StudentEntityTestData {
                 .name("name1")
                 .surname("surname1")
                 .email("student1@music-school.com")
-                .pesel("$2a$12$/iK7.k0Weo3rpCdRlvaDouun/6nHI75KTPVMptxeg8KY3ov.vqTvC")
+                .pesel("13333333333")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -27,7 +27,6 @@ public class StudentEntityTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherEntityTestData.teacherEntitySaved1())
                 .build();
-        //pesel 13333333333
     }
 
     public static StudentEntity studentEntitySaved1() {
@@ -54,7 +53,7 @@ public class StudentEntityTestData {
                 .name("name2")
                 .surname("surname2")
                 .email("student2@music-school.com")
-                .pesel("$2a$12$b/IcsSSIyzsDNR93EhzElutbCoV7b7fZScZTVEfs6lss7NhiHdjIC")
+                .pesel("33333333332")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -63,7 +62,6 @@ public class StudentEntityTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherEntityTestData.teacherEntitySaved1())
                 .build();
-        //33333333332
     }
 
     public static StudentEntity studentEntitySaved2() {
@@ -90,7 +88,7 @@ public class StudentEntityTestData {
                 .name("name3")
                 .surname("surname3")
                 .email("student3@music-school.com")
-                .pesel("$2a$12$X8YYtELB8O0CKBMhWgT4cOiYsA4KMy3TUQOwdy8hIDd077Bq6mHJS")
+                .pesel("33333333333")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -99,7 +97,6 @@ public class StudentEntityTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherEntityTestData.teacherEntitySaved1())
                 .build();
-        //33333333333
     }
 
     public static StudentEntity studentEntitySaved3() {
@@ -126,7 +123,7 @@ public class StudentEntityTestData {
                 .name("name4")
                 .surname("surname4")
                 .email("student4@music-school.com")
-                .pesel("$2a$12$JOvKXxmRzgI5EvUsbGhCs.1y2HJIwTPpxSO9QdbPaYiAsha.sMyba")
+                .pesel("43333333333")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -135,7 +132,6 @@ public class StudentEntityTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherEntityTestData.teacherEntitySaved1())
                 .build();
-        //43333333333
     }
 
     public static StudentEntity studentEntitySaved4() {
@@ -162,7 +158,7 @@ public class StudentEntityTestData {
                 .name("name5")
                 .surname("surname5")
                 .email("student5@music-school.com")
-                .pesel("$2a$12$4Dh/bAeEus0eJyv9/SAZ/OOCMVLstIvZdLjD.emdh8J/oCIGfrXu.")
+                .pesel("53333333333")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -171,7 +167,6 @@ public class StudentEntityTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherEntityTestData.teacherEntitySaved1())
                 .build();
-        //53333333333
     }
 
     public static StudentEntity studentEntitySaved5() {

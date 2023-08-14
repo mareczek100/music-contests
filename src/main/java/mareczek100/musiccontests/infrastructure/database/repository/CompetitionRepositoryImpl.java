@@ -35,7 +35,7 @@ public class CompetitionRepositoryImpl implements CompetitionRepositoryDAO {
     }
 
     @Override
-    public List<Competition> findCompetitionByInstrument(String instrument)
+    public List<Competition> findCompetitionsByInstrument(String instrument)
     {
         return competitionJpaRepository.findCompetitionByInstrument(instrument).stream()
                 .map(competitionEntityMapper::mapFromEntityToDomain)

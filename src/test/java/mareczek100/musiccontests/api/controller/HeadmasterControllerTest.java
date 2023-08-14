@@ -343,7 +343,6 @@ class HeadmasterControllerTest {
                 .thenReturn(headmasterTeacherToSave);
         Mockito.when(teacherService.findAllTeachers()).thenReturn(List.of(headmasterTeacherSaved));
 
-
         //then
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(
                                 HEADMASTER_MAIN_PAGE + HEADMASTER_COMPETITION_TEACHER_RIGHTS)

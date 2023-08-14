@@ -134,7 +134,7 @@ public class MusicContestsUserRestController  {
     @Operation(summary = "Delete music contests user account by email.")
     public ResponseEntity<?> deleteMusicContestsUserAccount(@RequestParam("userEmail") @Email String userEmail)
     {
-        Optional<Headmaster> foundHeadmaster = headmasterService.findAllHeadmaster().stream()
+        Optional<Headmaster> foundHeadmaster = headmasterService.findAllHeadmasters().stream()
                 .filter(headmaster -> userEmail.equalsIgnoreCase(headmaster.email()))
                 .findAny();
 

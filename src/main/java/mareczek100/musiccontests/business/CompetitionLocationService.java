@@ -17,8 +17,8 @@ public class CompetitionLocationService {
     private final AddressService addressService;
 
     @Transactional
-    public CompetitionLocation insertCompetitionLocations(CompetitionLocation competitionLocation) {
-        List<CompetitionLocation> allCompetitionLocation = findAllCompetitionLocation();
+    public CompetitionLocation insertCompetitionLocation(CompetitionLocation competitionLocation) {
+        List<CompetitionLocation> allCompetitionLocation = findAllCompetitionLocations();
         List<Address> allAddresses = addressService.findAllAddresses();
         Address addressToSave = competitionLocation.address();
         if (allCompetitionLocation.contains(competitionLocation)){
@@ -40,7 +40,7 @@ public class CompetitionLocationService {
                 competitionLocation.withAddress(insertedAddress));
     }
     @Transactional
-    public List<CompetitionLocation> findAllCompetitionLocation() {
+    public List<CompetitionLocation> findAllCompetitionLocations() {
         return competitionLocationRepositoryDAO.findAllCompetitionLocations();
     }
 }

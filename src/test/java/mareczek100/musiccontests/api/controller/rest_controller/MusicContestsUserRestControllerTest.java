@@ -118,11 +118,11 @@ class MusicContestsUserRestControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.name",
-                        Matchers.is(headmasterDtoToSave1.name())))
+                        Matchers.is(headmasterDtoSaved1.name())))
                 .andExpect(jsonPath("$.email",
-                        Matchers.is(headmasterDtoToSave1.email())))
+                        Matchers.is(headmasterDtoSaved1.email())))
                 .andExpect(jsonPath("$.pesel",
-                        Matchers.is(headmasterDtoToSave1.pesel())))
+                        Matchers.is(headmasterDtoSaved1.pesel())))
                 .andReturn();
 
         mvcResult.getResponse().setCharacterEncoding("UTF-8");
@@ -157,11 +157,11 @@ class MusicContestsUserRestControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.name",
-                        Matchers.is(teacherDtoToSave1.name())))
+                        Matchers.is(teacherDtoSaved1.name())))
                 .andExpect(jsonPath("$.email",
-                        Matchers.is(teacherDtoToSave1.email())))
+                        Matchers.is(teacherDtoSaved1.email())))
                 .andExpect(jsonPath("$.pesel",
-                        Matchers.is(teacherDtoToSave1.pesel())))
+                        Matchers.is(teacherDtoSaved1.pesel())))
                 .andReturn();
 
         mvcResult.getResponse().setCharacterEncoding("UTF-8");
@@ -196,11 +196,11 @@ class MusicContestsUserRestControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.name",
-                        Matchers.is(studentDtoToSave1.name())))
+                        Matchers.is(studentDtoSaved1.name())))
                 .andExpect(jsonPath("$.email",
-                        Matchers.is(studentDtoToSave1.email())))
+                        Matchers.is(studentDtoSaved1.email())))
                 .andExpect(jsonPath("$.pesel",
-                        Matchers.is(studentDtoToSave1.pesel())))
+                        Matchers.is(studentDtoSaved1.pesel())))
                 .andReturn();
 
         mvcResult.getResponse().setCharacterEncoding("UTF-8");
@@ -365,7 +365,7 @@ class MusicContestsUserRestControllerTest {
         String headmasterUserEmail = headmaster.email();
 
         //when
-        Mockito.when(headmasterService.findAllHeadmaster()).thenReturn(List.of(headmaster));
+        Mockito.when(headmasterService.findAllHeadmasters()).thenReturn(List.of(headmaster));
 
         //then
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete(
@@ -377,10 +377,10 @@ class MusicContestsUserRestControllerTest {
 
         mvcResult.getResponse().setCharacterEncoding("UTF-8");
 
-        Mockito.when(headmasterService.findAllHeadmaster()).thenReturn(Collections.emptyList());
+        Mockito.when(headmasterService.findAllHeadmasters()).thenReturn(Collections.emptyList());
 
         org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString()).isEmpty();
-        org.assertj.core.api.Assertions.assertThatCollection(headmasterService.findAllHeadmaster())
+        org.assertj.core.api.Assertions.assertThatCollection(headmasterService.findAllHeadmasters())
                 .isEqualTo(Collections.emptyList());
     }
     @Test

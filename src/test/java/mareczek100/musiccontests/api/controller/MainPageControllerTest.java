@@ -383,7 +383,7 @@ class MainPageControllerTest {
         String userEmail = headmaster.email();
 
         //when
-        Mockito.when(headmasterService.findAllHeadmaster()).thenReturn(List.of(headmaster));
+        Mockito.when(headmasterService.findAllHeadmasters()).thenReturn(List.of(headmaster));
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.delete(

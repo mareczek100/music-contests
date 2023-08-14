@@ -26,7 +26,7 @@ public class CompetitionService {
     {
         CompetitionLocation competitionLocation = competition.competitionLocation();
         CompetitionLocation insertedCompetitionLocations
-                = competitionLocationService.insertCompetitionLocations(competitionLocation);
+                = competitionLocationService.insertCompetitionLocation(competitionLocation);
         return competitionRepositoryDAO.insertCompetition(competition
                 .withCompetitionLocation(insertedCompetitionLocations)
                 .withFinished(false));
@@ -42,6 +42,7 @@ public class CompetitionService {
     {
         return competitionRepositoryDAO.findAllCompetitions();
     }
+
     @Transactional
     public Competition findCompetitionById(String competitionId)
     {
@@ -54,11 +55,11 @@ public class CompetitionService {
     @Transactional
     public List<Competition> findCompetitionsByInstrument(String instrument)
     {
-        return competitionRepositoryDAO.findCompetitionByInstrument(instrument);
+        return competitionRepositoryDAO.findCompetitionsByInstrument(instrument);
     }
 
     @Transactional
-    public List<Competition> findCompetitionByInstrumentCategory(String instrumentCategory)
+    public List<Competition> findCompetitionsByInstrumentCategory(String instrumentCategory)
     {
         List<Competition> allCompetitions = findAllCompetitions();
         Set<String> instrumentNamesSet = instrumentDAO.findInstrumentsByCategoryName(instrumentCategory).stream()

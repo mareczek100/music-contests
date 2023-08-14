@@ -12,7 +12,7 @@ public interface CompetitionRepositoryDAO {
 
     List<Competition> findAllCompetitions();
 
-    List<Competition> findCompetitionByInstrument(String instrument);
+    List<Competition> findCompetitionsByInstrument(String instrument);
 
     List<Competition> findCompetitionByOnline(Boolean online);
 
