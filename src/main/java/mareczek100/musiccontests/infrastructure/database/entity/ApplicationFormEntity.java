@@ -3,7 +3,7 @@ package mareczek100.musiccontests.infrastructure.database.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import mareczek100.musiccontests.domain.enums.ClassLevel;
-
+@With
 @Data
 @Entity
 @Builder

@@ -9,7 +9,6 @@ import mareczek100.musiccontests.infrastructure.database.repository.jpaRepositor
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 @Repository
 @AllArgsConstructor
 public class AddressRepositoryImpl implements AddressRepositoryDAO {
@@ -33,9 +32,4 @@ public class AddressRepositoryImpl implements AddressRepositoryDAO {
                 .toList();
     }
 
-    @Override
-    public Optional<Address> findAddressByHeadmasterEmail(String email) {
-        return addressJpaRepository.findAddressByHeadmasterEmail(email)
-               .map(addressEntityMapper::mapFromEntityToDomain);
-    }
 }

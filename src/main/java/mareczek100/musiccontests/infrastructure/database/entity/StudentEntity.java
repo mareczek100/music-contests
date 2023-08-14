@@ -8,7 +8,7 @@ import mareczek100.musiccontests.domain.enums.Degree;
 import mareczek100.musiccontests.domain.enums.EducationProgram;
 
 import java.util.Set;
-
+@With
 @Data
 @Entity
 @Builder

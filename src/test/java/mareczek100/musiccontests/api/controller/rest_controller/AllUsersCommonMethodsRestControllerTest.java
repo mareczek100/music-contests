@@ -57,7 +57,6 @@ class AllUsersCommonMethodsRestControllerTest implements ControllerRestSupport {
     private final InstrumentApiService instrumentApiService;
     @MockBean
     private final InstrumentDtoMapper instrumentDtoMapper;
-
     @MockBean
     private final AllUsersRestUtils allUsersRestUtils;
     @MockBean

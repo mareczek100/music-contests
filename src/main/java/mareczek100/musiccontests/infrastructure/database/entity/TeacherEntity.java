@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.util.Set;
-
+@With
 @Data
 @Entity
 @Builder

@@ -2,7 +2,7 @@ package mareczek100.musiccontests.infrastructure.database.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+@With
 @Data
 @Entity
 @Builder
