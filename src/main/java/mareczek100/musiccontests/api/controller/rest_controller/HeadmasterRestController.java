@@ -51,6 +51,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
     private final TeacherService teacherService;
     private final TeacherDtoMapper teacherDtoMapper;
     private final HeadmasterService headmasterService;
+    private final HeadmasterDtoMapper headmasterDtoMapper;
     private final StudentService studentService;
     private final StudentDtoMapper studentDtoMapper;
     private final ApplicationFormService applicationFormService;
@@ -203,7 +204,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
 
     @GetMapping(FIND_ALL_TEACHERS)
     @Operation(summary = "Find list of all teachers from headmaster's music school.")
-    public TeachersDto findAllTeachers(
+    public ResponseEntity<TeachersDto> findAllTeachers(
             @RequestParam("headmasterEmail") @Email String headmasterEmail
     )
     {
@@ -215,12 +216,19 @@ public class HeadmasterRestController implements ControllerRestSupport {
                 .map(teacherDtoMapper::mapFromDomainToDto)
                 .toList();
 
-        return TeachersDto.builder().TeacherDtoList(teacherDTOs).build();
+        if (teacherDTOs.isEmpty()) {
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
+                    "Your school [%s] has no teachers at all!"
+                            .formatted(headmaster.musicSchool().name()))).build();
+        }
+
+        TeachersDto teachersDto = TeachersDto.builder().TeacherDtoList(teacherDTOs).build();
+        return ResponseEntity.ok(teachersDto);
     }
 
     @GetMapping(FIND_ALL_TEACHER_STUDENTS)
-    @Operation(summary = "Find list of teacher's students. If headmaster has a teacher's account email is same.")
-    public StudentsDto findAllTeacherStudents(
+    @Operation(summary = "Find list of headmaster's students.")
+    public ResponseEntity<StudentsDto> findAllTeacherStudents(
             @RequestParam("teacherEmail") @Email String teacherEmail
     )
     {
@@ -263,7 +271,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
 
     @PostMapping(ANNOUNCE_STUDENT_TO_COMPETITION)
     @Operation(summary = "Fill in application form to announce student to competition.")
-    public ApplicationFormDto announceStudentToCompetition(
+    public ResponseEntity<ApplicationFormDto> announceStudentToCompetition(
             @RequestParam("teacherEmail") String teacherEmail,
             @RequestParam("studentId") String studentId,
             @RequestParam("competitionId") String competitionId,
@@ -391,7 +399,9 @@ public class HeadmasterRestController implements ControllerRestSupport {
     )
     {
         Headmaster competitionOrganizer = headmasterService.findHeadmasterByEmail(organizerEmail);
-        Competition competition = competitionDtoMapper.mapFromDtoToDomain(competitionDto);
+        HeadmasterDto headmasterDto = headmasterDtoMapper.mapFromDomainToDto(competitionOrganizer);
+        Competition competition = competitionDtoMapper.mapFromDtoToDomain(
+                competitionDto.withCompetitionOrganizer(headmasterDto));
 
         MusicSchool organizerMusicSchool = competitionOrganizer.musicSchool();
         CompetitionLocation competitionLocation = CompetitionLocation.builder()
@@ -401,7 +411,6 @@ public class HeadmasterRestController implements ControllerRestSupport {
 
         Competition insertedCompetition
                 = competitionService.insertCompetition(competition
-                .withHeadmaster(competitionOrganizer)
                 .withCompetitionLocation(competitionLocation));
         return competitionDtoMapper.mapFromDomainToDto(insertedCompetition);
     }

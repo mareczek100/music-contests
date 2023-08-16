@@ -9,6 +9,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import javax.sql.DataSource;
+
 @Testcontainers
 @TestConfiguration(proxyBeanMethods = false)
 public class PersistenceTestConfig {

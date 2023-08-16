@@ -6,16 +6,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = CompetitionEntityMapper.class)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {CompetitionEntityMapper.class, StudentEntityMapper.class})
 public interface CompetitionResultEntityMapper {
     @Mapping(source = "competitionResultEntity.competition", target = "competition",
             qualifiedByName = "competitionMapFromEntityToDomain")
-    @Mapping(target = "student.competitionResults", ignore = true)
-    @Mapping(target = "student.applicationForms", ignore = true)
-    @Mapping(target = "student.musicSchool", ignore = true)
-    @Mapping(target = "student.teacher.musicSchool", ignore = true)
-    @Mapping(target = "student.teacher.students", ignore = true)
-    @Mapping(target = "student.teacher.applicationForms", ignore = true)
+    @Mapping(source = "competitionResultEntity.student", target = "student",
+            qualifiedByName = "studentMapFromEntityToDomain")
     CompetitionResult mapFromEntityToDomain(CompetitionResultEntity competitionResultEntity);
     
     CompetitionResultEntity mapFromDomainToEntity(CompetitionResult competitionResult);

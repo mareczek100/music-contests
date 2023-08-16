@@ -187,7 +187,8 @@ class TeacherAndHeadmasterCommonMethodsRestControllerTest implements ControllerR
         StudentsDto studentsDto = StudentDtoTestData.studentsDtoList();
 
         //when
-        Mockito.when(teacherRestUtils.findAllTeacherStudents(teacherEmail)).thenReturn(studentsDto);
+        Mockito.when(teacherRestUtils.findAllTeacherStudents(teacherEmail))
+                .thenReturn(ResponseEntity.ok(studentsDto));
         Mockito.when(teacherService.findTeacherByEmail(teacherEmail)).thenReturn(teacher);
         Mockito.when(studentService.findAllStudents()).thenReturn(studentList);
         Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(0)))
@@ -242,7 +243,8 @@ class TeacherAndHeadmasterCommonMethodsRestControllerTest implements ControllerR
         //when
         Mockito.when(teacherRestUtils.announceStudentToCompetition(
                 Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString())).thenReturn(applicationFormDtoSaved);
+                Mockito.anyString(), Mockito.anyString()))
+                .thenReturn(ResponseEntity.status(HttpStatus.CREATED).body(applicationFormDtoSaved));
         Mockito.when(competitionService.findCompetitionById(competitionId)).thenReturn(competition);
         Mockito.when(teacherService.findTeacherByEmail(teacherEmail)).thenReturn(teacher);
         Mockito.when(studentService.findStudentById(studentId)).thenReturn(student);

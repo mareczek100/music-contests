@@ -97,7 +97,7 @@ public class TeacherRestController implements ControllerRestSupport {
 
     @GetMapping(FIND_ALL_TEACHER_STUDENTS)
     @Operation(summary = "Find list of teacher's students.")
-    public StudentsDto findAllTeacherStudents(
+    public ResponseEntity<StudentsDto> findAllTeacherStudents(
             @RequestParam("teacherEmail") @Email String teacherEmail
     )
     {
@@ -106,7 +106,7 @@ public class TeacherRestController implements ControllerRestSupport {
 
     @PostMapping(ANNOUNCE_STUDENT_TO_COMPETITION)
     @Operation(summary = "Fill in application form to announce student to competition.")
-    public ApplicationFormDto announceStudentToCompetition(
+    public ResponseEntity<ApplicationFormDto> announceStudentToCompetition(
             @RequestParam("teacherEmail") @Email String teacherEmail,
             @RequestParam("studentId") String studentId,
             @RequestParam("competitionId") String competitionId,

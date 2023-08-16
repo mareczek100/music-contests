@@ -28,6 +28,7 @@ public class CompetitionResultService {
         }
         return competitionResultRepositoryDAO.insertAllCompetitionResults(competitionResults);
     }
+
     @Transactional
     public List<CompetitionResult> findAllCompetitionResult()
     {

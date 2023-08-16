@@ -40,6 +40,7 @@ public class CompetitionResultRepositoryImpl implements CompetitionResultReposit
         List<CompetitionResultEntity> competitionResultEntities = competitionResults.stream()
                 .map(competitionResultEntityMapper::mapFromDomainToEntity)
                 .toList();
+
         return competitionResultJpaRepository.saveAllAndFlush(competitionResultEntities).stream()
                 .map(competitionResultEntityMapper::mapFromEntityToDomain)
                 .toList();

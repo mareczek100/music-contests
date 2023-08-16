@@ -43,6 +43,7 @@ public class MainPageController {
     public static final String MUSIC_CONTESTS_AUTHENTICATION = "/authentication";
     public static final String MUSIC_CONTESTS_LOGIN = "/login";
     public static final String MUSIC_CONTESTS_LOGOUT = "/logout";
+    public static final String MUSIC_CONTESTS_LOGOUT_SUCCESS = "/logout/success";
     public static final String MUSIC_CONTESTS_FAILURE = "/failure";
     public static final String MUSIC_CONTESTS_ERROR = "/error";
     public static final String MUSIC_CONTESTS_CREATE_ACCOUNT = "/account";
@@ -254,7 +255,7 @@ public class MainPageController {
         return "error";
     }
 
-    @GetMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_LOGOUT)
+    @GetMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_LOGOUT_SUCCESS)
     public String loginLogoutHomePage() {
         return "login/login_logout";
     }

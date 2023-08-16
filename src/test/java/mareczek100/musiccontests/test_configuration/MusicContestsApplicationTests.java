@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-
 @ActiveProfiles("test")
 @Import(PersistenceTestConfig.class)
 @SpringBootTest(
@@ -13,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 		properties = "spring.flyway.clean-disabled=false",
 		webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 abstract class MusicContestsApplicationTests {
-
+	protected final static String MUSIC_CONTESTS_HOME = "/music-contests";
 	@Test
 	void contextLoads() {
 	}

@@ -50,7 +50,7 @@ public class TeacherRestUtils {
         return ClassLevels.builder().classLevelList(classLevels).build();
     }
 
-    public StudentsDto findAllTeacherStudents(
+    public ResponseEntity<StudentsDto> findAllTeacherStudents(
             String teacherEmail
     )
     {
@@ -62,10 +62,17 @@ public class TeacherRestUtils {
                 .map(studentDtoMapper::mapFromDomainToDto)
                 .toList();
 
-        return StudentsDto.builder().StudentDtoList(studentDTOs).build();
+        if (studentDTOs.isEmpty()) {
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
+                    "You have no students at all!")).build();
+        }
+
+        StudentsDto studentsDto = StudentsDto.builder().StudentDtoList(studentDTOs).build();
+
+        return ResponseEntity.ok(studentsDto);
     }
 
-    public ApplicationFormDto announceStudentToCompetition(
+    public ResponseEntity<ApplicationFormDto> announceStudentToCompetition(
             String teacherEmail,
             String studentId,
             String competitionId,
@@ -78,6 +85,13 @@ public class TeacherRestUtils {
         Teacher teacher = teacherService.findTeacherByEmail(teacherEmail);
         Student student = studentService.findStudentById(studentId);
 
+        if (!OffsetDateTime.now().isBefore(competition.applicationDeadline())){
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(
+                    HttpStatus.REQUEST_TIMEOUT, "Too late! It is after announce deadline, " +
+                            "You can't no longer put Your student to competition [%s].".formatted(competition.name())
+            )).build();
+        }
+
         boolean studentAlreadyInCompetitionAnyMatch = applicationFormService.findAllApplicationForms().stream()
                 .anyMatch(applicationForm ->
                         studentId.equals(applicationForm.student().studentId())
@@ -87,7 +101,10 @@ public class TeacherRestUtils {
                     .formatted(student.name(), student.surname(), competition.name()));
         }
 
-        return createStudentApplicationForm(competition, teacher, student, classLevel, performancePieces);
+        ApplicationFormDto studentApplicationForm
+                = createStudentApplicationForm(competition, teacher, student, classLevel, performancePieces);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentApplicationForm);
     }
 
 
@@ -145,11 +162,12 @@ public class TeacherRestUtils {
                 .findAny();
 
         if (studentApplication.isEmpty()) {
-            throw new RuntimeException("Sorry, student [%s] [%s] isn't announced to competition [%s]!"
-                    .formatted(student.name(), student.surname(), competition.name()));
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(
+                    HttpStatus.BAD_REQUEST, "Sorry, student [%s] [%s] isn't announced to competition [%s]!"
+                            .formatted(student.name(), student.surname(), competition.name()))).build();
         }
 
-        if (!OffsetDateTime.now().plusHours(2L).isBefore(studentApplication.get().competition().beginning())) {
+        if (OffsetDateTime.now().isAfter(studentApplication.get().competition().beginning().minusHours(2L))) {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(
                     HttpStatus.REQUEST_TIMEOUT, "Too late! It is less than 2 hours before competition starts"
             )).build();

@@ -476,7 +476,7 @@ class MainPageControllerTest {
 
         //when, then
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
-                                MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_LOGOUT)
+                                MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_LOGOUT_SUCCESS)
                         .contentType(MediaType.TEXT_HTML))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("login/login_logout"))

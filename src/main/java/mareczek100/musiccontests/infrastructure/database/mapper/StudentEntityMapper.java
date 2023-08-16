@@ -10,11 +10,13 @@ import mareczek100.musiccontests.infrastructure.database.entity.StudentEntity;
 import mareczek100.musiccontests.infrastructure.database.entity.TeacherEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface StudentEntityMapper {
 
+    @Named("studentMapFromEntityToDomain")
     default Student mapFromEntityToDomain(StudentEntity studentEntity){
         return Student.builder()
                 .studentId(studentEntity.getStudentId())

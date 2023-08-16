@@ -1,17 +1,16 @@
 package mareczek100.musiccontests.api.dto.mapper;
 
-import mareczek100.musiccontests.api.dto.HeadmasterDto;
 import mareczek100.musiccontests.api.dto.MusicSchoolWithAddressDto;
 import mareczek100.musiccontests.domain.Address;
-import mareczek100.musiccontests.domain.Headmaster;
 import mareczek100.musiccontests.domain.MusicSchool;
 import org.mapstruct.Mapper;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MusicSchoolDtoMapper {
 
-    
+    @Named("musicSchoolMapFromDtoToDomain")
     default MusicSchool mapFromDtoToDomain(MusicSchoolWithAddressDto musicSchoolDto){
         return MusicSchool.builder()
                 .musicSchoolId(musicSchoolDto.musicSchoolId())
@@ -33,6 +32,7 @@ public interface MusicSchoolDtoMapper {
                 .additionalInfo(musicSchoolDto.addressAdditionalInfo())
                 .build();
     }
+    @Named("musicSchoolMapFromDomainToDto")
     default MusicSchoolWithAddressDto mapFromDomainToDto(MusicSchool musicSchool){
         return MusicSchoolWithAddressDto.builder()
                 .musicSchoolId(musicSchool.musicSchoolId())
@@ -46,17 +46,7 @@ public interface MusicSchoolDtoMapper {
                 .addressStreet(musicSchool.address().street())
                 .addressBuildingNumber(musicSchool.address().buildingNumber())
                 .addressAdditionalInfo(musicSchool.address().additionalInfo())
-//                .headmaster(getHeadmaster(musicSchool.headmaster()))
                 .build();
     }
 
-    private HeadmasterDto getHeadmaster(Headmaster headmaster){
-        return HeadmasterDto.builder()
-                .headmasterId(headmaster.headmasterId())
-                .name(headmaster.name())
-                .surname(headmaster.surname())
-                .email(headmaster.email())
-                .pesel(headmaster.pesel())
-                .build();
-    }
 }

@@ -169,34 +169,6 @@ public class HeadmasterController {
         return "headmaster/headmaster_competition_teacher";
     }
 
-    @GetMapping(HEADMASTER_COMPETITION_FILTERS_SEARCH)
-    public String headmasterSearchCompetitionByFiltersToPutStudent(
-            @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
-            Model model
-    )
-    {
-        List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
-                .map(instrumentDtoMapper::mapFromDomainToDto)
-                .toList();
-
-        List<String> cityDTOs = competitionService.findAllCompetitions().stream()
-                .filter(competition -> competition.finished().equals(false))
-                .map(Competition::competitionLocation)
-                .map(CompetitionLocation::address)
-                .map(Address::city)
-                .distinct()
-                .toList();
-
-        CompetitionWithLocationDto competitionDto = CompetitionWithLocationDto.builder().build();
-
-        model.addAttribute("headmasterTeacherEmail", headmasterTeacherEmail);
-        model.addAttribute("instrumentDTOs", instrumentDTOs);
-        model.addAttribute("competitionDto", competitionDto);
-        model.addAttribute("cityDTOs", cityDTOs);
-
-        return "headmaster/headmaster_competition_search_filters";
-    }
-
     @GetMapping(HEADMASTER_COMPETITION_INSTRUMENT_SEARCH)
     public String headmasterSearchCompetitionByInstrumentToPutStudent(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
@@ -223,6 +195,34 @@ public class HeadmasterController {
         model.addAttribute("competitionDto", competitionDto);
 
         return "headmaster/headmaster_competition_search_instrument";
+    }
+
+    @GetMapping(HEADMASTER_COMPETITION_FILTERS_SEARCH)
+    public String headmasterSearchCompetitionByFiltersToPutStudent(
+            @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
+            Model model
+    )
+    {
+        List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
+                .map(instrumentDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        List<String> cityDTOs = competitionService.findAllCompetitions().stream()
+                .filter(competition -> competition.finished().equals(false))
+                .map(Competition::competitionLocation)
+                .map(CompetitionLocation::address)
+                .map(Address::city)
+                .distinct()
+                .toList();
+
+        CompetitionWithLocationDto competitionDto = CompetitionWithLocationDto.builder().build();
+
+        model.addAttribute("headmasterTeacherEmail", headmasterTeacherEmail);
+        model.addAttribute("instrumentDTOs", instrumentDTOs);
+        model.addAttribute("competitionDto", competitionDto);
+        model.addAttribute("cityDTOs", cityDTOs);
+
+        return "headmaster/headmaster_competition_search_filters";
     }
 
     @GetMapping(HEADMASTER_COMPETITION_SELECT_STUDENT)

@@ -64,6 +64,8 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
     @MockBean
     private final HeadmasterService headmasterService;
     @MockBean
+    private final HeadmasterDtoMapper headmasterDtoMapper;
+    @MockBean
     private final StudentService studentService;
     @MockBean
     private final StudentDtoMapper studentDtoMapper;
@@ -91,6 +93,7 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
         Assertions.assertNotNull(teacherService);
         Assertions.assertNotNull(teacherDtoMapper);
         Assertions.assertNotNull(headmasterService);
+        Assertions.assertNotNull(headmasterDtoMapper);
         Assertions.assertNotNull(studentService);
         Assertions.assertNotNull(studentDtoMapper);
         Assertions.assertNotNull(applicationFormService);
@@ -211,7 +214,7 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
         //given
         Headmaster headmaster = HeadmasterDomainTestData.headmasterSaved1();
         String headmasterEmail = headmaster.email();
-        String instrumentName = InstrumentDtoTestData.instrumentDto1().name();
+        String instrumentName = InstrumentDtoTestData.instrumentDtoSaved1().name();
         TeacherDto headmasterTeacherDtoToSave1 = HeadmasterDtoTestData.headmasterTeacherDtoToSave1().withInstrument(instrumentName);
         TeacherDto headmasterTeacherDtoSaved1 = HeadmasterDtoTestData.headmasterTeacherDtoSaved1().withInstrument(instrumentName);
         Teacher headmasterTeacherToSave1 = HeadmasterDomainTestData.headmasterTeacherToSave1().withInstrument(instrumentName);
@@ -251,7 +254,7 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
         //given
         Headmaster headmaster = HeadmasterDomainTestData.headmasterSaved1();
         String headmasterEmail = headmaster.email();
-        String instrumentName = InstrumentDtoTestData.instrumentDto1().name();
+        String instrumentName = InstrumentDtoTestData.instrumentDtoSaved1().name();
         Teacher headmasterTeacherSaved1 = HeadmasterDomainTestData.headmasterTeacherSaved1().withInstrument(instrumentName);
 
         //when
@@ -312,7 +315,6 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
 
         org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
                 .isEqualTo(teacherDtoListJson);
-
     }
 
     @Test

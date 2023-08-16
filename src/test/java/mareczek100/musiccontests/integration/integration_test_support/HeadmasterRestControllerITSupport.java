@@ -8,10 +8,7 @@ import mareczek100.musiccontests.api.dto.TeacherDto;
 import mareczek100.musiccontests.api.dto.dto_class_support.CompetitionResultListDto;
 import mareczek100.musiccontests.api.dto.dto_rest_support.*;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.*;
@@ -53,33 +50,11 @@ public interface HeadmasterRestControllerITSupport {
                 .as(ClassLevels.class);
     }
 
-    default CompetitionWithLocationDto createCompetitionAtSchool(
-            String headmasterOrganizerEmail,
-            String competitionName,
-            String competitionInstrument,
-            Boolean competitionOnline,
-            Boolean competitionPrimaryDegree,
-            Boolean competitionSecondaryDegree,
-            LocalDateTime competitionBeginning,
-            LocalDateTime competitionEnd,
-            LocalDateTime competitionResultAnnouncement,
-            LocalDateTime competitionApplicationDeadline,
-            String competitionRequirementsDescription
-    )
+    default CompetitionWithLocationDto createCompetitionAtSchool(Map<String, Object> parameters)
     {
         return requestSpecification()
                 .given()
-                .params("headmasterOrganizerEmail", headmasterOrganizerEmail,
-                        "competitionName", competitionName,
-                        "competitionInstrument", competitionInstrument,
-                        "competitionOnline", competitionOnline,
-                        "competitionPrimaryDegree", competitionPrimaryDegree,
-                        "competitionSecondaryDegree", competitionSecondaryDegree,
-                        "competitionBeginning", competitionBeginning,
-                        "competitionEnd", competitionEnd,
-                        "competitionResultAnnouncement", competitionResultAnnouncement,
-                        "competitionApplicationDeadline", competitionApplicationDeadline,
-                        "competitionRequirementsDescription", competitionRequirementsDescription)
+                .queryParams(parameters)
                 .when()
                 .post(HEADMASTER_REST_MAIN_PAGE + CREATE_COMPETITION_AT_SCHOOL)
                 .then()
@@ -97,7 +72,7 @@ public interface HeadmasterRestControllerITSupport {
         return requestSpecification()
                 .given()
                 .body(competitionDto)
-                .param("headmasterOrganizerEmail", headmasterOrganizerEmail)
+                .queryParam("headmasterOrganizerEmail", headmasterOrganizerEmail)
                 .when()
                 .post(HEADMASTER_REST_MAIN_PAGE + CREATE_COMPETITION_AT_OTHER_LOCATION)
                 .then()
@@ -118,23 +93,11 @@ public interface HeadmasterRestControllerITSupport {
                 .extract()
                 .as(CompetitionsDto.class);
     }
-    default CompetitionsDto findAvailableCompetitionsByFilters(
-            String competitionInstrument,
-            Boolean competitionOnline,
-            Boolean competitionPrimaryDegree,
-            Boolean competitionSecondaryDegree,
-            String competitionCity
-    )
+    default CompetitionsDto findAvailableCompetitionsByFilters(Map<String, ?> parameters)
     {
         return requestSpecification()
                 .given()
-                .params(Map.of(
-                        "competitionInstrument", competitionInstrument,
-                        "competitionOnline", competitionOnline,
-                        "competitionPrimaryDegree", competitionPrimaryDegree,
-                        "competitionSecondaryDegree", competitionSecondaryDegree,
-                        "competitionCity",competitionCity
-                ))
+                .params(parameters)
                 .when()
                 .get(HEADMASTER_REST_MAIN_PAGE + FIND_AVAILABLE_COMPETITIONS_BY_FILTERS)
                 .then()
@@ -159,19 +122,11 @@ public interface HeadmasterRestControllerITSupport {
                 .as(CompetitionsDto.class);
     }
 
-    default CompetitionsDto findFinishedCompetitionsByFilters(
-            LocalDate competitionDateFrom,
-            LocalDate competitionDateTo,
-            String competitionCity
-    )
+    default CompetitionsDto findFinishedCompetitionsByFilters(Map<String, ?> parameters)
     {
         return requestSpecification()
                 .given()
-                .params(Map.of(
-                        "competitionDateFrom", competitionDateFrom,
-                        "competitionDateTo", competitionDateTo,
-                        "competitionCity",competitionCity
-                ))
+                .params(parameters)
                 .when()
                 .get(HEADMASTER_REST_MAIN_PAGE + FIND_FINISHED_COMPETITIONS_BY_FILTERS)
                 .then()
@@ -188,8 +143,8 @@ public interface HeadmasterRestControllerITSupport {
     {
         return requestSpecification()
                 .given()
-                .param("instrument", instrument)
-                .param("headmasterEmail", headmasterEmail)
+                .queryParam("headmasterEmail", headmasterEmail)
+                .queryParam("instrument", instrument)
                 .when()
                 .post(HEADMASTER_REST_MAIN_PAGE + CREATE_TEACHER_RIGHTS)
                 .then()
@@ -206,8 +161,8 @@ public interface HeadmasterRestControllerITSupport {
     {
         return requestSpecification()
                 .given()
-                .param("instrument", instrument)
-                .param("headmasterEmail", headmasterEmail)
+                .queryParam("instrument", instrument)
+                .queryParam("headmasterEmail", headmasterEmail)
                 .when()
                 .post(HEADMASTER_REST_MAIN_PAGE + CREATE_TEACHER_RIGHTS)
                 .then()
@@ -231,6 +186,19 @@ public interface HeadmasterRestControllerITSupport {
                 .as(TeachersDto.class);
 
     }
+    default Response findAllTeachersResponseMessageIfNoTeachers(String headmasterEmail) {
+        return requestSpecification()
+                .given()
+                .param("headmasterEmail", headmasterEmail)
+                .when()
+                .get(HEADMASTER_REST_MAIN_PAGE + FIND_ALL_TEACHERS)
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .and()
+                .extract()
+                .response();
+
+    }
 
     default StudentsDto findAllTeacherStudents(
             String teacherEmail
@@ -247,8 +215,23 @@ public interface HeadmasterRestControllerITSupport {
                 .extract()
                 .as(StudentsDto.class);
     }
+    default Response findAllTeacherStudentsResponseMessageIfNoStudents(
+            String teacherEmail
+    )
+    {
+        return requestSpecification()
+                .given()
+                .param("teacherEmail", teacherEmail)
+                .when()
+                .get(HEADMASTER_REST_MAIN_PAGE + FIND_ALL_TEACHER_STUDENTS)
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .and()
+                .extract()
+                .response();
+    }
 
-    default StudentsDto findAllCompetitionStudentsExists(String competitionId) {
+    default StudentsDto findAllCompetitionStudents(String competitionId) {
         return requestSpecification()
                 .given()
                 .param("competitionId", competitionId)
@@ -298,7 +281,7 @@ public interface HeadmasterRestControllerITSupport {
     {
         return requestSpecification()
                 .given()
-                .params(Map.of(
+                .queryParams(Map.of(
                         "teacherEmail", teacherEmail,
                         "studentId", studentId,
                         "competitionId", competitionId,
@@ -308,10 +291,35 @@ public interface HeadmasterRestControllerITSupport {
                 .when()
                 .post(HEADMASTER_REST_MAIN_PAGE + ANNOUNCE_STUDENT_TO_COMPETITION)
                 .then()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .and()
                 .extract()
                 .as(ApplicationFormDto.class);
+    }
+    default Response announceStudentToCompetitionResponseMessageIfItIsAfterDeadline(
+            String teacherEmail,
+            String studentId,
+            String competitionId,
+            String classLevel,
+            String performancePieces
+    )
+    {
+        return requestSpecification()
+                .given()
+                .queryParams(Map.of(
+                        "teacherEmail", teacherEmail,
+                        "studentId", studentId,
+                        "competitionId", competitionId,
+                        "classLevel", classLevel,
+                        "performancePieces", performancePieces
+                ))
+                .when()
+                .post(HEADMASTER_REST_MAIN_PAGE + ANNOUNCE_STUDENT_TO_COMPETITION)
+                .then()
+                .statusCode(HttpStatus.REQUEST_TIMEOUT.value())
+                .and()
+                .extract()
+                .response();
     }
 
     default ApplicationFormsDto findTeacherApplicationsToCompetition(
@@ -335,13 +343,13 @@ public interface HeadmasterRestControllerITSupport {
     }
 
     default ApplicationFormsDto findAllTeachersApplicationsToCompetition(
-            String teacherEmail,
+            String headmasterEmail,
             String competitionId
     )
     {
         return requestSpecification()
                 .given()
-                .param("teacherEmail", teacherEmail)
+                .param("headmasterEmail", headmasterEmail)
                 .param("competitionId", competitionId)
                 .when()
                 .get(HEADMASTER_REST_MAIN_PAGE + FIND_ALL_TEACHERS_APPLICATIONS)
@@ -353,7 +361,7 @@ public interface HeadmasterRestControllerITSupport {
 
     }
 
-    default ResponseEntity<?> announceStudentToCompetitionCancel(
+    default Response announceStudentToCompetitionCancel(
             String competitionId,
             String studentId
     )
@@ -368,7 +376,41 @@ public interface HeadmasterRestControllerITSupport {
                 .statusCode(HttpStatus.NO_CONTENT.value())
                 .and()
                 .extract()
-                .as(ResponseEntity.class);
+                .response();
+    }
+    default Response announceStudentToCompetitionCancelThrowsExceptionIfStudentIsNotAnnouncedToCompetition(
+            String competitionId,
+            String studentId
+    )
+    {
+        return requestSpecification()
+                .given()
+                .param("studentId", studentId)
+                .param("competitionId", competitionId)
+                .when()
+                .delete(HEADMASTER_REST_MAIN_PAGE + ANNOUNCE_STUDENT_CANCEL)
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .and()
+                .extract()
+                .response();
+    }
+    default Response announceStudentToCompetitionCancelResponseMessageIfItIsTooLateToCancel(
+            String competitionId,
+            String studentId
+    )
+    {
+        return requestSpecification()
+                .given()
+                .param("studentId", studentId)
+                .param("competitionId", competitionId)
+                .when()
+                .delete(HEADMASTER_REST_MAIN_PAGE + ANNOUNCE_STUDENT_CANCEL)
+                .then()
+                .statusCode(HttpStatus.REQUEST_TIMEOUT.value())
+                .and()
+                .extract()
+                .response();
     }
 
     default CompetitionsDto findCompetitionsCreatedByHeadmaster(String headmasterEmail) {
@@ -383,6 +425,20 @@ public interface HeadmasterRestControllerITSupport {
                 .extract()
                 .as(CompetitionsDto.class);
     }
+    default Response findCompetitionsCreatedByHeadmasterResponseMessageIfHeadmasterDidNotCreatedAnyCompetitions(
+            String headmasterEmail
+    ) {
+        return requestSpecification()
+                .given()
+                .param("headmasterEmail", headmasterEmail)
+                .when()
+                .get(HEADMASTER_REST_MAIN_PAGE + FIND_HEADMASTER_COMPETITIONS)
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .and()
+                .extract()
+                .response();
+    }
 
     default CompetitionResultsDto announceCompetitionResults(
             String competitionId,
@@ -392,14 +448,31 @@ public interface HeadmasterRestControllerITSupport {
         return requestSpecification()
                 .given()
                 .body(resultListDto)
-                .param("competitionId", competitionId)
+                .queryParam("competitionId", competitionId)
                 .when()
                 .post(HEADMASTER_REST_MAIN_PAGE + ANNOUNCE_RESULT)
                 .then()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .and()
                 .extract()
                 .as(CompetitionResultsDto.class);
+    }
+    default Response announceCompetitionResultsResponseMessageIfResultsAreEmpty(
+            String competitionId,
+            CompetitionResultListDto resultListDto
+    )
+    {
+        return requestSpecification()
+                .given()
+                .body(resultListDto)
+                .queryParam("competitionId", competitionId)
+                .when()
+                .post(HEADMASTER_REST_MAIN_PAGE + ANNOUNCE_RESULT)
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .and()
+                .extract()
+                .response();
     }
 
     default CompetitionResultsDto checkTeacherStudentsResults(

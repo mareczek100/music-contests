@@ -7,19 +7,19 @@ import mareczek100.musiccontests.domain.Competition;
 import mareczek100.musiccontests.domain.CompetitionLocation;
 import mareczek100.musiccontests.domain.Headmaster;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Objects;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = MusicSchoolDtoMapper.class)
 public interface CompetitionDtoMapper {
 
-    ZoneOffset ZONE_OFFSET = ZoneId.systemDefault().getRules().getOffset(LocalDateTime.now());
+    ZoneOffset ZONE_OFFSET = ZoneOffset.UTC;
+
     @Named("competitionMapFromDtoToDomain")
     default Competition mapFromDtoToDomain(CompetitionWithLocationDto competitionDto) {
         return Competition.builder()
@@ -34,10 +34,12 @@ public interface CompetitionDtoMapper {
                 .resultAnnouncement(OffsetDateTime.of(competitionDto.competitionResultAnnouncement(), ZONE_OFFSET))
                 .applicationDeadline(OffsetDateTime.of(competitionDto.competitionApplicationDeadline(), ZONE_OFFSET))
                 .requirementsDescription(competitionDto.competitionRequirementsDescription())
+                .headmaster(getHeadmaster(competitionDto.competitionOrganizer()))
                 .competitionLocation(getCompetitionLocation(competitionDto))
                 .finished(competitionDto.competitionFinished())
                 .build();
     }
+
     private CompetitionLocation getCompetitionLocation(CompetitionWithLocationDto competitionLocationDto){
         if (Objects.isNull(competitionLocationDto.competitionLocationName())){
             return null;
@@ -83,13 +85,12 @@ public interface CompetitionDtoMapper {
                 .competitionFinished(competition.finished())
                 .build();
     }
-    private HeadmasterDto getHeadmasterDto(Headmaster headmaster) {
-        return HeadmasterDto.builder()
-                .name(headmaster.name())
-                .surname(headmaster.surname())
-                .email(headmaster.email())
-                .pesel(headmaster.pesel())
-//                .musicSchool(headmasterDto.musicSchool())
-                .build();
-    }
+    @Mapping(source = "headmasterDto.musicSchool", target = "musicSchool",
+            qualifiedByName = "musicSchoolMapFromDtoToDomain")
+    Headmaster getHeadmaster(HeadmasterDto headmasterDto);
+
+    @Mapping(source = "headmaster.musicSchool", target = "musicSchool",
+            qualifiedByName = "musicSchoolMapFromDomainToDto")
+    HeadmasterDto getHeadmasterDto(Headmaster headmaster);
+
 }

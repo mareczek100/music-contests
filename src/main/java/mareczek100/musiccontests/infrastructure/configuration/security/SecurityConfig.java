@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,12 +16,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
+import static mareczek100.musiccontests.api.controller.MainPageController.*;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     private static final String ALL_SUBPAGES = "/**";
-    private static final String LOGOUT = "/logout";
     private static final String IMAGES = "/images/**";
+
+    private static final String REST_API_HOME = "/api";
 
 
     @Bean
@@ -29,9 +33,10 @@ public class SecurityConfig {
         requestCache.setMatchingRequestParameterName(null);
         http.requestCache(cache ->
                         cache.requestCache(requestCache))
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .anyRequest().permitAll())
+                        authorizeRequests.anyRequest().permitAll())
+//                        authorizeRequests
 //                                .requestMatchers(MUSIC_CONTESTS_AUTHENTICATION + ALL_SUBPAGES).permitAll()
 //                                .requestMatchers(MUSIC_CONTESTS_ERROR).authenticated()
 //                                .requestMatchers(IMAGES).authenticated()
@@ -42,22 +47,23 @@ public class SecurityConfig {
 //                                .requestMatchers(TEACHER_MAIN_PAGE + ALL_SUBPAGES)
 //                                .hasAnyAuthority(RoleEntity.RoleName.TEACHER.name(), RoleEntity.RoleName.ADMIN.name())
 //                                .requestMatchers(STUDENT_MAIN_PAGE + ALL_SUBPAGES)
-//                                .hasAnyAuthority(RoleEntity.RoleName.STUDENT.name(), RoleEntity.RoleName.ADMIN.name()))
+//                                .hasAnyAuthority(RoleEntity.RoleName.STUDENT.name(), RoleEntity.RoleName.ADMIN.name())
+//                                .requestMatchers(REST_API_HOME + ALL_SUBPAGES).permitAll())
                 .formLogin(formLogin ->
-                        formLogin.disable());
-//                                .usernameParameter("username")
-//                                .passwordParameter("password")
-//                                .loginPage(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_LOGIN)
-//                                .successHandler(roleDependentAuthenticationSuccessHandler())
-//                                .failureUrl(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_FAILURE))
-//                .logout(logout ->
-//                        logout
-//                                .logoutUrl(MUSIC_CONTESTS_AUTHENTICATION + LOGOUT)
-//                                .logoutSuccessUrl(MUSIC_CONTESTS_AUTHENTICATION + LOGOUT)
-//                                .invalidateHttpSession(true)
-//                                .clearAuthentication(true)
-//                                .deleteCookies("JSESSIONID")
-//                                .permitAll());
+                        formLogin
+                                .usernameParameter("username")
+                                .passwordParameter("password")
+                                .loginPage(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_LOGIN)
+                                .successHandler(roleDependentAuthenticationSuccessHandler())
+                                .failureUrl(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_FAILURE))
+                .logout(logout ->
+                        logout
+                                .logoutUrl(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_LOGOUT)
+                                .logoutSuccessUrl(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_LOGOUT_SUCCESS)
+                                .invalidateHttpSession(true)
+                                .clearAuthentication(true)
+                                .deleteCookies("JSESSIONID")
+                                .permitAll());
 
         return http.build();
     }

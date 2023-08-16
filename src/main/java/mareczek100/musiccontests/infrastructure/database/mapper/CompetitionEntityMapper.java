@@ -47,7 +47,19 @@ public interface CompetitionEntityMapper {
                 .patron(musicSchoolEntity.getPatron())
                 .primaryDegree(musicSchoolEntity.getPrimaryDegree())
                 .secondaryDegree(musicSchoolEntity.getSecondaryDegree())
-                .address(null)
+                .address(getAddress(musicSchoolEntity.getAddress()))
+                .build();
+    }
+
+    private Address getAddress(AddressEntity addressEntity){
+        return Address.builder()
+                .addressId(addressEntity.getAddressId())
+                .country(addressEntity.getCountry())
+                .city(addressEntity.getCity())
+                .postalCode(addressEntity.getPostalCode())
+                .street(addressEntity.getStreet())
+                .buildingNumber(addressEntity.getBuildingNumber())
+                .additionalInfo(addressEntity.getAdditionalInfo())
                 .build();
     }
 
