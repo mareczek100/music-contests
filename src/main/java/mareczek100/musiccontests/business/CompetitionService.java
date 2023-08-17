@@ -6,6 +6,10 @@ import mareczek100.musiccontests.business.instrument_storage_service.dao.Instrum
 import mareczek100.musiccontests.domain.Competition;
 import mareczek100.musiccontests.domain.CompetitionLocation;
 import mareczek100.musiccontests.domain.instrument_storage_domain.Instrument;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +45,13 @@ public class CompetitionService {
     public List<Competition> findAllCompetitions()
     {
         return competitionRepositoryDAO.findAllCompetitions();
+    }
+    @Transactional
+    public Page<Competition> findAllCompetitionsPageable(Integer pageNumber)
+    {
+        Sort sort = Sort.by("instrument").ascending();
+        Pageable pageable = PageRequest.of(pageNumber - 1,5, sort);
+        return competitionRepositoryDAO.findAllCompetitionsPageable(pageable);
     }
 
     @Transactional

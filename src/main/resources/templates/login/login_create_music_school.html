@@ -23,18 +23,18 @@
     <div class="row">
     <div class="col-md-3">
         <label for="validationSchoolName" class="form-label">Nazwa szkoły</label>
-        <input type="text" th:field="*{musicSchoolName}" th:text="Takaszkoła" class="form-control" id="validationSchoolName" required>
+        <input type="text" th:field="*{musicSchoolName}" class="form-control" id="validationSchoolName" required>
         <div class="invalid-feedback">Podaj pełną nazwę szkoły.</div>
         <div class="valid-feedback">Ok!</div>
     </div>
     <div class="col-md-3">
         <label for="validationPatron" class="form-label">Patron szkoły</label>
-        <input type="text" th:field="*{musicSchoolPatron}" th:text="Takipatron" class="form-control" id="validationPatron">
+        <input type="text" th:field="*{musicSchoolPatron}" class="form-control" id="validationPatron">
         <div class="valid-feedback">Wpisz imię i nazwisko patrona, jeśli Twoja szkoła go posiada.</div>
     </div>
     <div class="col-md-3">
         <label for="validationPrimaryDegree" class="form-label">Szkoła I stopnia</label>
-        <select th:field="*{musicSchoolPrimaryDegree}" class="form-select text-muted" id="validationPrimaryDegree" required>
+        <select th:name="musicSchoolPrimaryDegree" class="form-select text-muted" id="validationPrimaryDegree" required>
             <option selected value="" disabled>Potwierdź stopień szkoły</option>
             <option th:value="true" th:text="Tak"></option>
             <option th:value="false" th:text="Nie"></option>
@@ -46,7 +46,7 @@
     </div>
     <div class="col-md-3">
         <label for="validationSecondaryDegree" class="form-label">Szkoła II stopnia</label>
-        <select th:field="*{musicSchoolSecondaryDegree}" class="form-select text-muted" id="validationSecondaryDegree" required>
+        <select th:name="musicSchoolSecondaryDegree" class="form-select text-muted" id="validationSecondaryDegree" required>
             <option selected value="" disabled>Potwierdź stopień szkoły</option>
             <option th:value="true" th:text="Tak"></option>
             <option th:value="false" th:text="Nie"></option>
@@ -61,7 +61,7 @@
     <div class="row">
     <div class="col-md-4">
         <label for="validationCountry" class="form-label">Kraj</label>
-        <input type="text" th:field="*{addressCountry}" th:text="Polandia" class="form-control" id="validationCountry" required>
+        <input type="text" th:field="*{addressCountry}" class="form-control" id="validationCountry" required>
         <div class="valid-feedback">Ok!</div>
         <div class="invalid-feedback">
             Wybierz kraj swojej szkoły.
@@ -69,7 +69,7 @@
     </div>
     <div class="col-md-4">
         <label for="City" class="form-label">Miasto</label>
-        <input type="text" th:field="*{addressCity}" th:text="Killberg" class="form-control" id="City" required>
+        <input type="text" th:field="*{addressCity}" class="form-control" id="City" required>
         <div class="valid-feedback">Ok!</div>
         <div class="invalid-feedback">
             Podaj miasto, w którym znajduje się Twoja szkoła.
@@ -77,7 +77,7 @@
     </div>
     <div class="col-md-4">
         <label for="validationPostalCode" class="form-label">Kod pocztowy</label>
-        <input type="text" th:field="*{addressPostalCode}" th:text="78100" class="form-control" id="validationPostalCode" required>
+        <input type="text" th:field="*{addressPostalCode}" class="form-control" id="validationPostalCode" required>
         <div class="valid-feedback">Ok!</div>
         <div class="invalid-feedback">
             Podaj kod pocztowy.
@@ -87,7 +87,7 @@
     <div class="row">
     <div class="col-md-4">
         <label for="validationStreet" class="form-label">Ulica</label>
-        <input type="text" th:field="*{addressStreet}" th:text="Aloesowa" class="form-control" id="validationStreet" required>
+        <input type="text" th:field="*{addressStreet}" class="form-control" id="validationStreet" required>
         <div class="valid-feedback">Ok!</div>
         <div class="invalid-feedback">
             Podaj nazwę ulicy (bez numeru).
@@ -95,7 +95,7 @@
     </div>
     <div class="col-md-4">
         <label for="validationBuildingNumber" class="form-label">Numer budynku/lokalu</label>
-        <input type="text" th:field="*{addressBuildingNumber}" th:text="1414" class="form-control" id="validationBuildingNumber" required>
+        <input type="text" th:field="*{addressBuildingNumber}" class="form-control" id="validationBuildingNumber" required>
         <div class="valid-feedback">Ok!</div>
         <div class="invalid-feedback">
             Podaj numer budynku i lokalu (np. 5/23) lub tylko nr budynku.

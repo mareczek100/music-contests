@@ -439,7 +439,7 @@ class TeacherAndHeadmasterCommonMethodsRestControllerTest implements ControllerR
         Mockito.when(teacherRestUtils.checkTeacherStudentsResults(
                 Mockito.anyString(), Mockito.anyString())).thenReturn(competitionResultsDto);
         Mockito.when(teacherService.findTeacherByEmail(teacherEmail)).thenReturn(teacher);
-        Mockito.when(competitionResultService.findAllCompetitionResult()).thenReturn(competitionResultList);
+        Mockito.when(competitionResultService.findAllCompetitionResults()).thenReturn(competitionResultList);
         Mockito.when(competitionResultDtoMapper.mapFromDomainToDto(competitionResultList.get(0)))
                 .thenReturn(competitionResultDtoList.get(0));
         Mockito.when(competitionResultDtoMapper.mapFromDomainToDto(competitionResultList.get(1)))

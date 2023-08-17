@@ -132,9 +132,9 @@ class CompetitionServiceTest {
     @Test
     void findCompetitionByInstrumentCategory() {
         //given
-        Instrument instrument1 = InstrumentDomainTestData.instrument1();
-        Instrument instrument2 = InstrumentDomainTestData.instrument2();
-        Instrument instrument3 = InstrumentDomainTestData.instrument3();
+        Instrument instrument1 = InstrumentDomainTestData.instrumentSaved1();
+        Instrument instrument2 = InstrumentDomainTestData.instrumentSaved2();
+        Instrument instrument3 = InstrumentDomainTestData.instrumentSaved3();
         String instrumentCategory = instrument1.category().instrumentCategory();
         List<Instrument> instrumentList = InstrumentDomainTestData.instrumentList().stream()
                 .filter(instrument -> instrumentCategory.equals(instrument.category().instrumentCategory()))

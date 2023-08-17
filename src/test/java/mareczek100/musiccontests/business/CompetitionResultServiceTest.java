@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,7 +49,7 @@ class CompetitionResultServiceTest {
     }
 
     @Test
-    void insertAllCompetitionResults() {
+    void insertAllCompetitionResultsWorksCorrectly() {
         //given
         CompetitionResult competitionResultToSave1
                 = CompetitionResultDomainTestData.competitionResultToSave1();
@@ -76,9 +78,21 @@ class CompetitionResultServiceTest {
         //then
         Assertions.assertEquals(insertedCompetitionResult, competitionResultsSaved);
     }
+    @Test
+    void insertAllCompetitionResultsThrowExceptionIfThereAreNoResultsToInsert() {
+        //given
+        List<CompetitionResult> competitionResultsToInsert = Collections.emptyList();
+        String exceptionMessage = "There is no competition results!";
+
+        //when
+        Executable exception = () -> competitionResultService.insertAllCompetitionResults(competitionResultsToInsert);
+
+        //then
+        Assertions.assertThrowsExactly(RuntimeException.class,exception, exceptionMessage);
+    }
 
     @Test
-    void findAllCompetitionResult() {
+    void findAllCompetitionResultsWorksCorrectly() {
         //given
         CompetitionResult competitionResultSaved1
                 = CompetitionResultDomainTestData.competitionResultSaved1();
@@ -92,9 +106,23 @@ class CompetitionResultServiceTest {
         //when
         Mockito.when(competitionResultRepositoryDAO.findAllCompetitionResults())
                 .thenReturn(competitionResultsSaved);
-        List<CompetitionResult> competitionResultList = competitionResultService.findAllCompetitionResult();
+        List<CompetitionResult> competitionResultList = competitionResultService.findAllCompetitionResults();
 
         //then
         Assertions.assertEquals(competitionResultList, competitionResultsSaved);
+    }
+    @Test
+    void findAllCompetitionResultsThrowExceptionIfNoResults() {
+        //given
+        List<CompetitionResult> competitionResultsSaved = Collections.emptyList();
+        String exceptionMessage = "There is no competition results!";
+
+        //when
+        Mockito.when(competitionResultRepositoryDAO.findAllCompetitionResults())
+                .thenReturn(competitionResultsSaved);
+        Executable exception = () -> competitionResultService.findAllCompetitionResults();
+
+        //then
+        Assertions.assertThrowsExactly(RuntimeException.class,exception, exceptionMessage);
     }
 }

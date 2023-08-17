@@ -71,7 +71,7 @@ public class InstrumentApiService implements InstrumentDAO {
     {
         List<InstrumentDto> instrumentDtoList
                 = Objects.requireNonNull(instrumentApiController.allInstrumentList().block()).getInstrumentDtoList();
-        if (instrumentDtoList == null || instrumentDtoList.isEmpty())
+        if (Objects.isNull(instrumentDtoList) || instrumentDtoList.isEmpty())
         {
             throw new RuntimeException(EXCEPTION_API_MESSAGE);
         }

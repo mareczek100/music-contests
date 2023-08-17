@@ -6,6 +6,7 @@ import mareczek100.musiccontests.domain.ApplicationForm;
 import mareczek100.musiccontests.infrastructure.database.entity.ApplicationFormEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.ApplicationFormEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.ApplicationFormJpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,7 +30,8 @@ public class ApplicationFormRepositoryImpl implements ApplicationFormRepositoryD
     @Override
     public List<ApplicationForm> findAllApplicationForms()
     {
-        return applicationFormJpaRepository.findAll().stream()
+        Sort sort = Sort.by("competition.name").ascending();
+        return applicationFormJpaRepository.findAll(sort).stream()
                 .map(applicationFormEntityMapper::mapFromEntityToDomain)
                 .toList();
     }

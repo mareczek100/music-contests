@@ -38,7 +38,7 @@
         <div class="col-md-6 offset-md-3">
             <label for="validationStudentId" class="form-label">Uczeń do wycofania</label>
             <select th:name="studentId" class="form-select text-center" id="validationStudentId" required>
-                <option selected disabled value="">Uczeń</option>
+                <option class="text-muted" selected disabled value="">Uczeń</option>
                 <span th:each="student : ${studentDTOs}">
                 <option th:value="${student.studentId}" th:text="${student.name} + ' ' + ${student.surname}"></option>
                 </span>

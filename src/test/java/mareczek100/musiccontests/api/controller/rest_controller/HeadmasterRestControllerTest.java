@@ -564,7 +564,7 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
         CompetitionResultsDto competitionResultsDtoListSaved = CompetitionResultDtoTestData.competitionResultsDtoSaved();
 
         //when
-        Mockito.when(competitionResultService.findAllCompetitionResult())
+        Mockito.when(competitionResultService.findAllCompetitionResults())
                 .thenReturn(competitionResultListSaved);
         Mockito.when(competitionResultDtoMapper.mapFromDomainToDto(competitionResultListSaved.get(0)))
                 .thenReturn(competitionResultDtoListSaved.get(0));

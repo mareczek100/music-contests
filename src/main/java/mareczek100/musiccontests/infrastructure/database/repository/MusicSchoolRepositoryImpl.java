@@ -7,6 +7,7 @@ import mareczek100.musiccontests.domain.MusicSchool;
 import mareczek100.musiccontests.infrastructure.database.entity.MusicSchoolEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.MusicSchoolEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.MusicSchoolJpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,7 +29,8 @@ public class MusicSchoolRepositoryImpl implements MusicSchoolRepositoryDAO {
     @Override
     public List<MusicSchool> findAllMusicSchools()
     {
-        return musicSchoolJpaRepository.findAll().stream()
+        Sort sort = Sort.by("address.city").ascending();
+        return musicSchoolJpaRepository.findAll(sort).stream()
                 .map(musicSchoolEntityMapper::mapFromEntityToDomain)
                 .toList();
     }

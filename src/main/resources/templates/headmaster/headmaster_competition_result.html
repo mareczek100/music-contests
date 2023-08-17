@@ -28,8 +28,9 @@
 <div th:if="${noCompetitions}" class="text-bg-info p-3">
     <h4 class="text-center">Brak konkursów do publikacji wyników!</h4>
 </div>
-<div th:unless="${#lists.isEmpty(competitionDTOs) && noCompetitions==false}"><br>
-    <form class="row g-3" th:action="@{/headmaster/competition/result/announce}" method="GET">
+<div th:unless="${noCompetitions}">
+<div th:unless="${#lists.isEmpty(competitionDTOs)}"><br>
+    <form class="row g-3 was-validated" th:action="@{/headmaster/competition/result/announce}" method="GET">
         <table class="text-center table table-success table-striped table-hover">
             <thead>
             <tr class="table-success">
@@ -62,6 +63,7 @@
             <button class="btn btn-success btn-lg" type="submit">Przypisz uczniom miejsca w wybranym konkursie!</button>
         </div>
     </form>
+</div>
 </div><br>
 <div class="d-grid gap-2 col-2 mx-auto">
     <a class="btn btn-primary" th:href="@{/headmaster}" role="button">Portal Dyrektora</a>

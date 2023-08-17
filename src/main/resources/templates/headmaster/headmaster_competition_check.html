@@ -40,7 +40,7 @@
         <div class="col-md-4 offset-md-4">
             <label for="validationCompetitionCity" class="form-label">Miasto szukanego konkursu</label>
             <select th:name="competitionCity" class="form-select" id="validationCompetitionCity" required>
-                <option selected disabled value="">Miasto</option>
+                <option class="text-muted" selected disabled value="">Miasto</option>
                 <span th:each="city : ${cityDTOs}">
                <option th:value="${city}" th:text="${city}"></option>
                </span>

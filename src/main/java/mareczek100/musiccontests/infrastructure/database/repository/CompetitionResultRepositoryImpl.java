@@ -6,6 +6,7 @@ import mareczek100.musiccontests.domain.CompetitionResult;
 import mareczek100.musiccontests.infrastructure.database.entity.CompetitionResultEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.CompetitionResultEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.CompetitionResultJpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,7 +30,8 @@ public class CompetitionResultRepositoryImpl implements CompetitionResultReposit
     @Override
     public List<CompetitionResult> findAllCompetitionResults()
     {
-        return competitionResultJpaRepository.findAll().stream()
+        Sort sort = Sort.by("competitionPlace").ascending();
+        return competitionResultJpaRepository.findAll(sort).stream()
                 .map(competitionResultEntityMapper::mapFromEntityToDomain)
                 .toList();
     }

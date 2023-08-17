@@ -30,9 +30,10 @@ public class CompetitionResultService {
     }
 
     @Transactional
-    public List<CompetitionResult> findAllCompetitionResult()
+    public List<CompetitionResult> findAllCompetitionResults()
     {
         List<CompetitionResult> competitionResults = competitionResultRepositoryDAO.findAllCompetitionResults();
+
         if (competitionResults.isEmpty()){
             throw new RuntimeException("There is no competition results!");
         }

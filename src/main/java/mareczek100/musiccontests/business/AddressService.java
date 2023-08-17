@@ -21,6 +21,7 @@ public class AddressService {
     }
     @Transactional
     public List<Address> findAllAddresses() {
+
         return addressRepositoryDAO.findAllAddresses();
     }
 

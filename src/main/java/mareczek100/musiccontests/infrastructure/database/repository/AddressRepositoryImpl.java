@@ -6,6 +6,7 @@ import mareczek100.musiccontests.domain.Address;
 import mareczek100.musiccontests.infrastructure.database.entity.AddressEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.AddressEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.AddressJpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,8 +26,11 @@ public class AddressRepositoryImpl implements AddressRepositoryDAO {
     }
 
     @Override
-    public List<Address> findAllAddresses() {
-        List<AddressEntity> addressEntityList = addressJpaRepository.findAll();
+    public List<Address> findAllAddresses()
+    {
+        Sort sort = Sort.by("city").ascending();
+
+        List<AddressEntity> addressEntityList = addressJpaRepository.findAll(sort);
         return addressEntityList.stream()
                 .map(addressEntityMapper::mapFromEntityToDomain)
                 .toList();

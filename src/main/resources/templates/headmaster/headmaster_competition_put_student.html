@@ -18,13 +18,13 @@
 <h1 class="text-center">Twój uczeń jest zapisany na konkurs!</h1><br>
 <h2 class="text-center">Poniżej szczegóły zgłoszenia!</h2><br>
 <div>
-    <table class="table table-success table-striped table-hover">
+    <table class="table table-success table-striped table-hover text-center">
         <thead>
         <tr class="table-success">
             <th scope="col">Konkurs</th>
             <th scope="col">Nauczyciel zgłaszający</th>
             <th scope="col">Zgłoszony uczeń</th>
-            <th scope="col">Klasa występu</th>
+            <th scope="col">Poziom występu - klasa</th>
             <th scope="col">Zgłoszone utwory</th>
             <th scope="col">Publikacja wyników</th>
         </tr>
@@ -43,7 +43,7 @@
 </div><br>
     <div class="d-grid gap-2 col-2 mx-auto">
         <a class="btn btn-primary" th:href="@{/headmaster}" role="button">Portal Dyrektora</a>
-        <a class="btn btn-success" th:href="@{/headmaster/competition/student/select}" role="button">Poprzednia strona</a>
+        <a class="btn btn-success" th:href="@{/headmaster/competition/student}" role="button">Strona zgłoszeń</a>
     </div>
 </body>
 </html>

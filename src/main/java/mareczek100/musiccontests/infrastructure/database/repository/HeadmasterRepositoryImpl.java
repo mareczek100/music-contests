@@ -7,6 +7,7 @@ import mareczek100.musiccontests.domain.Headmaster;
 import mareczek100.musiccontests.infrastructure.database.entity.HeadmasterEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.HeadmasterEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.HeadmasterJpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,8 +28,10 @@ public class HeadmasterRepositoryImpl implements HeadmasterRepositoryDAO {
     }
 
     @Override
-    public List<Headmaster> findAllHeadmasters() {
-        List<HeadmasterEntity> headmasterEntityList = headmasterJpaRepository.findAll();
+    public List<Headmaster> findAllHeadmasters()
+    {
+        Sort sort = Sort.by("surname").ascending();
+        List<HeadmasterEntity> headmasterEntityList = headmasterJpaRepository.findAll(sort);
         return headmasterEntityList.stream()
                 .map(headmasterEntityMapper::mapFromEntityToDomain)
                 .toList();

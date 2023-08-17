@@ -13,6 +13,9 @@ import mareczek100.musiccontests.business.instrument_storage_service.InstrumentA
 import mareczek100.musiccontests.domain.Address;
 import mareczek100.musiccontests.domain.Competition;
 import mareczek100.musiccontests.domain.CompetitionLocation;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -28,7 +31,8 @@ public class AllUsersRestUtils {
 
     public InstrumentsDto findAllAvailableInstruments()
     {
-
+        Sort sort = Sort.by("name").ascending();
+        Pageable pageable = PageRequest.of(0, 5, sort);
         List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
                 .map(instrumentDtoMapper::mapFromDomainToDto)
                 .toList();

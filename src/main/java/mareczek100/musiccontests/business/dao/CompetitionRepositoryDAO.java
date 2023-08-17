@@ -1,6 +1,8 @@
 package mareczek100.musiccontests.business.dao;
 
 import mareczek100.musiccontests.domain.Competition;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +13,8 @@ public interface CompetitionRepositoryDAO {
     Competition insertCompetition(Competition competition);
 
     List<Competition> findAllCompetitions();
+
+    Page<Competition> findAllCompetitionsPageable(Pageable pageable);
 
     List<Competition> findCompetitionsByInstrument(String instrument);
 

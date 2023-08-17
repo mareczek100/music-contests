@@ -26,8 +26,8 @@
         <div class="row justify-content-evenly">
             <div class="col-4">
                 <label for="validationCompetitionInstrument" class="form-label">Instrument</label>
-                <select th:field="*{competitionInstrument}" class="form-select" id="validationCompetitionInstrument" required>
-                    <option selected disabled value="">Instrument konkursu</option>
+                <select th:name="competitionInstrument" class="form-select" id="validationCompetitionInstrument" required>
+                    <option class="text-muted" selected disabled value="">Instrument konkursu</option>
                     <span th:each="instrument : ${instrumentDTOs}">
                     <option th:value="${instrument.name}" th:text="${instrument.name}"></option>
                     </span>

@@ -17,7 +17,7 @@
         <a class="btn btn-outline-success btn-lg" th:href="@{/authentication/account}" role="button">Utwórz konto</a>
     </div>
     <div class="d-grid gap-2 col-2 mx-auto">
-        <form class="row g-1" th:action="@{/authentication/account/delete}" method="DELETE">
+        <form class="row g-1" th:action="@{/authentication/account/delete}" method="POST">
             <input type="text" th:name="userEmail" class="form-control text-center" id="deleteAccount"
                    placeholder="Email użytkownika" required>
             <button class="btn btn-outline-danger" type="submit">Skasuj konto</button>

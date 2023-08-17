@@ -34,8 +34,8 @@
         <input type="hidden" th:name="musicSchoolId" th:if="${headmasterDto!=null}" th:value="${headmasterDto.musicSchool.musicSchoolId}" class="form-control" required>
         <div>
             <label for="validationCompetitionInstrument" class="form-label">Instrument</label>
-            <select th:field="*{instrument}" class="form-select" id="validationCompetitionInstrument" required>
-                <option selected disabled value="">Instrument konkursu</option>
+            <select th:name="instrument" class="form-select" id="validationCompetitionInstrument" required>
+                <option class="text-muted" selected disabled value="">Instrument konkursu</option>
                 <span th:each="instrument : ${instrumentDTOs}">
                 <option th:value="${instrument.name}" th:text="${instrument.name}"></option>
                 </span>

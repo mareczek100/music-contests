@@ -133,8 +133,6 @@ public class HeadmasterRestController implements ControllerRestSupport {
         return ResponseEntity.status(HttpStatus.CREATED).body(competitionAtOtherPlace);
 
     }
-
-
     @GetMapping(FIND_ALL_COMPETITIONS)
     @Operation(summary = "Find list of all available music competitions.")
     public CompetitionsDto findAllAvailableCompetitions()
@@ -383,7 +381,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
             @RequestParam("competitionId") String competitionId
     )
     {
-        List<CompetitionResultDto> resultDTOs = competitionResultService.findAllCompetitionResult().stream()
+        List<CompetitionResultDto> resultDTOs = competitionResultService.findAllCompetitionResults().stream()
                 .filter(competitionResult ->
                         competitionId.equals(competitionResult.competition().competitionId()))
                 .map(competitionResultDtoMapper::mapFromDomainToDto)

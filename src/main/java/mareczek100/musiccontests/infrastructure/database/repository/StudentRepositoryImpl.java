@@ -6,6 +6,7 @@ import mareczek100.musiccontests.domain.Student;
 import mareczek100.musiccontests.infrastructure.database.entity.StudentEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.StudentEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.StudentJpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,7 +30,8 @@ public class StudentRepositoryImpl implements StudentRepositoryDAO {
     @Override
     public List<Student> findAllStudents()
     {
-        return studentJpaRepository.findAll().stream()
+        Sort sort = Sort.by("surname").ascending();
+        return studentJpaRepository.findAll(sort).stream()
                 .map(studentEntityMapper::mapFromEntityToDomain)
                 .toList();
     }

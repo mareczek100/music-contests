@@ -336,7 +336,7 @@ public class TeacherController {
         Competition competition = competitionService.findCompetitionById(competitionId);
         String competitionName = competition.name();
 
-        List<CompetitionResultDto> resultDTOs = competitionResultService.findAllCompetitionResult().stream()
+        List<CompetitionResultDto> resultDTOs = competitionResultService.findAllCompetitionResults().stream()
                 .filter(competitionResult ->
                         competitionId.equals(competitionResult.competition().competitionId()))
                 .map(competitionResultDtoMapper::mapFromDomainToDto)

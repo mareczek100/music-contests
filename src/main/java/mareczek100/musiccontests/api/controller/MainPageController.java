@@ -48,7 +48,6 @@ public class MainPageController {
     public static final String MUSIC_CONTESTS_ERROR = "/error";
     public static final String MUSIC_CONTESTS_CREATE_ACCOUNT = "/account";
     public static final String MUSIC_CONTESTS_DELETE_ACCOUNT = "/account/delete";
-    public static final String MUSIC_CONTESTS_CREATE_ACCOUNT_USER = "/account/user";
     public static final String MUSIC_CONTESTS_ACCOUNT_STUDENT = "/account/student";
     public static final String MUSIC_CONTESTS_ACCOUNT_TEACHER = "/account/teacher";
     private final static Boolean ACCOUNT_CREATED_SUCCESS = true;
@@ -98,7 +97,8 @@ public class MainPageController {
             @RequestParam("email") @Email String email,
             @RequestParam("pesel") @Valid String pesel,
             @RequestParam("role") String role
-    ) {
+    )
+    {
 
         RoleEntity.RoleName roleName = RoleEntity.RoleName.valueOf(role);
         MusicContestsPortalUserDto portalUser = MusicContestsPortalUserDto.builder()
@@ -123,9 +123,8 @@ public class MainPageController {
             return musicSchoolModelView;
         }
 
-
         return switch (roleName) {
-            case HEADMASTER -> createHeadmaster(portalUser, musicSchoolDto);
+            case HEADMASTER -> createHeadmaster(portalUser, musicSchoolDto.withMusicSchoolId(musicSchoolId));
             case TEACHER -> prepareTeacher(portalUser, musicSchoolDto, instrumentDTOs);
             case STUDENT -> prepareStudent(portalUser, musicSchoolDto, instrumentDTOs);
             default -> {
@@ -135,47 +134,13 @@ public class MainPageController {
             }
         };
     }
-
-//    @PostMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_CREATE_ACCOUNT_USER)
-//    public ModelAndView loginCreateUserAccountProcess(
-//            @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
-//            @RequestParam("name") String name,
-//            @RequestParam("surname") String surname,
-//            @RequestParam("email") @Email String email,
-//            @RequestParam("pesel") @Valid String pesel,
-//            @RequestParam("role") String role
-//    ) {
-//        RoleEntity.RoleName roleName = RoleEntity.RoleName.valueOf(role);
-//        MusicContestsPortalUserDto portalUser = MusicContestsPortalUserDto.builder()
-//                .name(name)
-//                .surname(surname)
-//                .email(email)
-//                .pesel(pesel)
-//                .build();
-//
-//        List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
-//                .map(instrumentDtoMapper::mapFromDomainToDto)
-//                .toList();
-//
-//        return switch (roleName) {
-//            case HEADMASTER -> createHeadmaster(portalUser, musicSchoolDto);
-//            case TEACHER -> prepareTeacher(portalUser, musicSchoolDto, instrumentDTOs);
-//            case STUDENT -> prepareStudent(portalUser, musicSchoolDto, instrumentDTOs);
-//            default -> {
-//                ModelAndView failureModelView = new ModelAndView("login/login_failure");
-//                failureModelView.addObject("accountCreated", ACCOUNT_CREATED_FAILURE);
-//                yield failureModelView;
-//            }
-//        };
-//    }
-
-
     @PostMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_ACCOUNT_TEACHER)
     public String loginCreateTeacherAccountProcess(
             @Valid @ModelAttribute TeacherDto teacherDto,
             @Valid @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
             Model model
-    ) {
+    )
+    {
         TeacherDto insertedTeacherDto = createTeacher(teacherDto, musicSchoolDto);
         model.addAttribute("accountCreated", ACCOUNT_CREATED_SUCCESS);
         model.addAttribute("portalUser", insertedTeacherDto);
@@ -189,7 +154,8 @@ public class MainPageController {
             @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
             @RequestParam("teacherEmail") @Email String teacherEmail,
             Model model
-    ) {
+    )
+    {
         StudentDto insertedStudentDto = createStudent(studentDto, teacherEmail, musicSchoolDto);
         model.addAttribute("accountCreated", ACCOUNT_CREATED_SUCCESS);
         model.addAttribute("portalUser", insertedStudentDto);
@@ -197,7 +163,7 @@ public class MainPageController {
         return "login/login_main_page";
     }
 
-    @DeleteMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_DELETE_ACCOUNT)
+    @PostMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_DELETE_ACCOUNT)
     public String deleteMusicContestsUserAccount(
             @RequestParam("userEmail") @Email String userEmail,
             Model model
@@ -215,7 +181,7 @@ public class MainPageController {
                 .filter(student -> userEmail.equalsIgnoreCase(student.email()))
                 .findAny();
 
-        if (foundHeadmaster.isPresent()){
+        if (foundHeadmaster.isPresent()) {
             Headmaster headmaster = foundHeadmaster.get();
             headmasterService.deleteHeadmaster(headmaster);
             model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
@@ -224,7 +190,7 @@ public class MainPageController {
             return "login/login_main_page";
         }
 
-        if (foundTeacher.isPresent()){
+        if (foundTeacher.isPresent()) {
             Teacher teacher = foundTeacher.get();
             teacherService.deleteTeacher(teacher);
             model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
@@ -232,7 +198,7 @@ public class MainPageController {
             return "login/login_main_page";
         }
 
-        if (foundStudent.isPresent()){
+        if (foundStudent.isPresent()) {
             Student student = foundStudent.get();
             studentService.deleteStudent(student);
             model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
@@ -260,8 +226,11 @@ public class MainPageController {
         return "login/login_logout";
     }
 
-    private ModelAndView createHeadmaster(MusicContestsPortalUserDto portalUser,
-                                          MusicSchoolWithAddressDto musicSchoolDto) {
+    private ModelAndView createHeadmaster(
+            MusicContestsPortalUserDto portalUser,
+            MusicSchoolWithAddressDto musicSchoolDto
+    )
+    {
         ModelAndView headmasterModelView = new ModelAndView("login/login_main_page");
 
         Headmaster headmaster = Headmaster.builder()
@@ -272,16 +241,17 @@ public class MainPageController {
                 .build();
 
         HeadmasterDto headmasterDto;
+        MusicSchool musicSchool;
 
         if (!musicSchoolDto.musicSchoolId().isEmpty()) {
-            MusicSchool musicSchool = musicSchoolService.findMusicSchoolById(musicSchoolDto.musicSchoolId());
-            Headmaster insertedHeadmaster = headmasterService.insertHeadmaster(headmaster.withMusicSchool(musicSchool));
-            headmasterDto = headmasterDtoMapper.mapFromDomainToDto(insertedHeadmaster);
+            musicSchool = musicSchoolService.findMusicSchoolById(musicSchoolDto.musicSchoolId());
         } else {
-            MusicSchool musicSchool = musicSchoolDtoMapper.mapFromDtoToDomain(musicSchoolDto);
-            Headmaster insertedHeadmaster = headmasterService.insertHeadmaster(headmaster.withMusicSchool(musicSchool));
-            headmasterDto = headmasterDtoMapper.mapFromDomainToDto(insertedHeadmaster);
+            musicSchool = musicSchoolDtoMapper.mapFromDtoToDomain(musicSchoolDto);
         }
+        Headmaster insertedHeadmaster = headmasterService.insertHeadmaster(
+                headmaster.withMusicSchool(musicSchool));
+        headmasterDto = headmasterDtoMapper.mapFromDomainToDto(insertedHeadmaster);
+
         headmasterModelView.addObject("portalUser", headmasterDto);
         headmasterModelView.addObject("accountCreated", ACCOUNT_CREATED_SUCCESS);
         headmasterModelView.setStatus(HttpStatus.CREATED);
@@ -291,7 +261,8 @@ public class MainPageController {
 
     private ModelAndView prepareTeacher(MusicContestsPortalUserDto portalUser,
                                         MusicSchoolWithAddressDto musicSchoolDto,
-                                        List<InstrumentDto> instrumentDTOs)
+                                        List<InstrumentDto> instrumentDTOs
+    )
     {
         TeacherDto teacherDto = TeacherDto.builder().build();
         ModelAndView teacherModelView = new ModelAndView("login/login_create_teacher");
@@ -304,25 +275,27 @@ public class MainPageController {
 
     private TeacherDto createTeacher(TeacherDto teacherDto,
                                      MusicSchoolWithAddressDto musicSchoolDto
-    ) {
-        Teacher teacher = teacherDtoMapper.mapFromDtoToDomain(teacherDto);
-        TeacherDto insertedTeacherDto;
+    )
+    {
+        Teacher teacher;
 
         if (!musicSchoolDto.musicSchoolId().isEmpty()) {
             MusicSchool musicSchool = musicSchoolService.findMusicSchoolById(musicSchoolDto.musicSchoolId());
-            Teacher insertedTeacher = teacherService.insertTeacher(teacher.withMusicSchool(musicSchool));
-            insertedTeacherDto = teacherDtoMapper.mapFromDomainToDto(insertedTeacher);
+            MusicSchoolWithAddressDto insertedMusicSchoolDto = musicSchoolDtoMapper.mapFromDomainToDto(musicSchool);
+            teacher = teacherDtoMapper.mapFromDtoToDomain(teacherDto.withMusicSchool(insertedMusicSchoolDto));
         } else {
-            MusicSchool musicSchool = musicSchoolDtoMapper.mapFromDtoToDomain(musicSchoolDto);
-            Teacher insertedTeacher = teacherService.insertTeacher(teacher.withMusicSchool(musicSchool));
-            insertedTeacherDto = teacherDtoMapper.mapFromDomainToDto(insertedTeacher);
+            teacher = teacherDtoMapper.mapFromDtoToDomain(teacherDto.withMusicSchool(musicSchoolDto));
         }
-        return insertedTeacherDto;
+
+        Teacher insertedTeacher = teacherService.insertTeacher(teacher);
+        return teacherDtoMapper.mapFromDomainToDto(insertedTeacher);
     }
 
     private ModelAndView prepareStudent(MusicContestsPortalUserDto portalUser,
                                         MusicSchoolWithAddressDto musicSchoolDto,
-                                        List<InstrumentDto> instrumentDTOs) {
+                                        List<InstrumentDto> instrumentDTOs
+    )
+    {
         StudentDto studentDto = StudentDto.builder().build();
         ModelAndView studentModelView = new ModelAndView("login/login_create_student");
 
@@ -349,25 +322,21 @@ public class MainPageController {
 
     private StudentDto createStudent(StudentDto studentDto,
                                      String teacherEmail,
-                                     MusicSchoolWithAddressDto musicSchoolDto)
+                                     MusicSchoolWithAddressDto musicSchoolDto
+    )
     {
-        Student student = studentDtoMapper.mapFromDtoToDomain(studentDto);
         Teacher teacherByEmail = teacherService.findTeacherByEmail(teacherEmail);
-        StudentDto insertedStudentDto;
+        Student student;
 
         if (!musicSchoolDto.musicSchoolId().isEmpty()) {
             MusicSchool musicSchool = musicSchoolService.findMusicSchoolById(musicSchoolDto.musicSchoolId());
-            Student insertedStudent = studentService.insertStudent(student
-                    .withMusicSchool(musicSchool)
-                    .withTeacher(teacherByEmail));
-            insertedStudentDto = studentDtoMapper.mapFromDomainToDto(insertedStudent);
+            MusicSchoolWithAddressDto insertedMusicSchoolDto = musicSchoolDtoMapper.mapFromDomainToDto(musicSchool);
+            student = studentDtoMapper.mapFromDtoToDomain(studentDto.withMusicSchool(insertedMusicSchoolDto));
         } else {
-            MusicSchool musicSchool = musicSchoolDtoMapper.mapFromDtoToDomain(musicSchoolDto);
-            Student insertedStudent = studentService.insertStudent(student
-                    .withMusicSchool(musicSchool)
-                    .withTeacher(teacherByEmail));
-            insertedStudentDto = studentDtoMapper.mapFromDomainToDto(insertedStudent);
+            student = studentDtoMapper.mapFromDtoToDomain(studentDto.withMusicSchool(musicSchoolDto));
         }
-        return insertedStudentDto;
+
+        Student insertedStudent = studentService.insertStudent(student.withTeacher(teacherByEmail));
+        return studentDtoMapper.mapFromDomainToDto(insertedStudent);
     }
 }

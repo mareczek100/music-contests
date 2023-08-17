@@ -98,7 +98,7 @@ public class StudentRestController implements ControllerRestSupport {
     )
     {
 
-        List<CompetitionWithLocationDto> competitionDTOs = competitionResultService.findAllCompetitionResult().stream()
+        List<CompetitionWithLocationDto> competitionDTOs = competitionResultService.findAllCompetitionResults().stream()
                 .filter(competitionResult -> competitionResult.competition().finished())
                 .filter(competitionResult ->
                         BCrypt.checkpw(studentPesel, competitionResult.student().pesel()))
@@ -119,7 +119,7 @@ public class StudentRestController implements ControllerRestSupport {
             @RequestParam("studentPesel") String studentPesel
     )
     {
-        List<CompetitionResultDto> resultDto = competitionResultService.findAllCompetitionResult().stream()
+        List<CompetitionResultDto> resultDto = competitionResultService.findAllCompetitionResults().stream()
                 .filter(competitionResult ->
                         competitionId.equals(competitionResult.competition().competitionId()))
                 .filter(competitionResult ->

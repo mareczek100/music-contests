@@ -163,7 +163,7 @@ public class StudentController {
     )
     {
 
-        List<CompetitionWithLocationDto> competitionDTOs = competitionResultService.findAllCompetitionResult().stream()
+        List<CompetitionWithLocationDto> competitionDTOs = competitionResultService.findAllCompetitionResults().stream()
                 .filter(competitionResult ->
                         BCrypt.checkpw(studentPesel, competitionResult.student().pesel()))
                 .map(CompetitionResult::competition)
@@ -190,7 +190,7 @@ public class StudentController {
         Competition competition = competitionService.findCompetitionById(competitionId);
         String competitionName = competition.name();
 
-        CompetitionResultDto resultDto = competitionResultService.findAllCompetitionResult().stream()
+        CompetitionResultDto resultDto = competitionResultService.findAllCompetitionResults().stream()
                 .filter(competitionResult ->
                         competitionId.equals(competitionResult.competition().competitionId()))
                 .filter(competitionResult ->

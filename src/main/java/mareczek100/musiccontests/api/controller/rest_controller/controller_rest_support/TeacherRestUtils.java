@@ -186,7 +186,7 @@ public class TeacherRestUtils {
         Teacher teacher = teacherService.findTeacherByEmail(teacherEmail);
         String teacherId = teacher.teacherId();
 
-        List<CompetitionResultDto> resultDTOs = competitionResultService.findAllCompetitionResult().stream()
+        List<CompetitionResultDto> resultDTOs = competitionResultService.findAllCompetitionResults().stream()
                 .filter(competitionResult ->
                         competitionId.equals(competitionResult.competition().competitionId()))
                 .filter(competitionResult ->

@@ -26,8 +26,8 @@
         <div class="row justify-content-evenly">
                 <div class="col-3">
                     <label for="validationCompetitionInstrument" class="form-label">Instrument</label>
-                    <select th:field="*{competitionInstrument}" class="form-select" id="validationCompetitionInstrument" required>
-                        <option selected disabled value="">Instrument konkursu</option>
+                    <select th:name="competitionInstrument" class="form-select" id="validationCompetitionInstrument" required>
+                        <option class="text-muted" selected disabled value="">Instrument konkursu</option>
                         <span th:each="instrument : ${instrumentDTOs}">
                         <option th:value="${instrument.name}" th:text="${instrument.name}"></option>
                         </span>
@@ -37,8 +37,8 @@
                 </div>
                 <div class="col-3">
                     <label for="validationCompetitionPrimaryDegree" class="form-label">Konkurs I stopnia</label>
-                    <select th:field="*{competitionPrimaryDegree}" class="form-select" id="validationCompetitionPrimaryDegree" required>
-                        <option selected disabled value="">Potwierdź stopień konkursu</option>
+                    <select th:name="competitionPrimaryDegree" class="form-select" id="validationCompetitionPrimaryDegree" required>
+                        <option class="text-muted" selected disabled value="">Potwierdź stopień konkursu</option>
                         <option th:value="true" th:text="Tak"></option>
                         <option th:value="false" th:text="Nie"></option>
                     </select>
@@ -49,8 +49,8 @@
                 </div>
                 <div class="col-3">
                      <label for="validationCompetitionSecondaryDegree" class="form-label">Konkurs II stopnia</label>
-                     <select th:field="*{competitionSecondaryDegree}" class="form-select" id="validationCompetitionSecondaryDegree" required>
-                         <option selected disabled value="">Potwierdź stopień konkursu</option>
+                     <select th:name="competitionSecondaryDegree" class="form-select" id="validationCompetitionSecondaryDegree" required>
+                         <option class="text-muted" selected disabled value="">Potwierdź stopień konkursu</option>
                          <option th:value="true" th:text="Tak"></option>
                          <option th:value="false" th:text="Nie"></option>
                      </select>
@@ -63,8 +63,8 @@
         <div class="row justify-content-evenly">
             <div class="col-4">
                 <label for="validationCompetitionOnline" class="form-label">Online</label>
-                <select th:field="*{competitionOnline}" class="form-select" id="validationCompetitionOnline" required>
-                    <option selected disabled value="">Konkurs online</option>
+                <select th:name="competitionOnline" class="form-select" id="validationCompetitionOnline" required>
+                    <option class="text-muted" selected disabled value="">Konkurs online</option>
                     <option th:value="true" th:text="Tak"></option>
                     <option th:value="false" th:text="Nie"></option>
                 </select>
@@ -75,8 +75,8 @@
             </div>
             <div class="col-4">
                 <label for="validationAddressCity" class="form-label">Miasto</label>
-                <select th:field="*{addressCity}" class="form-select" id="validationAddressCity" required>
-                    <option selected disabled value="">Podaj miasto konkursu</option>
+                <select th:name="addressCity" class="form-select" id="validationAddressCity" required>
+                    <option class="text-muted" selected disabled value="">Podaj miasto konkursu</option>
                     <span th:each="city : ${cityDTOs}">
                     <option th:value="${city}" th:text="${city}"></option>
                     </span>

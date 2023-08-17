@@ -26,8 +26,8 @@
         <div class="col-md-4 offset-md-4 text-center">
             <input type="hidden" th:name="headmasterTeacherEmail" th:value="${headmasterTeacherEmail}" class="form-control" required>
                 <label for="validationCompetitionInstrument" class="form-label">Instrument</label>
-                <select th:field="*{competitionInstrument}" class="form-select" id="validationCompetitionInstrument" required>
-                    <option selected disabled value="">Instrument konkursu</option>
+                <select th:name="competitionInstrument" class="form-select" id="validationCompetitionInstrument" required>
+                    <option class="text-muted" selected disabled value="">Instrument konkursu</option>
                     <span th:each="instrument : ${instrumentDTOs}">
                     <option th:value="${instrument.name}" th:text="${instrument.name}"></option>
                     </span>
@@ -37,15 +37,24 @@
             <button class="btn btn-info btn-lg" type="submit">Znajdź konkurs</button>
         </div>
     </form><br>
-    <form class="row g-3" action="#" th:action="@{/headmaster/competition/student/search/filters}" method="GET">
-        <div class="col-md-6 offset-md-3 text-center">
-            <input type="hidden" th:name="headmasterTeacherEmail" th:value="${headmasterTeacherEmail}" class="form-control" required>
-            <h4>Lub skorzystaj z pełnej wyszukiwarki i podaj więcej kryteriów!</h4>
-            <h5>Do wyboru masz filtry "online", "stopień", "miasto" i "instrument"</h5>
-                <button class="btn btn-info" type="submit">Pełna wyszukiwarka!</button>
+    <div class="row justify-content-evenly text-center">
+        <h4>Możesz też skorzystać z pełnej wyszukiwarki albo po prostu wyświetlić wszystkie dostępne konkursy!</h4>
+        <div class="col-md-4">
+            <form th:action="@{/headmaster/competition/student/search/filters}" method="GET">
+                <input type="hidden" th:name="headmasterTeacherEmail" th:value="${headmasterTeacherEmail}" class="form-control" required>
+                <h5>Do wyboru masz filtry "online", "stopień", "miasto" i "instrument"</h5>
+                    <button class="btn btn-info col-md-10" type="submit">Pełna wyszukiwarka</button>
+            </form>
         </div>
-    </form><br>
-</div>
+        <div class="col-md-4">
+            <form th:action="@{/headmaster/competition/student/search/all/{currentPage}(currentPage=1)}" method="GET">
+                <input type="hidden" th:name="headmasterTeacherEmail" th:value="${headmasterTeacherEmail}" class="form-control" required>
+                <h5>Przejrzyj wszystkie konkursy bez podawania żadnych wytycznych</h5>
+                    <button class="btn btn-info col-md-10" type="submit">Wszystkie konkursy</button>
+            </form>
+        </div>
+    </div><br>
+</div><br>
     <div class="d-grid gap-2 col-2 mx-auto">
         <a class="btn btn-primary" th:href="@{/headmaster}" role="button">Portal Dyrektora</a>
         <a class="btn btn-success" th:href="@{/headmaster/competition/student}" role="button">Poprzednia strona</a>

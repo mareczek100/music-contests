@@ -23,7 +23,6 @@ import static mareczek100.musiccontests.api.controller.MainPageController.*;
 public class SecurityConfig {
     private static final String ALL_SUBPAGES = "/**";
     private static final String IMAGES = "/images/**";
-
     private static final String REST_API_HOME = "/api";
 
 

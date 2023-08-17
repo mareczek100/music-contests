@@ -119,16 +119,19 @@ public class InstrumentDtoTestData {
 
     private static InstrumentCategoryDto buildCategoryStrunoweDto() {
         return InstrumentCategoryDto.builder()
+                .instrumentCategoryId("494f547b-6e71-4719-9315-2b00f96fe472")
                 .instrumentCategory("strunowe")
                 .build();
     }
     private static InstrumentCategoryDto buildCategoryDęteDto() {
         return InstrumentCategoryDto.builder()
+                .instrumentCategoryId("ad37f0ab-9de9-4a35-9e8e-06d057ed37a4")
                 .instrumentCategory("dęte")
                 .build();
     }
     private static InstrumentCategoryDto buildCategoryPerkusyjneDto() {
         return InstrumentCategoryDto.builder()
+                .instrumentCategoryId("996283fc-944e-45fe-8613-6c6b872c40c4")
                 .instrumentCategory("perkusyjne")
                 .build();
     }

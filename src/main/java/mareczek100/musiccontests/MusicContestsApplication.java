@@ -10,7 +10,4 @@ public class MusicContestsApplication {
 		SpringApplication.run(MusicContestsApplication.class, args);
 
 	}
-
-
-
 }

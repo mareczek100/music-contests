@@ -66,7 +66,7 @@
             <div class="text-center col-5">
                 <label for="validationStudent" class="form-label">Uczeń Twojej szkoły</label>
                 <select th:name="studentId" class="form-select" id="validationStudent" required>
-                    <option selected disabled value="">Wybierz ucznia</option>
+                    <option class="text-muted" selected disabled value="">Wybierz ucznia</option>
                     <span th:each="student : ${studentDTOs}">
                     <option th:value="${student.studentId}" th:text="${student.name} + ' ' + ${student.surname}"></option>
                     </span>
@@ -77,7 +77,7 @@
             <div class="text-center col-5">
                 <label for="validationClassLevel" class="form-label">Poziom klasy konkursu</label>
                 <select th:name="classLevel" class="form-select" id="validationClassLevel" required>
-                    <option selected disabled value="">Poziom klasy</option>
+                    <option class="text-muted" selected disabled value="">Poziom klasy</option>
                     <span th:each="classLevel : ${classLevels}">
                     <option th:value="${classLevel}" th:text="${classLevel.getClassLevel()}"></option>
                     </span>

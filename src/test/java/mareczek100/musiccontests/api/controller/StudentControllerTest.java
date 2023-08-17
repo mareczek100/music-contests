@@ -251,7 +251,7 @@ class StudentControllerTest {
                 .map(competition -> competition.withFinished(true)).toList();
 
         //when
-        Mockito.when(competitionResultService.findAllCompetitionResult())
+        Mockito.when(competitionResultService.findAllCompetitionResults())
                 .thenReturn(competitionResultList);
         Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
                 .thenReturn(competitionDTOs.get(0));
@@ -282,7 +282,7 @@ class StudentControllerTest {
 
         //when
         Mockito.when(competitionService.findCompetitionById(competitionId)).thenReturn(competition);
-        Mockito.when(competitionResultService.findAllCompetitionResult()).thenReturn(competitionResultList);
+        Mockito.when(competitionResultService.findAllCompetitionResults()).thenReturn(competitionResultList);
         Mockito.when(competitionResultDtoMapper.mapFromDomainToDto(competitionResultList.get(0)))
                 .thenReturn(competitionResultDtoList.get(0));
 

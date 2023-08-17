@@ -25,7 +25,7 @@ public class InstrumentCategoryApiService implements InstrumentCategoryDAO {
         List<InstrumentCategoryDto> instrumentCategoryDtoList
                 = Objects.requireNonNull(instrumentCategoryApiController.allInstrumentCategoryList()
                 .block()).getInstrumentCategoryDtoList();
-        if (instrumentCategoryDtoList == null || instrumentCategoryDtoList.isEmpty())
+        if (Objects.isNull(instrumentCategoryDtoList) || instrumentCategoryDtoList.isEmpty())
         {
             throw new RuntimeException(EXCEPTION_API_MESSAGE);
         }

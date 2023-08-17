@@ -6,6 +6,9 @@ import mareczek100.musiccontests.domain.Competition;
 import mareczek100.musiccontests.infrastructure.database.entity.CompetitionEntity;
 import mareczek100.musiccontests.infrastructure.database.mapper.CompetitionEntityMapper;
 import mareczek100.musiccontests.infrastructure.database.repository.jpaRepository.CompetitionJpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,9 +32,15 @@ public class CompetitionRepositoryImpl implements CompetitionRepositoryDAO {
     @Override
     public List<Competition> findAllCompetitions()
     {
-        return competitionJpaRepository.findAll().stream()
+        Sort sort = Sort.by("beginning").ascending();
+        return competitionJpaRepository.findAll(sort).stream()
                 .map(competitionEntityMapper::mapFromEntityToDomain)
                 .toList();
+    }
+    @Override
+    public Page<Competition> findAllCompetitionsPageable(Pageable pageable)
+    {
+        return competitionJpaRepository.findAll(pageable).map(competitionEntityMapper::mapFromEntityToDomain);
     }
 
     @Override

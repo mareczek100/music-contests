@@ -2,6 +2,7 @@ package mareczek100.musiccontests.api.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.xml.bind.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.SQLException;
 import java.util.Optional;
 @Slf4j
 @ControllerAdvice
@@ -36,10 +38,19 @@ public class ExceptionController {
         modelView.addObject("errorMessage", errorMessage);
         return modelView;
     }
-    @ExceptionHandler(ConstraintViolationException.class)
+    @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleConstraintViolationException(ConstraintViolationException ex) {
-        String errorMessage = String.format("Bad input: [%s]", ex.getMessage());
+    public ModelAndView handleConstraintViolationException(ValidationException ex) {
+        String errorMessage = String.format("Validation error: [%s]", ex.getMessage());
+        log.error(errorMessage, ex);
+        ModelAndView modelView = new ModelAndView("error");
+        modelView.addObject("errorMessage", errorMessage);
+        return modelView;
+    }
+    @ExceptionHandler(SQLException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView handleSQLException(ConstraintViolationException ex) {
+        String errorMessage = String.format("Bad input to database: [%s]", ex.getMessage());
         log.error(errorMessage, ex);
         ModelAndView modelView = new ModelAndView("error");
         modelView.addObject("errorMessage", errorMessage);
@@ -48,7 +59,7 @@ public class ExceptionController {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleNoResourceFound(EntityNotFoundException ex) {
-        String errorMessage = String.format("Could not find requested resource! [%s]", ex.getMessage());
+        String errorMessage = String.format("Could not find requested resource: [%s]", ex.getMessage());
         log.error(errorMessage, ex);
         ModelAndView modelView = new ModelAndView("error");
         modelView.addObject("errorMessage", errorMessage);

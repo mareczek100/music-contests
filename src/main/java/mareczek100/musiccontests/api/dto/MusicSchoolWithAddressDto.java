@@ -1,7 +1,9 @@
 package mareczek100.musiccontests.api.dto;
 
 import lombok.Builder;
+import lombok.With;
 
+@With
 @Builder
 public record MusicSchoolWithAddressDto(String musicSchoolId,
                                         String musicSchoolName,

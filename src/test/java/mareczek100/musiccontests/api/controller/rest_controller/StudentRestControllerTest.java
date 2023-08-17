@@ -90,7 +90,7 @@ class StudentRestControllerTest implements ControllerRestSupport {
         String competitionCity = competitionFinishedDto.addressCity();
 
         //when
-        Mockito.when(competitionResultService.findAllCompetitionResult()).thenReturn(competitionResultList);
+        Mockito.when(competitionResultService.findAllCompetitionResults()).thenReturn(competitionResultList);
         Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
                 .thenReturn(competitionDtoList.get(0));
 
@@ -129,7 +129,7 @@ class StudentRestControllerTest implements ControllerRestSupport {
         multiValueMap.add("competitionId", competitionId);
 
         //when
-        Mockito.when(competitionResultService.findAllCompetitionResult()).thenReturn(competitionResultList);
+        Mockito.when(competitionResultService.findAllCompetitionResults()).thenReturn(competitionResultList);
         Mockito.when(competitionResultDtoMapper.mapFromDomainToDto(competitionResultList.get(0)))
                 .thenReturn(competitionResultDtoList.get(0));
 
@@ -159,7 +159,7 @@ class StudentRestControllerTest implements ControllerRestSupport {
         multiValueMap.add("competitionId", competitionId);
 
         //when
-        Mockito.when(competitionResultService.findAllCompetitionResult()).thenReturn(Collections.emptyList());
+        Mockito.when(competitionResultService.findAllCompetitionResults()).thenReturn(Collections.emptyList());
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.get(
