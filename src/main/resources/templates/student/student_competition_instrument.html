@@ -36,13 +36,25 @@
             <button class="btn btn-info btn-lg" type="submit">Znajdź konkurs</button>
         </div>
     </form><br>
-    <form class="row g-3" action="#" th:action="@{/student/competition/filters}" method="GET">
-        <div class="col-md-6 offset-md-3 text-center">
-            <h4>Lub skorzystaj z pełnej wyszukiwarki i podaj więcej kryteriów!</h4>
+<!--    <form class="row g-3" action="#" th:action="@{/student/competition/filters}" method="GET">-->
+<!--        <div class="col-md-6 offset-md-3 text-center">-->
+<!--            <h4>Lub skorzystaj z pełnej wyszukiwarki i podaj więcej kryteriów!</h4>-->
+<!--            <h5>Do wyboru masz filtry "online", "stopień", "miasto" i "instrument"</h5>-->
+<!--            <button class="btn btn-info" type="submit">Pełna wyszukiwarka!</button>-->
+<!--        </div>-->
+<!--    </form><br>-->
+    <div class="row justify-content-evenly text-center">
+        <h4>Możesz też skorzystać z pełnej wyszukiwarki albo po prostu wyświetlić wszystkie dostępne konkursy!</h4>
+        <div class="col-md-4">
             <h5>Do wyboru masz filtry "online", "stopień", "miasto" i "instrument"</h5>
-            <button class="btn btn-info" type="submit">Pełna wyszukiwarka!</button>
+            <a class="btn btn-info col-md-10" th:href="@{/student/competition/filters}" role="button">Pełna wyszukiwarka</a>
         </div>
-    </form><br>
+        <div class="col-md-4">
+            <h5>Przejrzyj wszystkie konkursy bez podawania żadnych wytycznych</h5>
+            <a class="btn btn-info col-md-10" th:href="@{/student/competition/show/{currentPage}(currentPage=1)}"
+               role="button">Wszystkie konkursy</a>
+        </div>
+    </div><br>
 </div>
     <div class="d-grid gap-2 col-2 mx-auto">
         <a class="btn btn-primary" th:href="@{/student}" role="button">Portal Ucznia</a>

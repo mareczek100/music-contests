@@ -3,6 +3,7 @@ package mareczek100.musiccontests.api.controller.rest_controller.controller_rest
 public interface ControllerRestSupport {
     String FIND_ALL_INSTRUMENTS = "/instruments";
     String FIND_ALL_CITIES = "/cities";
+    String FIND_ALL_COMPETITIONS_PAGEABLE = "/competitions/all/{currentPage}";
     String FIND_ALL_COMPETITIONS = "/competitions/all";
     String FIND_AVAILABLE_COMPETITIONS_BY_FILTERS = "/competitions/available/filters";
     String FIND_AVAILABLE_COMPETITIONS_BY_INSTRUMENT = "/competitions/available/instrument";

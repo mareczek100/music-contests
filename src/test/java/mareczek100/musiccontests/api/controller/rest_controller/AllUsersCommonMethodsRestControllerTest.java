@@ -29,7 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -37,6 +42,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Collections;
 import java.util.List;
 
 import static mareczek100.musiccontests.api.controller.rest_controller.TeacherRestController.TEACHER_REST_MAIN_PAGE;
@@ -140,7 +146,7 @@ class AllUsersCommonMethodsRestControllerTest implements ControllerRestSupport {
     }
 
     @Test
-    void findAllAvailableCompetitions() throws Exception {
+    void findAllAvailableCompetitionsWorksCorrectly() throws Exception {
         //given
         List<Competition> competitionList = CompetitionDomainTestData.competitionList();
         List<CompetitionWithLocationDto> competitionDtoList = CompetitionDtoTestData.competitionDtoList();
@@ -148,7 +154,8 @@ class AllUsersCommonMethodsRestControllerTest implements ControllerRestSupport {
 
         //when
         Mockito.when(competitionService.findAllCompetitions()).thenReturn(competitionList);
-        Mockito.when(allUsersRestUtils.findAllAvailableCompetitions()).thenReturn(competitionsDto);
+        Mockito.when(allUsersRestUtils.findAllAvailableCompetitions())
+                .thenReturn(ResponseEntity.ok(competitionsDto));
         Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
                 .thenReturn(competitionDtoList.get(0));
         Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(1)))
@@ -169,6 +176,95 @@ class AllUsersCommonMethodsRestControllerTest implements ControllerRestSupport {
 
         org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
                 .isEqualTo(competitionsDtoJson);
+    }
+
+    @Test
+    void findAllAvailableCompetitionsResponseMessageIfNoCompetitions() throws Exception {
+        //given
+        List<Competition> competitionList = Collections.emptyList();
+        String problemDetailMessage = "No competitions, at all!";
+
+        //when
+        Mockito.when(competitionService.findAllCompetitions()).thenReturn(competitionList);
+        Mockito.when(allUsersRestUtils.findAllAvailableCompetitions())
+                .thenReturn(ResponseEntity.of(ProblemDetail.forStatusAndDetail(
+                        HttpStatus.NOT_FOUND, "No competitions, at all!")).build());
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
+                                TEACHER_REST_MAIN_PAGE + FIND_ALL_COMPETITIONS)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        mvcResult.getResponse().setCharacterEncoding("UTF-8");
+
+        org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
+                .contains(problemDetailMessage);
+    }
+    @Test
+    void findAllAvailableCompetitionsWithSortingAndPagingWorksCorrectly() throws Exception {
+        //given
+        List<Competition> competitionList = CompetitionDomainTestData.competitionList();
+        Page<Competition> competitionListPageable = new PageImpl<>(competitionList);
+        List<CompetitionWithLocationDto> competitionDtoList = CompetitionDtoTestData.competitionDtoList();
+        CompetitionsDto competitionsDto = CompetitionDtoTestData.competitionsDtoList();
+        Integer currentPage = 1;
+
+        //when
+        Mockito.when(competitionService.findAllCompetitionsPageable(currentPage))
+                .thenReturn(competitionListPageable);
+        Mockito.when(allUsersRestUtils.findAllAvailableCompetitionsPageable(currentPage))
+                .thenReturn(ResponseEntity.ok(competitionsDto));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
+                .thenReturn(competitionDtoList.get(0));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(1)))
+                .thenReturn(competitionDtoList.get(1));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(2)))
+                .thenReturn(competitionDtoList.get(2));
+
+
+        String competitionsDtoJson
+                = objectMapper.writeValueAsString(competitionsDto);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
+                                TEACHER_REST_MAIN_PAGE + FIND_ALL_COMPETITIONS_PAGEABLE, currentPage)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        mvcResult.getResponse().setCharacterEncoding("UTF-8");
+
+        org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
+                .isEqualTo(competitionsDtoJson);
+    }
+    @Test
+    void findAllAvailableCompetitionsWithSortingAndPagingMessageIfPageDoesNotExists() throws Exception {
+        //given
+        List<Competition> competitionList = Collections.emptyList();
+        Page<Competition> competitionListPageable = new PageImpl<>(competitionList);
+        Integer currentPage = 4;
+        String problemDetailMessage = "No more competitions, page doesn't exist!";
+
+        //when
+        Mockito.when(competitionService.findAllCompetitionsPageable(currentPage))
+                .thenReturn(competitionListPageable);
+        Mockito.when(allUsersRestUtils.findAllAvailableCompetitionsPageable(currentPage))
+                .thenReturn(ResponseEntity.of(ProblemDetail.forStatusAndDetail(
+                        HttpStatus.NOT_FOUND, "No more competitions, page doesn't exist!")).build());
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
+                                TEACHER_REST_MAIN_PAGE + FIND_ALL_COMPETITIONS_PAGEABLE, currentPage)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        mvcResult.getResponse().setCharacterEncoding("UTF-8");
+
+        org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
+                .contains(problemDetailMessage);
     }
 
     @Test

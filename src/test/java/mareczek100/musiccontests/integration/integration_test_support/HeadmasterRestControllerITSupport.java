@@ -93,6 +93,30 @@ public interface HeadmasterRestControllerITSupport {
                 .extract()
                 .as(CompetitionsDto.class);
     }
+    default CompetitionsDto findAllAvailableCompetitionsWithSortingAndPagingWorksCorrectly(
+            Integer currentPage
+    ){
+        return requestSpecification()
+                .when()
+                .get(HEADMASTER_REST_MAIN_PAGE + FIND_ALL_COMPETITIONS_PAGEABLE, currentPage)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and()
+                .extract()
+                .as(CompetitionsDto.class);
+    }
+    default Response findAllAvailableCompetitionsResponseMessageIfPageIsEmpty(
+            Integer currentPage
+    ){
+        return requestSpecification()
+                .when()
+                .get(HEADMASTER_REST_MAIN_PAGE + FIND_ALL_COMPETITIONS_PAGEABLE, currentPage)
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .and()
+                .extract()
+                .response();
+    }
     default CompetitionsDto findAvailableCompetitionsByFilters(Map<String, ?> parameters)
     {
         return requestSpecification()

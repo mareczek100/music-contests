@@ -21,8 +21,8 @@
     <h4 class="text-center">Aktualnie brak konkursów!</h4>
 </div><br>
 <div th:unless="${#lists.isEmpty(cityDTOs)}">
-    <form class="row g-2 was-validated" action="#" th:object="${competitionDto}"
-          th:action="@{/teacher/student/competition/select}" method="GET">
+    <form class="row g-2 was-validated" th:action="@{/teacher/student/competition/select}"  method="GET">
+        <input type="hidden" th:name="teacherEmail" th:value="${teacherEmail}" class="form-control" required>
         <div class="row justify-content-evenly">
             <div class="col-4">
                 <label for="validationCompetitionInstrument" class="form-label">Instrument</label>
@@ -35,27 +35,15 @@
                 <div class="valid-feedback">Ok!</div>
                 <div class="invalid-feedback">Wybierz swój instrument.</div>
             </div>
-            <div class="col-4">
-                <label for="validationTeacherEmail" class="form-label">Email</label>
-                <input type="text" th:name="teacherEmail" class="form-control" id="validationTeacherEmail" required>
-                <div class="valid-feedback">Ok!</div>
-                <div class="invalid-feedback">Podaj swój adres email.</div>
-            </div>
-        </div>
+        </div><p>
             <div class="d-grid gap-2 col-4 mx-auto">
                 <button class="btn btn-info btn-lg" type="submit">Znajdź konkurs</button>
-            </div>
-    </form><br>
-    <form class="row g-3" action="#" th:action="@{//teacher/student/competition/filters}" method="GET">
-        <div class="col-md-6 offset-md-3 text-center">
-            <h4>Lub skorzystaj z pełnej wyszukiwarki i podaj więcej kryteriów!</h4>
-            <h5>Do wyboru masz filtry "online", "stopień", "miasto" i "instrument"</h5>
-            <button class="btn btn-info" type="submit">Pełna wyszukiwarka!</button>
-        </div>
-    </form><br>
+            </div><p>
+    </form>
 </div>
     <div class="d-grid gap-2 col-2 mx-auto">
         <a class="btn btn-primary" th:href="@{/teacher}" role="button">Portal Nauczyciela</a>
+        <a class="btn btn-success" th:href="@{/teacher/student/competition/search}" role="button">Strona wyszukiwania</a>
     </div>
 </body>
 </html>

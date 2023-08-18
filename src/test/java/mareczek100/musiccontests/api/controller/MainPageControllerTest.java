@@ -254,12 +254,12 @@ class MainPageControllerTest {
         String musicSchoolId = musicSchoolExisted.musicSchoolId();
 
         //when
-        Mockito.when(teacherDtoMapper.mapFromDtoToDomain(teacherDtoToSave)).thenReturn(teacherToSave);
         Mockito.when(musicSchoolService.findMusicSchoolById(musicSchoolId)).thenReturn(musicSchoolExisted);
+        Mockito.when(musicSchoolDtoMapper.mapFromDomainToDto(musicSchoolExisted)).thenReturn(musicSchoolDto);
+        Mockito.when(teacherDtoMapper.mapFromDtoToDomain(teacherDtoToSave)).thenReturn(teacherToSave);
         Mockito.when(teacherService.insertTeacher(Mockito.any(Teacher.class)))
                 .thenReturn(teacherSaved);
         Mockito.when(teacherDtoMapper.mapFromDomainToDto(teacherSaved)).thenReturn(teacherDtoSaved);
-
 
         //then
         mockMvc.perform(post(
@@ -355,13 +355,13 @@ class MainPageControllerTest {
         String musicSchoolId = musicSchoolExisted.musicSchoolId();
 
         //when
-        Mockito.when(studentDtoMapper.mapFromDtoToDomain(studentDtoToSave)).thenReturn(studentToSave);
         Mockito.when(teacherService.findTeacherByEmail(teacherEmail)).thenReturn(teacher);
         Mockito.when(musicSchoolService.findMusicSchoolById(musicSchoolId)).thenReturn(musicSchoolExisted);
+        Mockito.when(musicSchoolDtoMapper.mapFromDomainToDto(musicSchoolExisted)).thenReturn(musicSchoolDto);
+        Mockito.when(studentDtoMapper.mapFromDtoToDomain(studentDtoToSave)).thenReturn(studentToSave);
         Mockito.when(studentService.insertStudent(Mockito.any(Student.class)))
                 .thenReturn(studentSaved);
         Mockito.when(studentDtoMapper.mapFromDomainToDto(studentSaved)).thenReturn(studentDtoSaved);
-
 
         //then
         mockMvc.perform(post(
@@ -386,7 +386,7 @@ class MainPageControllerTest {
         Mockito.when(headmasterService.findAllHeadmasters()).thenReturn(List.of(headmaster));
 
         //then
-        mockMvc.perform(MockMvcRequestBuilders.delete(
+        mockMvc.perform(MockMvcRequestBuilders.post(
                                 MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_DELETE_ACCOUNT)
                         .contentType(MediaType.TEXT_HTML)
                         .param("userEmail", userEmail))
@@ -406,7 +406,7 @@ class MainPageControllerTest {
         Mockito.when(teacherService.findAllTeachers()).thenReturn(teacherList);
 
         //then
-        mockMvc.perform(MockMvcRequestBuilders.delete(
+        mockMvc.perform(MockMvcRequestBuilders.post(
                                 MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_DELETE_ACCOUNT)
                         .contentType(MediaType.TEXT_HTML)
                         .param("userEmail", userEmail))
@@ -426,7 +426,7 @@ class MainPageControllerTest {
         Mockito.when(studentService.findAllStudents()).thenReturn(studentList);
 
         //then
-        mockMvc.perform(MockMvcRequestBuilders.delete(
+        mockMvc.perform(MockMvcRequestBuilders.post(
                                 MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_DELETE_ACCOUNT)
                         .contentType(MediaType.TEXT_HTML)
                         .param("userEmail", userEmail))

@@ -20,6 +20,7 @@ import mareczek100.musiccontests.test_data_storage.headmaster.HeadmasterDtoTestD
 import mareczek100.musiccontests.test_data_storage.instrument.InstrumentDomainTestData;
 import mareczek100.musiccontests.test_data_storage.instrument.InstrumentDtoTestData;
 import mareczek100.musiccontests.test_data_storage.music_school.MusicSchoolDomainTestData;
+import mareczek100.musiccontests.test_data_storage.music_school.MusicSchoolDtoTestData;
 import mareczek100.musiccontests.test_data_storage.student.StudentDomainTestData;
 import mareczek100.musiccontests.test_data_storage.student.StudentDtoTestData;
 import org.junit.jupiter.api.Assertions;
@@ -77,6 +78,8 @@ class HeadmasterControllerTest {
     @MockBean
     private final MusicSchoolService musicSchoolService;
     @MockBean
+    private final MusicSchoolDtoMapper musicSchoolDtoMapper;
+    @MockBean
     private final StudentService studentService;
     @MockBean
     private final StudentDtoMapper studentDtoMapper;
@@ -98,6 +101,7 @@ class HeadmasterControllerTest {
         Assertions.assertNotNull(headmasterService);
         Assertions.assertNotNull(headmasterDtoMapper);
         Assertions.assertNotNull(musicSchoolService);
+        Assertions.assertNotNull(musicSchoolDtoMapper);
         Assertions.assertNotNull(studentService);
         Assertions.assertNotNull(studentDtoMapper);
         Assertions.assertNotNull(mockMvc);
@@ -177,7 +181,7 @@ class HeadmasterControllerTest {
                         .contentType(MediaType.TEXT_HTML)
                         .param("competitionOrganizerEmail", competitionOrganizerEmail)
                         .param("competitionSchoolLocation", "true")
-                        .flashAttr("competitionDto", competitionAtOrganizerSchoolToSave))
+                        .flashAttr("competitionDto", competitionDtoSaved))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("headmaster/headmaster_competition_create_done"))
                 .andExpect(model().attribute("createdCompetitionDto", competitionDtoSaved))
@@ -299,6 +303,7 @@ class HeadmasterControllerTest {
         //given
         MusicSchool musicSchool = MusicSchoolDomainTestData.musicSchoolSaved1();
         String musicSchoolId = musicSchool.musicSchoolId();
+        MusicSchoolWithAddressDto musicSchoolDto = MusicSchoolDtoTestData.musicSchoolDtoSaved1();
         TeacherDto headmasterTeacherDtoToSave = HeadmasterDtoTestData.headmasterTeacherDtoToSave1();
         TeacherDto headmasterTeacherDtoSaved = HeadmasterDtoTestData.headmasterTeacherDtoSaved1();
         Teacher headmasterTeacherToSave = HeadmasterDomainTestData.headmasterTeacherToSave1();
@@ -306,6 +311,7 @@ class HeadmasterControllerTest {
 
         //when
         Mockito.when(musicSchoolService.findMusicSchoolById(musicSchoolId)).thenReturn(musicSchool);
+        Mockito.when(musicSchoolDtoMapper.mapFromDomainToDto(musicSchool)).thenReturn(musicSchoolDto);
         Mockito.when(teacherDtoMapper.mapFromDtoToDomain(headmasterTeacherDtoToSave))
                 .thenReturn(headmasterTeacherToSave);
         Mockito.when(teacherService.findAllTeachers()).thenReturn(Collections.emptyList());
@@ -313,7 +319,6 @@ class HeadmasterControllerTest {
                 .thenReturn(headmasterTeacherSaved);
         Mockito.when(teacherDtoMapper.mapFromDomainToDto(headmasterTeacherSaved))
                 .thenReturn(headmasterTeacherDtoSaved);
-
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.post(
@@ -332,6 +337,7 @@ class HeadmasterControllerTest {
         //given
         MusicSchool musicSchool = MusicSchoolDomainTestData.musicSchoolSaved1();
         String musicSchoolId = musicSchool.musicSchoolId();
+        MusicSchoolWithAddressDto musicSchoolDto = MusicSchoolDtoTestData.musicSchoolDtoSaved1();
         TeacherDto headmasterTeacherDtoToSave = HeadmasterDtoTestData.headmasterTeacherDtoToSave1();
         Teacher headmasterTeacherToSave = HeadmasterDomainTestData.headmasterTeacherToSave1();
         Teacher headmasterTeacherSaved = HeadmasterDomainTestData.headmasterTeacherSaved1();
@@ -339,6 +345,7 @@ class HeadmasterControllerTest {
 
         //when
         Mockito.when(musicSchoolService.findMusicSchoolById(musicSchoolId)).thenReturn(musicSchool);
+        Mockito.when(musicSchoolDtoMapper.mapFromDomainToDto(musicSchool)).thenReturn(musicSchoolDto);
         Mockito.when(teacherDtoMapper.mapFromDtoToDomain(headmasterTeacherDtoToSave))
                 .thenReturn(headmasterTeacherToSave);
         Mockito.when(teacherService.findAllTeachers()).thenReturn(List.of(headmasterTeacherSaved));
@@ -716,7 +723,7 @@ class HeadmasterControllerTest {
         Mockito.when(applicationFormService.findAllApplicationForms()).thenReturn(applicationFormList);
 
         //then
-        mockMvc.perform(MockMvcRequestBuilders.delete(
+        mockMvc.perform(MockMvcRequestBuilders.post(
                                 HEADMASTER_MAIN_PAGE + HEADMASTER_COMPETITION_STUDENT_CANCEL_CONFIRM)
                         .contentType(MediaType.TEXT_HTML)
                         .param("competitionId", competitionId)

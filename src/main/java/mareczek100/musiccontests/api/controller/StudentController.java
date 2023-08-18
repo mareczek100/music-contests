@@ -14,6 +14,7 @@ import mareczek100.musiccontests.domain.Address;
 import mareczek100.musiccontests.domain.Competition;
 import mareczek100.musiccontests.domain.CompetitionLocation;
 import mareczek100.musiccontests.domain.CompetitionResult;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
@@ -35,9 +36,10 @@ import static mareczek100.musiccontests.api.controller.StudentController.STUDENT
 public class StudentController {
 
     public static final String STUDENT_MAIN_PAGE = "/student";
-    public static final String STUDENT_COMPETITION_FILTERS = "/competition/instrument";
-    public static final String STUDENT_COMPETITION_INSTRUMENT = "/competition/filters";
+    public static final String STUDENT_COMPETITION_FILTERS = "/competition/filters";
+    public static final String STUDENT_COMPETITION_INSTRUMENT = "/competition/instrument";
     public static final String STUDENT_COMPETITION_SHOW = "/competition/show";
+    public static final String STUDENT_COMPETITION_SHOW_PAGES = "/competition/show/{currentPage}";
     public static final String STUDENT_RESULT = "/result";
     public static final String STUDENT_RESULT_SEARCH = "/result/search";
     public static final String STUDENT_RESULT_SHOW = "/result/show";
@@ -136,6 +138,29 @@ public class StudentController {
         model.addAttribute("competitionDTOs", competitionDTOs);
 
         return "student/student_competition_show";
+    }
+    @GetMapping(STUDENT_COMPETITION_SHOW_PAGES)
+    public String studentShowAvailableCompetitionsWithPaginationSortedByInstrument(
+            Model model,
+            @PathVariable("currentPage") Integer currentPage
+    )
+    {
+        Page<Competition> competitionsPage = competitionService.findAllCompetitionsPageable(currentPage);
+        int allPages = competitionsPage.getTotalPages();
+        long allCompetitions = competitionsPage.getTotalElements();
+        List<Competition> competitions = competitionsPage.getContent();
+        List<CompetitionWithLocationDto> competitionDTOs = competitions.stream()
+                .filter(competition -> !competition.finished())
+                .filter(competition -> OffsetDateTime.now().isBefore(competition.applicationDeadline()))
+                .map(competitionDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("allPages", allPages);
+        model.addAttribute("allCompetitions", allCompetitions);
+        model.addAttribute("competitionDTOs", competitionDTOs);
+
+        return "student/student_competition_show_pages";
     }
 
     @GetMapping(STUDENT_RESULT)

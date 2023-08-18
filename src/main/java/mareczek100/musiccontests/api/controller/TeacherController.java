@@ -7,6 +7,7 @@ import mareczek100.musiccontests.business.*;
 import mareczek100.musiccontests.business.instrument_storage_service.InstrumentApiService;
 import mareczek100.musiccontests.domain.*;
 import mareczek100.musiccontests.domain.enums.ClassLevel;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,8 +30,10 @@ import static mareczek100.musiccontests.api.controller.TeacherController.TEACHER
 public class TeacherController {
 
     public static final String TEACHER_MAIN_PAGE = "/teacher";
-    public static final String TEACHER_STUDENT_COMPETITION_FILTERS = "/student/competition/filters";
-    public static final String TEACHER_STUDENT_COMPETITION_INSTRUMENT = "/student/competition/instrument";
+    public static final String TEACHER_STUDENT_COMPETITIONS_SEARCH = "/student/competition/search";
+    public static final String TEACHER_STUDENT_COMPETITIONS_FILTERS = "/student/competition/filters";
+    public static final String TEACHER_STUDENT_COMPETITIONS_INSTRUMENT = "/student/competition/instrument";
+    public static final String TEACHER_STUDENT_COMPETITIONS_ALL = "/student/competition/all/{currentPage}";
     public static final String TEACHER_STUDENT_SELECT = "/student/competition/select";
     public static final String TEACHER_STUDENT_ANNOUNCE = "/student/competition/announce";
     public static final String TEACHER_STUDENT_CANCEL = "/student/cancel";
@@ -53,13 +56,70 @@ public class TeacherController {
     private final CompetitionResultDtoMapper competitionResultDtoMapper;
 
     @GetMapping
-    public String teacherHomePage(Model model) {
+    public String teacherHomePage() {
 
         return "teacher/teacher";
     }
+    @GetMapping(TEACHER_STUDENT_COMPETITIONS_SEARCH)
+    public String teacherSearchCompetitionsHomePage(Model model)
+    {
+        List<Competition> competitions = competitionService.findAllCompetitions().stream()
+                .filter(competition -> !competition.finished())
+                .toList();
 
-    @GetMapping(TEACHER_STUDENT_COMPETITION_INSTRUMENT)
-    public String teacherSearchCompetitionsByInstrument(Model model) {
+        model.addAttribute("competitions", competitions);
+
+        return "teacher/teacher_student_competition_search";
+    }
+
+    @GetMapping(TEACHER_STUDENT_COMPETITIONS_ALL)
+    public String teacherSearchAllCompetitionsWithPaginationAndSortedByInstrument(
+            @RequestParam("teacherEmail") String teacherEmail,
+            @PathVariable("currentPage") Integer currentPage,
+            Model model
+    )
+    {
+        Page<Competition> competitionsPage = competitionService.findAllCompetitionsPageable(currentPage);
+        int allPages = competitionsPage.getTotalPages();
+        long allCompetitions = competitionsPage.getTotalElements();
+        List<Competition> competitions = competitionsPage.getContent();
+        List<CompetitionWithLocationDto> competitionDTOs = competitions.stream()
+                .filter(competition -> !competition.finished())
+                .filter(competition -> OffsetDateTime.now().isBefore(competition.applicationDeadline()))
+                .map(competitionDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        Teacher teacher = teacherService.findTeacherByEmail(teacherEmail);
+        String teacherId = teacher.teacherId();
+
+        List<Student> studentList = studentService.findAllStudents().stream()
+                .filter(student -> teacherId.equals(student.teacher().teacherId()))
+                .toList();
+
+        List<StudentDto> studentDTOs = studentList.stream()
+                .map(studentDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        List<ClassLevel> classLevels
+                = Arrays.stream(ClassLevel.values())
+                .toList();
+
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("allPages", allPages);
+        model.addAttribute("allCompetitions", allCompetitions);
+        model.addAttribute("studentDTOs", studentDTOs);
+        model.addAttribute("classLevels", classLevels);
+        model.addAttribute("competitionDTOs", competitionDTOs);
+        model.addAttribute("teacherEmail", teacherEmail);
+
+        return "teacher/teacher_student_competition_all";
+    }
+
+    @GetMapping(TEACHER_STUDENT_COMPETITIONS_INSTRUMENT)
+    public String teacherSearchCompetitionsByInstrument(
+            @RequestParam("teacherEmail") String teacherEmail,
+            Model model
+    ) {
 
         List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
                 .map(instrumentDtoMapper::mapFromDomainToDto)
@@ -78,12 +138,16 @@ public class TeacherController {
         model.addAttribute("instrumentDTOs", instrumentDTOs);
         model.addAttribute("competitionDto", competitionDto);
         model.addAttribute("cityDTOs", cityDTOs);
+        model.addAttribute("teacherEmail", teacherEmail);
 
         return "teacher/teacher_student_competition_instrument";
     }
 
-    @GetMapping(TEACHER_STUDENT_COMPETITION_FILTERS)
-    public String teacherSearchCompetitionsByFilters(Model model) {
+    @GetMapping(TEACHER_STUDENT_COMPETITIONS_FILTERS)
+    public String teacherSearchCompetitionsByFilters(
+            @RequestParam("teacherEmail") String teacherEmail,
+            Model model
+    ) {
 
         List<InstrumentDto> instrumentDTOs = instrumentApiService.findAllInstruments().stream()
                 .map(instrumentDtoMapper::mapFromDomainToDto)
@@ -102,6 +166,7 @@ public class TeacherController {
         model.addAttribute("instrumentDTOs", instrumentDTOs);
         model.addAttribute("competitionDto", competitionDto);
         model.addAttribute("cityDTOs", cityDTOs);
+        model.addAttribute("teacherEmail", teacherEmail);
 
         return "teacher/teacher_student_competition_filters";
     }
@@ -168,7 +233,6 @@ public class TeacherController {
             Model model
     )
     {
-
         Competition competition = competitionService.findCompetitionById(competitionId);
         Teacher teacher = teacherService.findTeacherByEmail(teacherEmail);
         Student student = studentService.findStudentById(studentId);
@@ -260,7 +324,7 @@ public class TeacherController {
         return "teacher/teacher_student_cancel_confirm";
     }
 
-    @DeleteMapping(TEACHER_STUDENT_CANCEL_CONFIRM)
+    @PostMapping(TEACHER_STUDENT_CANCEL_CONFIRM)
     public String teacherCancelStudentConfirmDone(
             Model model,
             @RequestParam("competitionId") String competitionId,

@@ -19,6 +19,7 @@ import mareczek100.musiccontests.test_data_storage.instrument.InstrumentDtoTestD
 import mareczek100.musiccontests.test_data_storage.student.StudentDomainTestData;
 import mareczek100.musiccontests.test_data_storage.student.StudentDtoTestData;
 import mareczek100.musiccontests.test_data_storage.teacher.TeacherDomainTestData;
+import mareczek100.musiccontests.test_data_storage.teacher.TeacherDtoTestData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -106,6 +107,7 @@ class TeacherControllerTest {
     @Test
     void teacherSearchCompetitionsByInstrument() throws Exception {
         //given
+        String teacherEmail = TeacherDtoTestData.teacherDtoSaved1().email();
         List<Instrument> instrumentList = InstrumentDomainTestData.instrumentList();
         List<InstrumentDto> instrumentDtoList = InstrumentDtoTestData.instrumentDtoList();
         List<Competition> competitionList = CompetitionDomainTestData.competitionList();
@@ -127,19 +129,22 @@ class TeacherControllerTest {
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.get(
-                                TEACHER_MAIN_PAGE + TEACHER_STUDENT_COMPETITION_INSTRUMENT)
-                        .contentType(MediaType.TEXT_HTML))
+                                TEACHER_MAIN_PAGE + TEACHER_STUDENT_COMPETITIONS_INSTRUMENT)
+                        .contentType(MediaType.TEXT_HTML)
+                        .param("teacherEmail", teacherEmail))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("teacher/teacher_student_competition_instrument"))
                 .andExpect(model().attribute("instrumentDTOs", instrumentDtoList))
                 .andExpect(model().attribute("competitionDto", CompetitionWithLocationDto.builder().build()))
                 .andExpect(model().attribute("cityDTOs", competitionCityList))
+                .andExpect(model().attribute("teacherEmail", teacherEmail))
                 .andReturn();
     }
 
     @Test
     void teacherSearchCompetitionsByFilters() throws Exception {
         //given
+        String teacherEmail = TeacherDtoTestData.teacherDtoSaved1().email();
         List<Instrument> instrumentList = InstrumentDomainTestData.instrumentList();
         List<InstrumentDto> instrumentDtoList = InstrumentDtoTestData.instrumentDtoList();
         List<Competition> competitionList = CompetitionDomainTestData.competitionList();
@@ -161,13 +166,15 @@ class TeacherControllerTest {
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.get(
-                                TEACHER_MAIN_PAGE + TEACHER_STUDENT_COMPETITION_FILTERS)
-                        .contentType(MediaType.TEXT_HTML))
+                                TEACHER_MAIN_PAGE + TEACHER_STUDENT_COMPETITIONS_FILTERS)
+                        .contentType(MediaType.TEXT_HTML)
+                .param("teacherEmail", teacherEmail))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("teacher/teacher_student_competition_filters"))
                 .andExpect(model().attribute("instrumentDTOs", instrumentDtoList))
                 .andExpect(model().attribute("competitionDto", CompetitionWithLocationDto.builder().build()))
                 .andExpect(model().attribute("cityDTOs", competitionCityList))
+                .andExpect(model().attribute("teacherEmail", teacherEmail))
                 .andReturn();
     }
 
@@ -439,7 +446,7 @@ class TeacherControllerTest {
         Mockito.when(applicationFormService.findAllApplicationForms()).thenReturn(applicationFormList);
 
         //then
-        mockMvc.perform(MockMvcRequestBuilders.delete(
+        mockMvc.perform(MockMvcRequestBuilders.post(
                                 TEACHER_MAIN_PAGE + TEACHER_STUDENT_CANCEL_CONFIRM)
                         .contentType(MediaType.TEXT_HTML)
                         .param("competitionId", competitionId)

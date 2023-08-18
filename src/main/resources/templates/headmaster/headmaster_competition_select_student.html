@@ -16,7 +16,7 @@
     </div>
 </form>
 <h1 class="text-center">Tutaj wybierzesz konkurs i zgłosisz swojego ucznia!</h1><br>
-<h2 class="text-center">Wypełnij formularz zgłoszenia!</h2>
+<h2 class="text-center">Wypełnij formularz zgłoszenia</h2>
 <div th:if="${#lists.isEmpty(competitionDTOs)}" class="text-bg-info p-3">
     <h4 class="text-center">Brak konkursów z podanymi kryteriami!</h4>
 </div><br>
@@ -39,7 +39,7 @@
                     <th>Miasto</th>
                     <th>Wybierz</th>
                 </tr>
-                <tr th:each="i, competition : ${competitionDTOs}">
+                <tr th:each="competition : ${competitionDTOs}">
                     <td th:text="${competition.competitionName}"></td>
                     <td th:text="${competition.competitionInstrument}"></td>
                     <td th:if="${competition.competitionOnline==true}">TAK</td>

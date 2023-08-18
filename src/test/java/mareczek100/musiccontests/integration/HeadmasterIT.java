@@ -181,13 +181,44 @@ public class HeadmasterIT extends RestAssuredITConfig
     }
 
     @Test
-    void thatFindAllAvailableCompetitionsWorksCorrectly()
+    void findAllAvailableCompetitionsWorksCorrectly()
     {
         //given, when
         CompetitionsDto allAvailableCompetitions = findAllAvailableCompetitions();
 
         //then
         Assertions.assertThatCollection(allAvailableCompetitions.competitionDtoList()).isNotEmpty();
+    }
+
+    @Test
+    void findAllAvailableCompetitionsWithSortingAndPagingWorksCorrectly()
+    {
+        //given
+        Integer currentPage = 1;
+
+        //when
+        CompetitionsDto allAvailableCompetitions
+                = findAllAvailableCompetitionsWithSortingAndPagingWorksCorrectly(currentPage);
+
+        //then
+        Assertions.assertThatCollection(allAvailableCompetitions.competitionDtoList()).isNotEmpty();
+        Assertions.assertThatCollection(allAvailableCompetitions.competitionDtoList())
+                .hasSize(5);
+    }
+    @Test
+    void findAllAvailableCompetitionsResponseMessageIfPageIsEmpty()
+    {
+        //given
+        Integer currentPage = 20;
+        String problemDetailMessage = "No more competitions, page doesn't exist!";
+
+        //when
+        Response response
+                = findAllAvailableCompetitionsResponseMessageIfPageIsEmpty(currentPage);
+
+        //then
+        Assertions.assertThat(response.asString()).contains(problemDetailMessage);
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     @Test

@@ -23,6 +23,7 @@
 <div th:unless="${#lists.isEmpty(cityDTOs)}">
     <form class="row g-2 was-validated" action="#" th:object="${competitionDto}"
           th:action="@{/teacher/student/competition/select}" method="GET">
+        <input type="hidden" th:name="teacherEmail" th:value="${teacherEmail}" class="form-control" required>
         <div class="row justify-content-evenly">
                 <div class="col-3">
                     <label for="validationCompetitionInstrument" class="form-label">Instrument</label>
@@ -61,7 +62,7 @@
                 </div>
         </div><p>
         <div class="row justify-content-evenly">
-            <div class="col-3">
+            <div class="col-4">
                 <label for="validationCompetitionOnline" class="form-label">Online</label>
                 <select th:name="competitionOnline" class="form-select" id="validationCompetitionOnline" required>
                     <option class="text-muted" selected disabled value="">Konkurs online</option>
@@ -73,7 +74,7 @@
                     Określ czy konkurs będzie się odbywał online.
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <label for="validationAddressCity" class="form-label">Miasto</label>
                 <select th:name="addressCity" class="form-select" id="validationAddressCity" required>
                     <option class="text-muted" selected disabled value="">Podaj miasto konkursu</option>
@@ -86,12 +87,6 @@
                     Określ miasto konkursu.
                 </div>
             </div>
-            <div class="col-3">
-                <label for="validationTeacherEmail" class="form-label">Email</label>
-                <input type="text" th:name="teacherEmail" class="form-control" id="validationTeacherEmail" required>
-                <div class="valid-feedback">Ok!</div>
-                <div class="invalid-feedback">Podaj swój adres email.</div>
-            </div>
         </div><p>
             <div class="d-grid gap-2 col-4 mx-auto">
                 <button class="btn btn-info btn-lg" type="submit">Znajdź konkurs</button>
@@ -100,6 +95,7 @@
 </div>
     <div class="d-grid gap-2 col-2 mx-auto">
         <a class="btn btn-primary" th:href="@{/teacher}" role="button">Portal Nauczyciela</a>
+        <a class="btn btn-success" th:href="@{/teacher/student/competition/search}" role="button">Strona wyszukiwania</a>
     </div>
 </body>
 </html>

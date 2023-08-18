@@ -16,6 +16,9 @@ import mareczek100.musiccontests.domain.CompetitionLocation;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -51,16 +54,39 @@ public class AllUsersRestUtils {
 
         return CitiesDto.builder().competitionCitiesDtoList(cityDTOs).build();
     }
-
-
-    public CompetitionsDto findAllAvailableCompetitions()
+    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitions()
     {
-        List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
+        List<CompetitionWithLocationDto> competitionDTOs
+                = competitionService.findAllCompetitions().stream()
                 .filter(competition -> !competition.finished())
                 .map(competitionDtoMapper::mapFromDomainToDto)
                 .toList();
 
-        return CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
+        if (competitionDTOs.isEmpty()){
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(
+                    HttpStatus.NOT_FOUND, "No competitions, at all!")).build();
+        }
+
+        CompetitionsDto competitionsDto = CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
+
+        return ResponseEntity.ok(competitionsDto);
+    }
+    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitionsPageable(Integer pageNumber)
+    {
+        List<CompetitionWithLocationDto> competitionDTOs
+                = competitionService.findAllCompetitionsPageable(pageNumber).getContent().stream()
+                .filter(competition -> !competition.finished())
+                .map(competitionDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        if (competitionDTOs.isEmpty()){
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(
+                    HttpStatus.NOT_FOUND, "No more competitions, page doesn't exist!")).build();
+        }
+
+        CompetitionsDto competitionsDto = CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
+
+        return ResponseEntity.ok(competitionsDto);
     }
 
     public CompetitionsDto findAvailableCompetitionsByFilters(

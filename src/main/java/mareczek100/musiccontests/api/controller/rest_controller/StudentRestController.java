@@ -18,10 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -57,10 +54,19 @@ public class StudentRestController implements ControllerRestSupport {
     }
 
     @GetMapping(FIND_ALL_COMPETITIONS)
-    @Operation(summary = "Find list of all available music competitions.")
-    public CompetitionsDto findAllAvailableCompetitions()
+    @Operation(summary = "Find list of all available music competitions. Sorted by instrument, without paging.")
+    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitions()
     {
         return allUsersRestUtils.findAllAvailableCompetitions();
+    }
+
+    @GetMapping(FIND_ALL_COMPETITIONS_PAGEABLE)
+    @Operation(summary = "Find list of all available music competitions - 5 results per page, sorted by instrument.")
+    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitions(
+            @PathVariable("currentPage") Integer currentPage
+    )
+    {
+        return allUsersRestUtils.findAllAvailableCompetitionsPageable(currentPage);
     }
     @GetMapping(FIND_AVAILABLE_COMPETITIONS_BY_INSTRUMENT)
     @Operation(summary = "Find list of all available music competitions for chosen instrument.")

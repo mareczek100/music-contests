@@ -29,19 +29,19 @@
             <li class="page-item">
                 <form th:if="${currentPage > 1}" th:action="@{'/headmaster/competition/student/search/all/' + ${currentPage - 1}}" method="GET">
                     <input type="hidden" th:name="headmasterTeacherEmail" th:value="${headmasterTeacherEmail}" class="form-control" required>
-                    <button type="submit">Poprzednia</button>
+                    <button class="btn btn-light btn-sm" type="submit">Poprzednia</button>
                 </form>
             </li>
             <li class="page-item" th:each="i: ${#numbers.sequence(1, allPages)}">
                 <form th:action="@{'/headmaster/competition/student/search/all/' + ${i}}" method="GET">
                     <input type="hidden" th:name="headmasterTeacherEmail" th:value="${headmasterTeacherEmail}" class="form-control" required>
-                    <button type="submit">[[${i}]]</button>
+                    <button class="btn btn-light btn-sm" type="submit">[[${i}]]</button>
                 </form>
             </li>
             <li class="page-item">
                 <form th:if="${currentPage < allPages}" th:action="@{'/headmaster/competition/student/search/all/' + ${currentPage + 1}}" method="GET">
                     <input type="hidden" th:name="headmasterTeacherEmail" th:value="${headmasterTeacherEmail}" class="form-control" required>
-                    <button type="submit">Następna</button>
+                    <button class="btn btn-light btn-sm" type="submit">Następna</button>
                 </form>
             </li>
         </ul>
