@@ -880,10 +880,10 @@ class HeadmasterControllerTest {
     }
 
     @Test
-    void headmasterCheckCompetitionResultByFilters() throws Exception {
+    void headmasterCheckCompetitionResultsByFilters() throws Exception {
         //given
         CompetitionWithLocationDto competitionDto = CompetitionDtoTestData.competitionAtOrganizerSchoolToSaveDto1();
-        LocalDate competitionDateTo = competitionDto.competitionBeginning().plusDays(1).toLocalDate();
+        LocalDate competitionDateTo = competitionDto.competitionEnd().plusDays(1).toLocalDate();
         LocalDate competitionDateFrom = competitionDto.competitionBeginning().minusDays(1).toLocalDate();
         String addressCity = competitionDto.addressCity();
         List<CompetitionWithLocationDto> competitionDTOs = CompetitionDtoTestData.competitionDtoList().stream()

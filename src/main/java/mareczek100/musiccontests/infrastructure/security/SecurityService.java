@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class SecurityService {
                 .map(MusicContestsPortalUserEntity::getUserName)
                 .toList();
 
-        if (userNameList.contains(email)){
+        if (userNameList.contains(email)) {
             throw new RuntimeException("Account for user [%s]: already exist!".formatted(email));
         }
 
@@ -41,9 +42,11 @@ public class SecurityService {
 
         return portalUserJpaRepository.saveAndFlush(portalUserEntity);
     }
+
     @Transactional
     public MusicContestsPortalUserEntity changeRoleToExistingUser(
-            String securityPortalUserEmail, RoleEntity.RoleName newRole)
+            String securityPortalUserEmail, RoleEntity.RoleName newRole
+    )
     {
         MusicContestsPortalUserEntity securityPortalUser = findByUserName(securityPortalUserEmail);
         RoleEntity newRoleToAdd = roleJpaRepository.findRoleByRoleName(newRole)
@@ -54,18 +57,19 @@ public class SecurityService {
 
         return portalUserJpaRepository.saveAndFlush(securityPortalUser);
     }
+
     @Transactional
     public MusicContestsPortalUserEntity findByUserName(String userName)
     {
-        return portalUserJpaRepository.findByUserName(userName).orElseThrow(
-                () -> new RuntimeException("Music Contests Portal user [%s] doesn't exist!"
-                        .formatted(userName))
-        );
+        return portalUserJpaRepository.findByUserName(userName).orElse(null);
     }
+
     @Transactional
     public void deleteUserByUserName(String userName)
     {
         MusicContestsPortalUserEntity musicContestsPortalUser = findByUserName(userName);
-        portalUserJpaRepository.delete(musicContestsPortalUser);
+        if (Objects.nonNull(musicContestsPortalUser)) {
+            portalUserJpaRepository.delete(musicContestsPortalUser);
+        }
     }
 }

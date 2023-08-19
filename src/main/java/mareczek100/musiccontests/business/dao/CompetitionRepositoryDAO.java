@@ -28,4 +28,6 @@ public interface CompetitionRepositoryDAO {
             String instrument, Boolean online, Boolean primaryDegree, Boolean secondaryDegree, String locationCity);
 
     Optional<Competition> findCompetitionById(String competitionId);
+
+    void deleteCompetition(Competition competition);
 }

@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.api.dto.*;
 import mareczek100.musiccontests.api.dto.dto_class_support.MusicContestsPortalUserDto;
 import mareczek100.musiccontests.api.dto.mapper.*;
-import mareczek100.musiccontests.business.HeadmasterService;
-import mareczek100.musiccontests.business.MusicSchoolService;
-import mareczek100.musiccontests.business.StudentService;
-import mareczek100.musiccontests.business.TeacherService;
+import mareczek100.musiccontests.business.*;
 import mareczek100.musiccontests.business.instrument_storage_service.InstrumentApiService;
 import mareczek100.musiccontests.domain.Headmaster;
 import mareczek100.musiccontests.domain.MusicSchool;
@@ -80,6 +77,12 @@ class MainPageControllerTest {
     private final StudentService studentService;
     @MockBean
     private final StudentDtoMapper studentDtoMapper;
+    @MockBean
+    private final ApplicationFormService applicationFormService;
+    @MockBean
+    private final CompetitionResultService competitionResultService;
+    @MockBean
+    private final CompetitionService competitionService;
 
     private final MockMvc mockMvc;
 
@@ -95,6 +98,9 @@ class MainPageControllerTest {
         Assertions.assertNotNull(musicSchoolDtoMapper);
         Assertions.assertNotNull(studentService);
         Assertions.assertNotNull(studentDtoMapper);
+        Assertions.assertNotNull(applicationFormService);
+        Assertions.assertNotNull(competitionResultService);
+        Assertions.assertNotNull(competitionService);
         Assertions.assertNotNull(mockMvc);
     }
 
@@ -204,7 +210,7 @@ class MainPageControllerTest {
                 .name("name")
                 .surname("surname")
                 .email("teacher.email@email.com")
-                .pesel("pesel")
+                .pesel("01234567890")
                 .role(RoleEntity.RoleName.TEACHER)
                 .build();
 
@@ -288,7 +294,7 @@ class MainPageControllerTest {
                 .name("name")
                 .surname("surname")
                 .email("teacher.email@email.com")
-                .pesel("pesel")
+                .pesel("01234567890")
                 .role(RoleEntity.RoleName.STUDENT)
                 .build();
 

@@ -111,18 +111,4 @@ class CompetitionResultServiceTest {
         //then
         Assertions.assertEquals(competitionResultList, competitionResultsSaved);
     }
-    @Test
-    void findAllCompetitionResultsThrowExceptionIfNoResults() {
-        //given
-        List<CompetitionResult> competitionResultsSaved = Collections.emptyList();
-        String exceptionMessage = "There is no competition results!";
-
-        //when
-        Mockito.when(competitionResultRepositoryDAO.findAllCompetitionResults())
-                .thenReturn(competitionResultsSaved);
-        Executable exception = () -> competitionResultService.findAllCompetitionResults();
-
-        //then
-        Assertions.assertThrowsExactly(RuntimeException.class,exception, exceptionMessage);
-    }
 }

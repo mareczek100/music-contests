@@ -158,7 +158,8 @@ public class TeacherRestUtils {
         Optional<ApplicationForm> studentApplication = applicationFormService.findAllApplicationForms().stream()
                 .filter(applicationForm ->
                         competitionId.equals(applicationForm.competition().competitionId()))
-                .filter(applicationForm -> studentId.equals(applicationForm.student().studentId()))
+                .filter(applicationForm ->
+                        studentId.equals(applicationForm.student().studentId()))
                 .findAny();
 
         if (studentApplication.isEmpty()) {

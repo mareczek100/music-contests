@@ -95,6 +95,14 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+bootJar {
+	archiveFileName = "music_contests.${archiveExtension.get()}"
+}
+
+jar {
+	enabled = false
+}
+
 test {
 	testLogging {
 		events "passed", "skipped", "failed"

@@ -92,4 +92,10 @@ public class CompetitionRepositoryImpl implements CompetitionRepositoryDAO {
         return competitionJpaRepository.findById(competitionId)
                 .map(competitionEntityMapper::mapFromEntityToDomain);
     }
+
+    @Override
+    public void deleteCompetition(Competition competition) {
+        CompetitionEntity competitionEntity = competitionEntityMapper.mapFromDomainToEntity(competition);
+        competitionJpaRepository.delete(competitionEntity);
+    }
 }

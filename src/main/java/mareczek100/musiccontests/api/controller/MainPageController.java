@@ -2,19 +2,14 @@ package mareczek100.musiccontests.api.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.api.dto.*;
 import mareczek100.musiccontests.api.dto.dto_class_support.MusicContestsPortalUserDto;
 import mareczek100.musiccontests.api.dto.mapper.*;
-import mareczek100.musiccontests.business.HeadmasterService;
-import mareczek100.musiccontests.business.MusicSchoolService;
-import mareczek100.musiccontests.business.StudentService;
-import mareczek100.musiccontests.business.TeacherService;
+import mareczek100.musiccontests.business.*;
 import mareczek100.musiccontests.business.instrument_storage_service.InstrumentApiService;
-import mareczek100.musiccontests.domain.Headmaster;
-import mareczek100.musiccontests.domain.MusicSchool;
-import mareczek100.musiccontests.domain.Student;
-import mareczek100.musiccontests.domain.Teacher;
+import mareczek100.musiccontests.domain.*;
 import mareczek100.musiccontests.domain.enums.ClassLevel;
 import mareczek100.musiccontests.domain.enums.Degree;
 import mareczek100.musiccontests.domain.enums.EducationProgram;
@@ -66,6 +61,9 @@ public class MainPageController {
     private final HeadmasterDtoMapper headmasterDtoMapper;
     private final TeacherDtoMapper teacherDtoMapper;
     private final StudentDtoMapper studentDtoMapper;
+    private final ApplicationFormService applicationFormService;
+    private final CompetitionResultService competitionResultService;
+    private final CompetitionService competitionService;
 
     @GetMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_LOGIN)
     public String loginHomePage() {
@@ -95,7 +93,7 @@ public class MainPageController {
             @RequestParam("name") String name,
             @RequestParam("surname") String surname,
             @RequestParam("email") @Email String email,
-            @RequestParam("pesel") @Valid String pesel,
+            @RequestParam("pesel") @Valid @Pattern(regexp = "^\\d{11}$") String pesel,
             @RequestParam("role") String role
     )
     {
@@ -181,32 +179,87 @@ public class MainPageController {
                 .filter(student -> userEmail.equalsIgnoreCase(student.email()))
                 .findAny();
 
+        if (foundHeadmaster.isEmpty() && foundTeacher.isEmpty() && foundStudent.isEmpty())
+        {
+            model.addAttribute("accountDeleted", ACCOUNT_DELETED_FAILURE);
+            model.addAttribute("userEmail", userEmail);
+            return "login/login_main_page";
+        }
+
         if (foundHeadmaster.isPresent()) {
             Headmaster headmaster = foundHeadmaster.get();
+
+            List<Competition> competitions = competitionService.findAllCompetitions().stream()
+                    .filter(competition ->
+                            headmaster.headmasterId().equals(competition.headmaster().headmasterId()))
+                    .toList();
+
+            List<String> competitionIdList = competitions.stream().map(Competition::competitionId).toList();
+
+            List<ApplicationForm> applicationForms = applicationFormService.findAllApplicationForms().stream()
+                    .filter(applicationForm ->
+                            competitionIdList.contains(applicationForm.competition().competitionId()))
+                    .toList();
+
+            List<CompetitionResult> competitionResults = competitionResultService.findAllCompetitionResults().stream()
+                    .filter(competitionResult ->
+                            competitionIdList.contains(competitionResult.competition().competitionId()))
+                    .toList();
+
+            if (!competitions.isEmpty()){
+                competitions.forEach(competitionService::deleteCompetition);
+            }
+
+            if (!applicationForms.isEmpty()){
+                applicationForms.forEach(applicationFormService::deleteApplicationForm);
+            }
+
+            if (!competitionResults.isEmpty()){
+                competitionResults.forEach(competitionResultService::deleteCompetitionResult);
+            }
+
             headmasterService.deleteHeadmaster(headmaster);
-            model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
             model.addAttribute("portalUser", headmaster);
-            foundTeacher.ifPresent(teacherService::deleteTeacher);
-            return "login/login_main_page";
         }
 
         if (foundTeacher.isPresent()) {
             Teacher teacher = foundTeacher.get();
+
+            List<ApplicationForm> applicationForms = applicationFormService.findAllApplicationForms().stream()
+                    .filter(applicationForm -> teacher.teacherId().equals(applicationForm.teacher().teacherId()))
+                    .toList();
+
+            List<Student> students = studentService.findAllStudents().stream()
+                    .filter(student -> teacher.teacherId().equals(student.teacher().teacherId()))
+                    .toList();
+
+            if (!applicationForms.isEmpty()){
+                applicationForms.forEach(applicationFormService::deleteApplicationForm);
+            }
+
+            if (!students.isEmpty()){
+                students.forEach(studentService::deleteStudent);
+            }
             teacherService.deleteTeacher(teacher);
-            model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
             model.addAttribute("portalUser", teacher);
-            return "login/login_main_page";
         }
 
         if (foundStudent.isPresent()) {
             Student student = foundStudent.get();
+            List<CompetitionResult> competitionResults = competitionResultService.findAllCompetitionResults().stream()
+                    .filter(competitionResult ->
+                            student.studentId().equals(competitionResult.student().studentId()))
+                    .toList();
+
+            if (!competitionResults.isEmpty()){
+            competitionResults.forEach(competitionResultService::deleteCompetitionResult);
+            }
+
             studentService.deleteStudent(student);
-            model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
             model.addAttribute("portalUser", student);
-            return "login/login_main_page";
         }
 
-        model.addAttribute("accountDeleted", ACCOUNT_DELETED_FAILURE);
+        model.addAttribute("accountDeleted", ACCOUNT_DELETED_SUCCESS);
         return "login/login_main_page";
     }
 

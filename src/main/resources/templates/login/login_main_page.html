@@ -33,7 +33,7 @@
     + ' pomyślnie usunięto!'"></h3>
 </div>
 <div th:if="${accountDeleted==false}" class="text-bg-danger text-white p-3">
-    <h3 class="text-center" th:text="'Błąd usuwania konta: ' + ${portalUser.name} + ' ' + ${portalUser.surname}!"></h3>
+    <h3 class="text-center" th:text="'Brak konta: ' + ${userEmail} + '!'"></h3>
 </div>
 <form class="row g-3 was-validated" action="#" th:action="@{/authentication/login}" method="POST">
     <h5>Podaj nazwę użytkownika i hasło</h5>

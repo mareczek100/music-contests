@@ -32,11 +32,11 @@ public class CompetitionResultService {
     @Transactional
     public List<CompetitionResult> findAllCompetitionResults()
     {
-        List<CompetitionResult> competitionResults = competitionResultRepositoryDAO.findAllCompetitionResults();
-
-        if (competitionResults.isEmpty()){
-            throw new RuntimeException("There is no competition results!");
-        }
-        return competitionResults;
+        return competitionResultRepositoryDAO.findAllCompetitionResults();
+    }
+    @Transactional
+    public void deleteCompetitionResult(CompetitionResult competitionResult)
+    {
+      competitionResultRepositoryDAO.deleteCompetitionResult(competitionResult);
     }
 }

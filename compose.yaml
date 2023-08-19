@@ -1,9 +1,42 @@
+version: '3.7'
 services:
   postgres:
     image: 'postgres:latest'
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      - 'POSTGRES_DB=musical_contests'
+      - 'POSTGRES_PASSWORD=postgres'
+      - 'POSTGRES_USER=postgres'
     ports:
-      - '5432'
+      - '8000:5432'
+#    volumes:
+#      - db-data:/var/lib/postgresql/music_contests/data
+    networks:
+      - spring-boot-postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  musiccontests:
+    container_name: music-contests
+    hostname: music-contests
+    build: .
+    ports:
+      - 9090:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/musical_contests
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - INSTRUMENT-STORAGE_URL=http://instrument-storage:9092
+    networks:
+      - spring-boot-postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  db-data:
+networks:
+  spring-boot-postgres:
+    name: music-net
+    external: true

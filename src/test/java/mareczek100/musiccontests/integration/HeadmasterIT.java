@@ -1,16 +1,15 @@
 package mareczek100.musiccontests.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
 import lombok.RequiredArgsConstructor;
-import mareczek100.musiccontests.api.controller.rest_controller.controller_rest_support.AllUsersRestUtils;
-import mareczek100.musiccontests.api.controller.rest_controller.controller_rest_support.TeacherRestUtils;
 import mareczek100.musiccontests.api.dto.*;
 import mareczek100.musiccontests.api.dto.dto_class_support.CompetitionResultListDto;
 import mareczek100.musiccontests.api.dto.dto_rest_support.*;
-import mareczek100.musiccontests.api.dto.mapper.*;
+import mareczek100.musiccontests.api.dto.mapper.CompetitionDtoMapper;
+import mareczek100.musiccontests.api.dto.mapper.HeadmasterDtoMapper;
+import mareczek100.musiccontests.api.dto.mapper.StudentDtoMapper;
+import mareczek100.musiccontests.api.dto.mapper.TeacherDtoMapper;
 import mareczek100.musiccontests.business.*;
-import mareczek100.musiccontests.business.instrument_storage_service.InstrumentApiService;
 import mareczek100.musiccontests.domain.*;
 import mareczek100.musiccontests.domain.enums.ClassLevel;
 import mareczek100.musiccontests.integration.integration_test_support.HeadmasterRestControllerITSupport;
@@ -33,8 +32,6 @@ import java.util.*;
 public class HeadmasterIT extends RestAssuredITConfig
         implements HeadmasterRestControllerITSupport, WireMockInstrumentStorageITSupport {
 
-    private final InstrumentApiService instrumentApiService;
-    private final InstrumentDtoMapper instrumentDtoMapper;
     private final CompetitionLocationService competitionLocationService;
     private final CompetitionService competitionService;
     private final CompetitionDtoMapper competitionDtoMapper;
@@ -45,25 +42,12 @@ public class HeadmasterIT extends RestAssuredITConfig
     private final MusicSchoolService musicSchoolService;
     private final StudentService studentService;
     private final StudentDtoMapper studentDtoMapper;
-    private final ApplicationFormService applicationFormService;
-    private final ApplicationFormDtoMapper applicationFormDtoMapper;
-    private final CompetitionResultService competitionResultService;
-    private final CompetitionResultDtoMapper competitionResultDtoMapper;
-    private final AllUsersRestUtils allUsersRestUtils;
-    private final TeacherRestUtils teacherRestUtils;
-    private final ObjectMapper objectMapper;
 
     @BeforeEach
     void thatSetUpWorksCorrectly() {
-        org.junit.jupiter.api.Assertions.assertNotNull(competitionResultService);
-        org.junit.jupiter.api.Assertions.assertNotNull(competitionResultDtoMapper);
         org.junit.jupiter.api.Assertions.assertNotNull(competitionLocationService);
         org.junit.jupiter.api.Assertions.assertNotNull(competitionService);
         org.junit.jupiter.api.Assertions.assertNotNull(competitionDtoMapper);
-        org.junit.jupiter.api.Assertions.assertNotNull(applicationFormService);
-        org.junit.jupiter.api.Assertions.assertNotNull(applicationFormDtoMapper);
-        org.junit.jupiter.api.Assertions.assertNotNull(instrumentApiService);
-        org.junit.jupiter.api.Assertions.assertNotNull(instrumentDtoMapper);
         org.junit.jupiter.api.Assertions.assertNotNull(teacherService);
         org.junit.jupiter.api.Assertions.assertNotNull(teacherDtoMapper);
         org.junit.jupiter.api.Assertions.assertNotNull(headmasterService);
@@ -71,9 +55,6 @@ public class HeadmasterIT extends RestAssuredITConfig
         org.junit.jupiter.api.Assertions.assertNotNull(musicSchoolService);
         org.junit.jupiter.api.Assertions.assertNotNull(studentService);
         org.junit.jupiter.api.Assertions.assertNotNull(studentDtoMapper);
-        org.junit.jupiter.api.Assertions.assertNotNull(allUsersRestUtils);
-        org.junit.jupiter.api.Assertions.assertNotNull(teacherRestUtils);
-        org.junit.jupiter.api.Assertions.assertNotNull(objectMapper);
     }
 
     @Test

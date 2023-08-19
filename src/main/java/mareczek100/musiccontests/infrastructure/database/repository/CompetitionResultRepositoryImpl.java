@@ -47,4 +47,11 @@ public class CompetitionResultRepositoryImpl implements CompetitionResultReposit
                 .map(competitionResultEntityMapper::mapFromEntityToDomain)
                 .toList();
     }
+
+    @Override
+    public void deleteCompetitionResult(CompetitionResult competitionResult) {
+        CompetitionResultEntity competitionResultEntity
+                = competitionResultEntityMapper.mapFromDomainToEntity(competitionResult);
+        competitionResultJpaRepository.delete(competitionResultEntity);
+    }
 }

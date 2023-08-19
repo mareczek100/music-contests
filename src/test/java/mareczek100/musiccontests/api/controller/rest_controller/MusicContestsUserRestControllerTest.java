@@ -11,10 +11,7 @@ import mareczek100.musiccontests.api.dto.mapper.HeadmasterDtoMapper;
 import mareczek100.musiccontests.api.dto.mapper.MusicSchoolDtoMapper;
 import mareczek100.musiccontests.api.dto.mapper.StudentDtoMapper;
 import mareczek100.musiccontests.api.dto.mapper.TeacherDtoMapper;
-import mareczek100.musiccontests.business.HeadmasterService;
-import mareczek100.musiccontests.business.MusicSchoolService;
-import mareczek100.musiccontests.business.StudentService;
-import mareczek100.musiccontests.business.TeacherService;
+import mareczek100.musiccontests.business.*;
 import mareczek100.musiccontests.domain.Headmaster;
 import mareczek100.musiccontests.domain.MusicSchool;
 import mareczek100.musiccontests.domain.Student;
@@ -72,6 +69,12 @@ class MusicContestsUserRestControllerTest {
     private final StudentService studentService;
     @MockBean
     private final StudentDtoMapper studentDtoMapper;
+    @MockBean
+    private final ApplicationFormService applicationFormService;
+    @MockBean
+    private final CompetitionResultService competitionResultService;
+    @MockBean
+    private final CompetitionService competitionService;
 
     private final ObjectMapper objectMapper;
     private final MockMvc mockMvc;
@@ -87,6 +90,9 @@ class MusicContestsUserRestControllerTest {
         Assertions.assertNotNull(musicSchoolDtoMapper);
         Assertions.assertNotNull(studentService);
         Assertions.assertNotNull(studentDtoMapper);
+        Assertions.assertNotNull(applicationFormService);
+        Assertions.assertNotNull(competitionResultService);
+        Assertions.assertNotNull(competitionService);
         Assertions.assertNotNull(objectMapper);
         Assertions.assertNotNull(mockMvc);
     }
@@ -287,7 +293,7 @@ class MusicContestsUserRestControllerTest {
                                 MUSIC_CONTESTS_USER_REST_MAIN_PAGE + FIND_MUSIC_SCHOOL_BY_PATRON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("patron", musicSchoolPatron))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andReturn();
 
         org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())

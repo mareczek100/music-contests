@@ -22,7 +22,7 @@ import java.util.UUID;
 @RestControllerAdvice(annotations = RestController.class)
 public class ExceptionRestController extends ResponseEntityExceptionHandler {
 
-    public static final Map<Class<?>, HttpStatus> EXCEPTION_STATUS = Map.of(
+    private static final Map<Class<?>, HttpStatus> EXCEPTION_STATUS = Map.of(
             ConstraintViolationException.class, HttpStatus.BAD_REQUEST,
             DataIntegrityViolationException.class, HttpStatus.BAD_REQUEST,
             EntityNotFoundException.class, HttpStatus.NOT_FOUND,

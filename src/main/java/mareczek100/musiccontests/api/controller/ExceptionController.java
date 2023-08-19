@@ -49,8 +49,17 @@ public class ExceptionController {
     }
     @ExceptionHandler(SQLException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleSQLException(ConstraintViolationException ex) {
-        String errorMessage = String.format("Bad input to database: [%s]", ex.getMessage());
+    public ModelAndView handleSQLException(SQLException ex) {
+        String errorMessage = "Error occurred: bad input to database.";
+        log.error(errorMessage, ex);
+        ModelAndView modelView = new ModelAndView("error");
+        modelView.addObject("errorMessage", errorMessage);
+        return modelView;
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView handleConstraintViolationException(ConstraintViolationException ex) {
+        String errorMessage = "Error occurred: bad input.";
         log.error(errorMessage, ex);
         ModelAndView modelView = new ModelAndView("error");
         modelView.addObject("errorMessage", errorMessage);
@@ -59,7 +68,7 @@ public class ExceptionController {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleNoResourceFound(EntityNotFoundException ex) {
-        String errorMessage = String.format("Could not find requested resource: [%s]", ex.getMessage());
+        String errorMessage = "Could not find requested resource";
         log.error(errorMessage, ex);
         ModelAndView modelView = new ModelAndView("error");
         modelView.addObject("errorMessage", errorMessage);

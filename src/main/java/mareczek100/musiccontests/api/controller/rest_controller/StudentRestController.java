@@ -1,6 +1,8 @@
 package mareczek100.musiccontests.api.controller.rest_controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.api.controller.rest_controller.controller_rest_support.AllUsersRestUtils;
 import mareczek100.musiccontests.api.controller.rest_controller.controller_rest_support.ControllerRestSupport;
@@ -14,7 +16,9 @@ import mareczek100.musiccontests.api.dto.mapper.CompetitionResultDtoMapper;
 import mareczek100.musiccontests.business.CompetitionResultService;
 import mareczek100.musiccontests.domain.CompetitionResult;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.validation.annotation.Validated;
@@ -96,11 +100,11 @@ public class StudentRestController implements ControllerRestSupport {
 
     @GetMapping(FIND_STUDENT_COMPETITIONS)
     @Operation(summary = "Find competitions in which student participated.")
-    public CompetitionsDto findFinishedStudentCompetitionsByFilters(
+    public ResponseEntity<CompetitionsDto> findFinishedStudentCompetitionsByFilters(
             @RequestParam("competitionDateFrom") @DateTimeFormat LocalDate competitionDateFrom,
             @RequestParam("competitionDateTo") @DateTimeFormat LocalDate competitionDateTo,
             @RequestParam("competitionCity") String competitionCity,
-            @RequestParam("studentPesel") String studentPesel
+            @RequestParam("studentPesel") @Valid @Pattern(regexp = "^\\d{11}$") String studentPesel
     )
     {
 
@@ -115,14 +119,21 @@ public class StudentRestController implements ControllerRestSupport {
                 .map(competitionDtoMapper::mapFromDomainToDto)
                 .toList();
 
-        return CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
+        if (competitionDTOs.isEmpty()){
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
+                    "No such finished competitions in which You participated!")).build();
+        }
+
+        CompetitionsDto competitionsDto = CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
+
+        return ResponseEntity.ok(competitionsDto);
     }
 
     @GetMapping(CHECK_RESULT)
     @Operation(summary = "Find student's result in competition.")
     public ResponseEntity<CompetitionResultDto> checkStudentResult(
             @RequestParam("competitionId") String competitionId,
-            @RequestParam("studentPesel") String studentPesel
+            @RequestParam("studentPesel") @Pattern(regexp = "^\\d{11}$") String studentPesel
     )
     {
         List<CompetitionResultDto> resultDto = competitionResultService.findAllCompetitionResults().stream()

@@ -575,7 +575,7 @@ public class HeadmasterController {
         List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
                 .filter(Competition::finished)
                 .filter(competition -> competitionFrom.isBefore(competition.beginning().toLocalDate())
-                        && competitionTo.isAfter(competition.beginning().toLocalDate()))
+                        && competitionTo.isAfter(competition.end().toLocalDate()))
                 .filter(competition -> competitionCity.equals(competition.competitionLocation().address().city()))
                 .map(competitionDtoMapper::mapFromDomainToDto)
                 .toList();

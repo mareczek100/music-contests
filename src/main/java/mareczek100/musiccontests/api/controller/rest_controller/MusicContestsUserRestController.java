@@ -13,14 +13,8 @@ import mareczek100.musiccontests.api.dto.mapper.HeadmasterDtoMapper;
 import mareczek100.musiccontests.api.dto.mapper.MusicSchoolDtoMapper;
 import mareczek100.musiccontests.api.dto.mapper.StudentDtoMapper;
 import mareczek100.musiccontests.api.dto.mapper.TeacherDtoMapper;
-import mareczek100.musiccontests.business.HeadmasterService;
-import mareczek100.musiccontests.business.MusicSchoolService;
-import mareczek100.musiccontests.business.StudentService;
-import mareczek100.musiccontests.business.TeacherService;
-import mareczek100.musiccontests.domain.Headmaster;
-import mareczek100.musiccontests.domain.MusicSchool;
-import mareczek100.musiccontests.domain.Student;
-import mareczek100.musiccontests.domain.Teacher;
+import mareczek100.musiccontests.business.*;
+import mareczek100.musiccontests.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -58,31 +52,37 @@ public class MusicContestsUserRestController  {
     private final StudentDtoMapper studentDtoMapper;
     private final MusicSchoolService musicSchoolService;
     private final MusicSchoolDtoMapper musicSchoolDtoMapper;
+    private final ApplicationFormService applicationFormService;
+    private final CompetitionService competitionService;
+    private final CompetitionResultService competitionResultService;
 
 
     @PostMapping(CREATE_HEADMASTER)
     @Operation(summary = "Create headmaster account.")
-    public HeadmasterDto createHeadmaster(@RequestBody @Valid HeadmasterDto headmasterDto)
+    public ResponseEntity<HeadmasterDto> createHeadmaster(@RequestBody @Valid HeadmasterDto headmasterDto)
     {
         Headmaster headmaster = headmasterDtoMapper.mapFromDtoToDomain(headmasterDto);
         Headmaster insertedHeadmaster = headmasterService.insertHeadmaster(headmaster);
-        return headmasterDtoMapper.mapFromDomainToDto(insertedHeadmaster);
+        HeadmasterDto insertedHeadmasterDto = headmasterDtoMapper.mapFromDomainToDto(insertedHeadmaster);
+        return ResponseEntity.status(HttpStatus.CREATED).body(insertedHeadmasterDto);
     }
     @PostMapping(CREATE_TEACHER)
     @Operation(summary = "Create teacher account.")
-    public TeacherDto createTeacher(@RequestBody @Valid TeacherDto teacherDto)
+    public ResponseEntity<TeacherDto> createTeacher(@RequestBody @Valid TeacherDto teacherDto)
     {
         Teacher teacher = teacherDtoMapper.mapFromDtoToDomain(teacherDto);
         Teacher insertedTeacher = teacherService.insertTeacher(teacher);
-        return teacherDtoMapper.mapFromDomainToDto(insertedTeacher);
+        TeacherDto insertedTeacherDto = teacherDtoMapper.mapFromDomainToDto(insertedTeacher);
+        return ResponseEntity.status(HttpStatus.CREATED).body(insertedTeacherDto);
     }
     @PostMapping(CREATE_STUDENT)
     @Operation(summary = "Create student account.")
-    public StudentDto createStudent(@RequestBody @Valid StudentDto studentDto)
+    public ResponseEntity<StudentDto> createStudent(@RequestBody @Valid StudentDto studentDto)
     {
         Student student = studentDtoMapper.mapFromDtoToDomain(studentDto);
         Student insertedStudent = studentService.insertStudent(student);
-        return studentDtoMapper.mapFromDomainToDto(insertedStudent);
+        StudentDto insertedStudentDto = studentDtoMapper.mapFromDomainToDto(insertedStudent);
+        return ResponseEntity.status(HttpStatus.CREATED).body(insertedStudentDto);
     }
     @GetMapping(FIND_MUSIC_SCHOOL_BY_ID)
     @Operation(summary = "Find music school by id number.")
@@ -100,7 +100,7 @@ public class MusicContestsUserRestController  {
         Optional<MusicSchool> musicSchoolByPatron = musicSchoolService.findMusicSchoolByPatron(patron);
 
         if (musicSchoolByPatron.isEmpty()){
-            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
                     "Music school with patron [%s] doesn't exist!".formatted(patron))).build();
         }
 
@@ -122,13 +122,15 @@ public class MusicContestsUserRestController  {
     }
     @PostMapping(CREATE_MUSIC_SCHOOL)
     @Operation(summary = "Create new music school with address.")
-    public MusicSchoolWithAddressDto createMusicSchoolWithAddress(
+    public ResponseEntity<MusicSchoolWithAddressDto> createMusicSchoolWithAddress(
             @RequestBody @Valid MusicSchoolWithAddressDto musicSchoolWithAddressDto
     )
     {
         MusicSchool musicSchool = musicSchoolDtoMapper.mapFromDtoToDomain(musicSchoolWithAddressDto);
         MusicSchool insertedMusicSchool = musicSchoolService.insertMusicSchool(musicSchool);
-        return musicSchoolDtoMapper.mapFromDomainToDto(insertedMusicSchool);
+        MusicSchoolWithAddressDto insertedMusicSchoolWithAddressDto
+                = musicSchoolDtoMapper.mapFromDomainToDto(insertedMusicSchool);
+        return ResponseEntity.status(HttpStatus.CREATED).body(insertedMusicSchoolWithAddressDto);
     }
     @DeleteMapping(MUSIC_CONTESTS_USER_DELETE_ACCOUNT)
     @Operation(summary = "Delete music contests user account by email.")
@@ -146,11 +148,75 @@ public class MusicContestsUserRestController  {
                 .filter(student -> userEmail.equalsIgnoreCase(student.email()))
                 .findAny();
 
-        foundHeadmaster.ifPresent(headmasterService::deleteHeadmaster);
+        if (foundHeadmaster.isEmpty() && foundTeacher.isEmpty() && foundStudent.isEmpty())
+        {
+            throw new RuntimeException("Music Contests Portal user [%s] doesn't exist!".formatted(userEmail));
+        }
 
-        foundTeacher.ifPresent(teacherService::deleteTeacher);
+        foundHeadmaster.ifPresent(headmaster -> {
+            List<Competition> competitions = competitionService.findAllCompetitions().stream()
+                    .filter(competition ->
+                            headmaster.headmasterId().equals(competition.headmaster().headmasterId()))
+                    .toList();
 
-        foundStudent.ifPresent(studentService::deleteStudent);
+            List<String> competitionIdList = competitions.stream().map(Competition::competitionId).toList();
+
+            List<ApplicationForm> applicationForms = applicationFormService.findAllApplicationForms().stream()
+                    .filter(applicationForm ->
+                            competitionIdList.contains(applicationForm.competition().competitionId()))
+                    .toList();
+
+            List<CompetitionResult> competitionResults = competitionResultService.findAllCompetitionResults().stream()
+                    .filter(competitionResult ->
+                            competitionIdList.contains(competitionResult.competition().competitionId()))
+                    .toList();
+
+            if (!competitions.isEmpty()){
+                competitions.forEach(competitionService::deleteCompetition);
+            }
+
+            if (!applicationForms.isEmpty()){
+                applicationForms.forEach(applicationFormService::deleteApplicationForm);
+            }
+
+            if (!competitionResults.isEmpty()){
+                competitionResults.forEach(competitionResultService::deleteCompetitionResult);
+            }
+
+            headmasterService.deleteHeadmaster(headmaster);
+        });
+
+        foundTeacher.ifPresent(teacher -> {
+            List<ApplicationForm> applicationForms = applicationFormService.findAllApplicationForms().stream()
+                    .filter(applicationForm -> teacher.teacherId().equals(applicationForm.teacher().teacherId()))
+                    .toList();
+
+            List<Student> students = studentService.findAllStudents().stream()
+                    .filter(student -> teacher.teacherId().equals(student.teacher().teacherId()))
+                    .toList();
+
+            if (!applicationForms.isEmpty()){
+                applicationForms.forEach(applicationFormService::deleteApplicationForm);
+            }
+
+            if (!students.isEmpty()){
+                students.forEach(studentService::deleteStudent);
+            }
+
+            teacherService.deleteTeacher(teacher);
+        });
+
+        foundStudent.ifPresent(student -> {
+            List<CompetitionResult> competitionResults = competitionResultService.findAllCompetitionResults().stream()
+                    .filter(competitionResult ->
+                            student.studentId().equals(competitionResult.student().studentId()))
+                    .toList();
+
+            if (!competitionResults.isEmpty()){
+                competitionResults.forEach(competitionResultService::deleteCompetitionResult);
+            }
+            studentService.deleteStudent(student);
+        });
 
         return ResponseEntity.noContent().build();
     }

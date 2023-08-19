@@ -107,5 +107,10 @@ public class CompetitionService {
         return competitionRepositoryDAO.findCompetitionsByFilters(
                 instrument, online, primaryDegree, secondaryDegree, locationCity);
     }
+    @Transactional
+    public void deleteCompetition(Competition competition)
+    {
+        competitionRepositoryDAO.deleteCompetition(competition);
+    }
 
 }
