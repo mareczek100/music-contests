@@ -81,5 +81,6 @@ class ApplicationFormServiceTest {
         //then
         org.assertj.core.api.Assertions.assertThatCollection(applicationFormListAfter)
                 .doesNotContain(applicationFormSaved1);
+        Mockito.verify(applicationFormRepositoryDAO).deleteApplicationForm(applicationFormSaved1);
     }
 }

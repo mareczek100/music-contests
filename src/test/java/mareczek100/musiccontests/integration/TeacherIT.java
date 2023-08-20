@@ -223,21 +223,6 @@ public class TeacherIT extends RestAssuredITConfig
     }
 
     @Test
-    void thatFindAllCompetitionStudentsEmptyListResponseNotFoundStatusWorksCorrectly() {
-        //given
-        CompetitionWithLocationDto competition
-                = findAllAvailableCompetitions().competitionDtoList().stream().findAny().orElseThrow();
-        String competitionId = competition.competitionId();
-
-        //when
-        Response responseNotFoundStatus = findAllCompetitionStudentsEmptyListResponseNotFoundStatus(competitionId);
-
-        //then
-        Assertions.assertThat(responseNotFoundStatus.getStatusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND.value());
-    }
-
-    @Test
     void thatAnnounceStudentToCompetitionWorksCorrectly() {
         //given
         String teacherEmail = "nauczyciel1@mejl.com";

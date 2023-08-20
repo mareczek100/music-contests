@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -74,6 +75,20 @@ class MusicSchoolServiceTest {
 
         //then
         Assertions.assertEquals(musicSchoolById, musicSchoolSaved1);
+    }
+    @Test
+    void findMusicSchoolByIdThrowsExceptionIfMusicSchoolDoesNotExists() {
+        //given
+        String musicSchoolId = "nonExistsMusicSchoolId";
+        String exceptionMessage = "Music School with id [%s] doesn't exist".formatted(musicSchoolId);
+
+        //when
+        Mockito.when(musicSchoolRepositoryDAO.findMusicSchoolById(musicSchoolId))
+                .thenReturn(Optional.empty());
+        Executable exception = () ->  musicSchoolService.findMusicSchoolById(musicSchoolId);
+
+        //then
+        Assertions.assertThrowsExactly(RuntimeException.class, exception, exceptionMessage);
     }
 
     @Test

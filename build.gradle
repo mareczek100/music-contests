@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'mareczek100'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
 	sourceCompatibility = "17"
@@ -34,7 +34,7 @@ dependencies {
 	implementation "org.thymeleaf.extras:thymeleaf-extras-java8time:$thymeleafVersion"
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-//	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
 	//db
 	implementation 'org.flywaydb:flyway-core'
@@ -112,6 +112,15 @@ test {
 
 jacocoTestReport{
 	dependsOn test
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					"mareczek100/musiccontests/MusicContestsApplication.class",
+					"mareczek100/musiccontests/infrastructure/**",
+					"mareczek100/infrastructure/**"
+			])
+		}))
+	}
 }
 
 compileJava.options.encoding = 'UTF-8'

@@ -59,7 +59,7 @@ public class StudentRestController implements ControllerRestSupport {
 
     @GetMapping(FIND_ALL_COMPETITIONS)
     @Operation(summary = "Find list of all available music competitions. Sorted by instrument, without paging.")
-    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitions()
+    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitionsWithPagingAndSorting()
     {
         return allUsersRestUtils.findAllAvailableCompetitions();
     }

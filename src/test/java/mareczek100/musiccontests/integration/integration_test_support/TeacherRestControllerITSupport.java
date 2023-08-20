@@ -154,18 +154,6 @@ public interface TeacherRestControllerITSupport {
                 .extract()
                 .response();
     }
-    default Response findAllCompetitionStudentsEmptyListResponseNotFoundStatus(String competitionId) {
-        return requestSpecification()
-                .given()
-                .param("competitionId", competitionId)
-                .when()
-                .get(TEACHER_REST_MAIN_PAGE + FIND_ALL_COMPETITION_STUDENTS)
-                .then()
-                .statusCode(HttpStatus.NOT_FOUND.value())
-                .and()
-                .extract()
-                .response();
-    }
 
     default ApplicationFormDto announceStudentToCompetition(
             String teacherEmail,

@@ -255,7 +255,7 @@ public class TeacherController {
     }
 
     @GetMapping(TEACHER_STUDENT_CANCEL)
-    public String teacherCancelStudent(Model model) {
+    public String teacherCancelStudentApplicationForm(Model model) {
 
         List<String> cityDTOs = competitionService.findAllCompetitions().stream()
                 .filter(competition -> !competition.finished())
@@ -271,7 +271,7 @@ public class TeacherController {
     }
 
     @GetMapping(TEACHER_STUDENT_CANCEL_SELECT)
-    public String teacherCancelStudentConfirm(
+    public String teacherCancelStudentApplicationFormSelectCompetition(
             @RequestParam("competitionDateFrom") @DateTimeFormat LocalDate competitionDateFrom,
             @RequestParam("competitionDateTo") @DateTimeFormat LocalDate competitionDateTo,
             @RequestParam("teacherEmail") String teacherEmail,
@@ -296,7 +296,7 @@ public class TeacherController {
     }
 
     @GetMapping(TEACHER_STUDENT_CANCEL_CONFIRM)
-    public String teacherCancelStudentConfirm(
+    public String teacherCancelStudentApplicationFormSelectStudent(
             @RequestParam("teacherEmail") String teacherEmail,
             @RequestParam("competitionId") String competitionId,
             Model model
@@ -325,7 +325,7 @@ public class TeacherController {
     }
 
     @PostMapping(TEACHER_STUDENT_CANCEL_CONFIRM)
-    public String teacherCancelStudentConfirmDone(
+    public String teacherCancelStudentConfirm(
             Model model,
             @RequestParam("competitionId") String competitionId,
             @RequestParam("studentId") String studentId
@@ -357,7 +357,7 @@ public class TeacherController {
     }
 
     @GetMapping(TEACHER_RESULT)
-    public String teacherCheckCompetitionResultHomePage(Model model) {
+    public String teacherCheckCompetitionResultsHomePage(Model model) {
         List<String> cityDTOs = competitionService.findAllCompetitions().stream()
                 .filter(Competition::finished)
                 .map(Competition::competitionLocation)
@@ -372,7 +372,7 @@ public class TeacherController {
     }
 
     @GetMapping(TEACHER_RESULT_SEARCH)
-    public String teacherCheckCompetitionResultByFilters(Model model,
+    public String teacherCheckCompetitionResultsByFilters(Model model,
                                                          @RequestParam("competitionFrom") @DateTimeFormat LocalDate competitionFrom,
                                                          @RequestParam("competitionTo") @DateTimeFormat LocalDate competitionTo,
                                                          @RequestParam("competitionCity") String competitionCity
@@ -393,7 +393,7 @@ public class TeacherController {
     }
 
     @PostMapping(TEACHER_RESULT_SHOW)
-    public String teacherCheckCompetitionResult(Model model,
+    public String teacherCheckCompetitionResultsShowResults(Model model,
                                                 @RequestParam("competitionId") String competitionId
     )
     {

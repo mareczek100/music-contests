@@ -61,7 +61,7 @@ class StudentServiceTest {
 
         //when
         Mockito.when(studentRepositoryDAO.findAllStudents()).thenReturn(studentList);
-        Mockito.when(securityService.insertRoleWhileCreateNewUser(
+        Mockito.when(securityService.setRoleWhileCreateNewPortalUser(
                 studentToSave.email(), studentToSave.pesel(), studentRole)).thenReturn(studentPortalUserEntity);
         Mockito.when(studentRepositoryDAO.insertStudent(studentToSave))
                 .thenReturn(studentSaved);
@@ -150,5 +150,6 @@ class StudentServiceTest {
 
         //then
         org.assertj.core.api.Assertions.assertThatCollection(studentListAfter).isEmpty();
+        Mockito.verify(studentRepositoryDAO).deleteStudent(studentSaved1);
     }
 }

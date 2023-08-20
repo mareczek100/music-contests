@@ -8,8 +8,8 @@ services:
       - 'POSTGRES_USER=postgres'
     ports:
       - '8000:5432'
-#    volumes:
-#      - db-data:/var/lib/postgresql/music_contests/data
+    volumes:
+      - db-data:/var/lib/postgresql/music_contests/data
     networks:
       - spring-boot-postgres
     healthcheck:
@@ -22,7 +22,7 @@ services:
     hostname: music-contests
     build: .
     ports:
-      - 9090:8080
+      - "9090:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=local
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/musical_contests

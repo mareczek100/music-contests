@@ -35,7 +35,7 @@ public class TeacherService {
         }
         RoleEntity.RoleName teacherRole = RoleEntity.RoleName.TEACHER;
         MusicContestsPortalUserEntity teacherPortalUserEntity
-                = securityService.insertRoleWhileCreateNewUser(teacher.email(), teacher.pesel(), teacherRole);
+                = securityService.setRoleWhileCreateNewPortalUser(teacher.email(), teacher.pesel(), teacherRole);
         String encodedPesel = teacherPortalUserEntity.getPassword();
         MusicSchool musicSchool = teacher.musicSchool();
         if (!musicSchool.musicSchoolId().isEmpty()) {

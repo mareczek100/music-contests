@@ -71,7 +71,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
 
     @GetMapping(FIND_ALL_CITIES)
     @Operation(summary = "Find list of available competition's cities.")
-    public CitiesDto findAllAvailableCompetitionCities()
+    public CitiesDto findAllCitiesWithAvailableCompetition()
     {
         return allUsersRestUtils.findAllAvailableCompetitionCities();
     }
@@ -141,7 +141,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
     }
     @GetMapping(FIND_ALL_COMPETITIONS_PAGEABLE)
     @Operation(summary = "Find list of all available music competitions - 5 results per page, sorted by instrument.")
-    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitions(
+    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitionsWithPagingAndSorting(
             @PathVariable("currentPage") Integer currentPage
     )
     {
@@ -186,8 +186,8 @@ public class HeadmasterRestController implements ControllerRestSupport {
     }
 
     @PostMapping(CREATE_TEACHER_RIGHTS)
-    @Operation(summary = "Create for headmaster teacher's account.")
-    public ResponseEntity<TeacherDto> createHeadmasterTeacherRights(
+    @Operation(summary = "Create teacher's account for headmaster.")
+    public ResponseEntity<TeacherDto> createHeadmasterTeachersRights(
             @RequestParam("headmasterEmail") String headmasterEmail,
             @RequestParam("instrument") String instrument
     )
@@ -233,8 +233,8 @@ public class HeadmasterRestController implements ControllerRestSupport {
     }
 
     @GetMapping(FIND_ALL_TEACHER_STUDENTS)
-    @Operation(summary = "Find list of headmaster's students.")
-    public ResponseEntity<StudentsDto> findAllTeacherStudents(
+    @Operation(summary = "Find list of all headmaster's students.")
+    public ResponseEntity<StudentsDto> findAllHeadmasterStudents(
             @RequestParam("teacherEmail") @Email String teacherEmail
     )
     {

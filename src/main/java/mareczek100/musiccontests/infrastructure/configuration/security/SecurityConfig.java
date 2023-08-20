@@ -1,5 +1,6 @@
 package mareczek100.musiccontests.infrastructure.configuration.security;
 
+import mareczek100.musiccontests.infrastructure.security.RoleEntity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +17,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
+import static mareczek100.musiccontests.api.controller.AdminController.ADMIN_MAIN_PAGE;
+import static mareczek100.musiccontests.api.controller.HeadmasterController.HEADMASTER_MAIN_PAGE;
 import static mareczek100.musiccontests.api.controller.MainPageController.*;
+import static mareczek100.musiccontests.api.controller.StudentController.STUDENT_MAIN_PAGE;
+import static mareczek100.musiccontests.api.controller.TeacherController.TEACHER_MAIN_PAGE;
 
 @Configuration
 @EnableWebSecurity
@@ -34,20 +39,19 @@ public class SecurityConfig {
                         cache.requestCache(requestCache))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests.anyRequest().permitAll())
-//                        authorizeRequests
-//                                .requestMatchers(MUSIC_CONTESTS_AUTHENTICATION + ALL_SUBPAGES).permitAll()
-//                                .requestMatchers(MUSIC_CONTESTS_ERROR).authenticated()
-//                                .requestMatchers(IMAGES).authenticated()
-//                                .requestMatchers(ADMIN_MAIN_PAGE + ALL_SUBPAGES)
-//                                .hasAuthority(RoleEntity.RoleName.ADMIN.name())
-//                                .requestMatchers(HEADMASTER_MAIN_PAGE + ALL_SUBPAGES)
-//                                .hasAnyAuthority(RoleEntity.RoleName.HEADMASTER.name(), RoleEntity.RoleName.ADMIN.name())
-//                                .requestMatchers(TEACHER_MAIN_PAGE + ALL_SUBPAGES)
-//                                .hasAnyAuthority(RoleEntity.RoleName.TEACHER.name(), RoleEntity.RoleName.ADMIN.name())
-//                                .requestMatchers(STUDENT_MAIN_PAGE + ALL_SUBPAGES)
-//                                .hasAnyAuthority(RoleEntity.RoleName.STUDENT.name(), RoleEntity.RoleName.ADMIN.name())
-//                                .requestMatchers(REST_API_HOME + ALL_SUBPAGES).permitAll())
+                        authorizeRequests
+                                .requestMatchers(MUSIC_CONTESTS_AUTHENTICATION + ALL_SUBPAGES).permitAll()
+                                .requestMatchers(MUSIC_CONTESTS_ERROR).authenticated()
+                                .requestMatchers(IMAGES).authenticated()
+                                .requestMatchers(ADMIN_MAIN_PAGE + ALL_SUBPAGES)
+                                .hasAuthority(RoleEntity.RoleName.ADMIN.name())
+                                .requestMatchers(HEADMASTER_MAIN_PAGE + ALL_SUBPAGES)
+                                .hasAnyAuthority(RoleEntity.RoleName.HEADMASTER.name(), RoleEntity.RoleName.ADMIN.name())
+                                .requestMatchers(TEACHER_MAIN_PAGE + ALL_SUBPAGES)
+                                .hasAnyAuthority(RoleEntity.RoleName.TEACHER.name(), RoleEntity.RoleName.ADMIN.name())
+                                .requestMatchers(STUDENT_MAIN_PAGE + ALL_SUBPAGES)
+                                .hasAnyAuthority(RoleEntity.RoleName.STUDENT.name(), RoleEntity.RoleName.ADMIN.name())
+                                .requestMatchers(REST_API_HOME + ALL_SUBPAGES).permitAll())
                 .formLogin(formLogin ->
                         formLogin
                                 .usernameParameter("username")

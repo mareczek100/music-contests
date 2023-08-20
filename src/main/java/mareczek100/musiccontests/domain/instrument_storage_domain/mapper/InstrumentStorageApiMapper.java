@@ -32,7 +32,8 @@ public class InstrumentStorageApiMapper {
     {
         return InstrumentCategory.builder()
                 .instrumentCategoryId(UUID.randomUUID().toString())
-                .instrumentCategory(Objects.requireNonNull(category.getCategory()).name())
+                .instrumentCategory(
+                        Objects.requireNonNull(category.getCategory()).name().toUpperCase())
                 .build();
     }
     public InstrumentDto mapFromInstrumentToInstrumentApiDto(Instrument instrument)

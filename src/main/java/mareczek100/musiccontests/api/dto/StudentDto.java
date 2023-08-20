@@ -1,5 +1,7 @@
 package mareczek100.musiccontests.api.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.With;
 import mareczek100.musiccontests.domain.enums.ClassLevel;
@@ -11,8 +13,8 @@ import mareczek100.musiccontests.domain.enums.EducationProgram;
 public record StudentDto(String studentId,
                          String name,
                          String surname,
-                         String email,
-                         String pesel,
+                         @Email String email,
+                         @Pattern(regexp = "^\\d{11}$") String pesel,
                          ClassLevel classYear,
                          EducationProgram educationDuration,
                          Degree musicSchoolDegree,

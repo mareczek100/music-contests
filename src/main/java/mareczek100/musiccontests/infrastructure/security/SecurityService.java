@@ -19,7 +19,7 @@ public class SecurityService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public MusicContestsPortalUserEntity insertRoleWhileCreateNewUser(String email, String pesel, RoleEntity.RoleName role)
+    public MusicContestsPortalUserEntity setRoleWhileCreateNewPortalUser(String email, String pesel, RoleEntity.RoleName role)
     {
         RoleEntity roleEntity = roleJpaRepository.findRoleByRoleName(role)
                 .orElseThrow(() -> new RuntimeException("Role [%s] doesn't exist!"

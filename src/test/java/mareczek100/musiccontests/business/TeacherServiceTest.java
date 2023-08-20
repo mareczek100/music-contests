@@ -67,7 +67,7 @@ class TeacherServiceTest {
         Mockito.when(teacherRepositoryDAO.findAllTeachers()).thenReturn(teacherList);
         Mockito.when(headmasterRepositoryDAO.findHeadmasterByEmail(teacherToSave.email()))
                 .thenReturn(Optional.empty());
-        Mockito.when(securityService.insertRoleWhileCreateNewUser(
+        Mockito.when(securityService.setRoleWhileCreateNewPortalUser(
                 teacherToSave.email(), teacherToSave.pesel(), teacherRole)).thenReturn(teacherPortalUserEntity);
         Mockito.when(teacherRepositoryDAO.insertTeacher(teacherToSave))
                 .thenReturn(teacherSaved);
@@ -141,5 +141,6 @@ class TeacherServiceTest {
 
         //then
         org.assertj.core.api.Assertions.assertThatCollection(teacherListAfter).isEmpty();
+        Mockito.verify(teacherRepositoryDAO).deleteTeacher(teacherSaved1);
     }
 }

@@ -121,7 +121,7 @@ public class MusicContestsUserRestController  {
         return MusicSchoolsDto.builder().musicSchoolDtoList(musicSchoolDTOs).build();
     }
     @PostMapping(CREATE_MUSIC_SCHOOL)
-    @Operation(summary = "Create new music school with address.")
+    @Operation(summary = "Create new music school with school address.")
     public ResponseEntity<MusicSchoolWithAddressDto> createMusicSchoolWithAddress(
             @RequestBody @Valid MusicSchoolWithAddressDto musicSchoolWithAddressDto
     )

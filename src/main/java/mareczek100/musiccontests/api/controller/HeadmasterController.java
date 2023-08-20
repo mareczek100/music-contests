@@ -37,13 +37,13 @@ public class HeadmasterController {
     public static final String HEADMASTER_COMPETITION_TEACHER = "/competition/teacher";
     public static final String HEADMASTER_COMPETITION_TEACHER_RIGHTS = "/competition/teacher/rights";
     public static final String HEADMASTER_COMPETITION_SELECT_STUDENT = "/competition/student/select";
-    public static final String HEADMASTER_COMPETITION_PUT_STUDENT = "/competition/student/put";
+    public static final String HEADMASTER_COMPETITION_STUDENT_PUT = "/competition/student/put";
     public static final String HEADMASTER_COMPETITION_STUDENT_CANCEL = "/competition/student/cancel";
     public static final String HEADMASTER_COMPETITION_STUDENT_CANCEL_SELECT = "/competition/student/cancel/select";
     public static final String HEADMASTER_COMPETITION_STUDENT_CANCEL_CONFIRM = "/competition/student/cancel/confirm";
     public static final String HEADMASTER_COMPETITION_FILTERS_SEARCH = "/competition/student/search/filters";
     public static final String HEADMASTER_COMPETITION_INSTRUMENT_SEARCH = "/competition/student/search/instrument";
-    public static final String HEADMASTER_COMPETITION_SEARCH_ALL = "/competition/student/search/all/{currentPage}";
+    public static final String HEADMASTER_COMPETITION_ALL_SEARCH = "/competition/student/search/all/{currentPage}";
     public static final String HEADMASTER_COMPETITION_CHECK = "/competition/check";
     public static final String HEADMASTER_COMPETITION_CHECK_RESULT = "/competition/check/result";
 
@@ -108,7 +108,7 @@ public class HeadmasterController {
 
 
     @PostMapping(HEADMASTER_COMPETITION_CREATE_LOCATION)
-    public String headmasterCreateCompetitionLocation(
+    public String headmasterCreateCompetitionInOtherLocation(
             @Valid @ModelAttribute("competitionDto") CompetitionWithLocationDto competitionDto,
             @RequestParam("competitionOrganizerEmail") String competitionOrganizerEmail,
             Model model
@@ -120,7 +120,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_STUDENT)
-    public String headmasterStudentHomePage() {
+    public String headmasterStudentAnnounceOrCancelHomePage() {
 
         return "headmaster/headmaster_competition_student";
     }
@@ -147,7 +147,7 @@ public class HeadmasterController {
     }
 
     @PostMapping(HEADMASTER_COMPETITION_TEACHER_RIGHTS)
-    public String headmasterCreateTeacherRights(
+    public String headmasterCreateTeacherRightsProcess(
             @ModelAttribute("headmasterTeacherDto") TeacherDto headmasterTeacherDto,
             @RequestParam("musicSchoolId") String musicSchoolId,
             Model model
@@ -176,7 +176,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_INSTRUMENT_SEARCH)
-    public String headmasterSearchCompetitionByInstrumentToPutStudent(
+    public String headmasterSearchCompetitionsByInstrumentToPutStudent(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             Model model
     )
@@ -204,8 +204,8 @@ public class HeadmasterController {
         return "headmaster/headmaster_competition_search_instrument";
     }
 
-    @GetMapping(HEADMASTER_COMPETITION_SEARCH_ALL)
-    public String headmasterSearchAllAvailableCompetitions(
+    @GetMapping(HEADMASTER_COMPETITION_ALL_SEARCH)
+    public String headmasterSearchAllAvailableCompetitionsPageable(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             @PathVariable("currentPage") Integer currentPage,
             Model model
@@ -248,7 +248,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_FILTERS_SEARCH)
-    public String headmasterSearchCompetitionByFiltersToPutStudent(
+    public String headmasterSearchCompetitionsByFiltersToPutStudent(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             Model model
     )
@@ -328,7 +328,7 @@ public class HeadmasterController {
         return "headmaster/headmaster_competition_select_student";
     }
 
-    @PostMapping(HEADMASTER_COMPETITION_PUT_STUDENT)
+    @PostMapping(HEADMASTER_COMPETITION_STUDENT_PUT)
     public String headmasterPutUpStudentToCompetition(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             @RequestParam("studentId") String studentId,
@@ -360,7 +360,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_STUDENT_CANCEL)
-    public String headmasterCancelStudent(
+    public String headmasterCancelStudentApplicationForm(
             Model model,
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail
     )
@@ -381,7 +381,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_STUDENT_CANCEL_SELECT)
-    public String headmasterCancelStudentConfirm(
+    public String headmasterCancelStudentApplicationSelectCompetition(
             @RequestParam("competitionDateFrom") @DateTimeFormat LocalDate competitionDateFrom,
             @RequestParam("competitionDateTo") @DateTimeFormat LocalDate competitionDateTo,
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
@@ -405,7 +405,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_STUDENT_CANCEL_CONFIRM)
-    public String headmasterCancelStudentConfirm(
+    public String headmasterCancelStudentApplicationSelectStudent(
             @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
             @RequestParam("competitionId") String competitionId,
             Model model
@@ -433,7 +433,7 @@ public class HeadmasterController {
     }
 
     @PostMapping(HEADMASTER_COMPETITION_STUDENT_CANCEL_CONFIRM)
-    public String headmasterCancelStudentConfirmDone(
+    public String headmasterCancelStudentConfirm(
             Model model,
             @RequestParam("competitionId") String competitionId,
             @RequestParam("studentId") String studentId
@@ -465,7 +465,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_RESULT)
-    public String headmasterAnnounceCompetitionResultHomePage(Model model)
+    public String headmasterAnnounceCompetitionResultsHomePage(Model model)
     {
         model.addAttribute("competitionDTOs", Collections.emptyList());
         model.addAttribute("noCompetitions", false);
@@ -474,7 +474,7 @@ public class HeadmasterController {
     }
 
     @PostMapping(HEADMASTER_COMPETITION_RESULT)
-    public String headmasterPickCompetitionToAnnounceResult(
+    public String headmasterPickCompetitionToAnnounceResults(
             @RequestParam("headmasterEmail") String headmasterEmail,
             Model model
     )
@@ -497,7 +497,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_ANNOUNCE_RESULT)
-    public String headmasterAnnounceCompetitionHomePage(
+    public String headmasterAnnounceCompetitionMainPage(
             @RequestParam("competitionId") String competitionId,
             Model model
     )
@@ -531,7 +531,7 @@ public class HeadmasterController {
     }
 
     @PostMapping(HEADMASTER_COMPETITION_ANNOUNCE_RESULT)
-    public String headmasterAnnounceCompetitionResult(
+    public String headmasterAnnounceCompetitionResultsConfirm(
             @RequestParam("competitionId") String competitionId,
             @ModelAttribute("resultListDto") CompetitionResultListDto resultListDto,
             Model model
@@ -549,7 +549,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_CHECK)
-    public String headmasterCheckCompetitionResultHomePage(Model model) {
+    public String headmasterCheckCompetitionResultsHomePage(Model model) {
         List<String> cityDTOs = competitionService.findAllCompetitions().stream()
                 .filter(Competition::finished)
                 .map(Competition::competitionLocation)
@@ -564,7 +564,7 @@ public class HeadmasterController {
     }
 
     @GetMapping(HEADMASTER_COMPETITION_CHECK_RESULT)
-    public String headmasterCheckCompetitionResultByFilters(
+    public String headmasterCheckCompetitionResultsByFilters(
             Model model,
             @RequestParam("competitionFrom") @DateTimeFormat LocalDate competitionFrom,
             @RequestParam("competitionTo") @DateTimeFormat LocalDate competitionTo,
@@ -586,7 +586,7 @@ public class HeadmasterController {
     }
 
     @PostMapping(HEADMASTER_COMPETITION_CHECK_RESULT)
-    public String headmasterCheckCompetitionResult(
+    public String headmasterCheckCompetitionResultsShowResults(
             Model model,
             @RequestParam("competitionId") String competitionId
     )

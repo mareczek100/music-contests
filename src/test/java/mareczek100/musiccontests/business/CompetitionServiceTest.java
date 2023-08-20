@@ -290,4 +290,17 @@ class CompetitionServiceTest {
         //then
         Assertions.assertEquals(competitionsByFilters, competitionsSaved);
     }
+
+    @Test
+    void deleteCompetitionResult() {
+        //given
+        Competition competitionSaved1
+                = CompetitionDomainTestData.competitionAtOtherLocationSaved1();
+
+        //when
+        competitionService.deleteCompetition(competitionSaved1);
+
+        //then
+        Mockito.verify(competitionRepositoryDAO).deleteCompetition(competitionSaved1);
+    }
 }

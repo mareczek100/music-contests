@@ -27,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -212,6 +214,40 @@ class StudentControllerTest {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(view().name("student/student_competition_show"))
                 .andExpect(model().attribute("competitionDTOs", competitionDTOs))
+                .andReturn();
+    }
+
+    @Test
+    void studentShowAllCompetitionsWithSortingAndPagination() throws Exception {
+        //given
+        int currentPage = 1;
+        List<Competition> competitionList = CompetitionDomainTestData.competitionList();
+        List<CompetitionWithLocationDto> competitionDtoList = CompetitionDtoTestData.competitionDtoList();
+        Page<Competition> competitionListPageable = new PageImpl<>(competitionList);
+        int allPages = 1;
+        long allCompetitions = 3;
+
+        //when
+        Mockito.when(competitionService.findAllCompetitionsPageable(currentPage))
+                .thenReturn(competitionListPageable);
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
+                .thenReturn(competitionDtoList.get(0));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(1)))
+                .thenReturn(competitionDtoList.get(1));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(2)))
+                .thenReturn(competitionDtoList.get(2));
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get(
+                                STUDENT_MAIN_PAGE + STUDENT_COMPETITION_SHOW_PAGES,
+                                currentPage)
+                        .contentType(MediaType.TEXT_HTML))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("student/student_competition_show_pages"))
+                .andExpect(model().attribute("currentPage", currentPage))
+                .andExpect(model().attribute("allPages", allPages))
+                .andExpect(model().attribute("allCompetitions", allCompetitions))
+                .andExpect(model().attribute("competitionDTOs", competitionDtoList))
                 .andReturn();
     }
 

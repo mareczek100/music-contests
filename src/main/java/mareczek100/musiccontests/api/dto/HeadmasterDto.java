@@ -1,5 +1,7 @@
 package mareczek100.musiccontests.api.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.With;
 
@@ -8,7 +10,7 @@ import lombok.With;
 public record HeadmasterDto(String headmasterId,
                             String name,
                             String surname,
-                            String email,
-                            String pesel,
+                            @Email String email,
+                            @Pattern(regexp = "^\\d{11}$") String pesel,
                             MusicSchoolWithAddressDto musicSchool) {
 }

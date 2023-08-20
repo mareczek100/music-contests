@@ -60,7 +60,7 @@ public class TeacherRestController implements ControllerRestSupport {
 
     @GetMapping(FIND_ALL_COMPETITIONS_PAGEABLE)
     @Operation(summary = "Find list of all available music competitions - 5 results per page, sorted by instrument.")
-    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitions(
+    public ResponseEntity<CompetitionsDto> findAllAvailableCompetitionsWithPagingAndSorting(
             @PathVariable("currentPage") Integer currentPage
     )
     {

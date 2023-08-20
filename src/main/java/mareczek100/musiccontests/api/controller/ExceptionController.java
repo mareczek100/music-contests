@@ -40,7 +40,7 @@ public class ExceptionController {
     }
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handleConstraintViolationException(ValidationException ex) {
+    public ModelAndView handleValidationException(ValidationException ex) {
         String errorMessage = String.format("Validation error: [%s]", ex.getMessage());
         log.error(errorMessage, ex);
         ModelAndView modelView = new ModelAndView("error");

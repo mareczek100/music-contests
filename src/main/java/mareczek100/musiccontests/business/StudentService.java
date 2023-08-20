@@ -29,7 +29,7 @@ public class StudentService {
 
         RoleEntity.RoleName studentRole = RoleEntity.RoleName.STUDENT;
         MusicContestsPortalUserEntity studentPortalUserEntity
-                = securityService.insertRoleWhileCreateNewUser(student.email(), student.pesel(), studentRole);
+                = securityService.setRoleWhileCreateNewPortalUser(student.email(), student.pesel(), studentRole);
         String encodedPesel = studentPortalUserEntity.getPassword();
         MusicSchool musicSchool = student.musicSchool();
 

@@ -61,7 +61,7 @@ class HeadmasterServiceTest {
 
         //when
         Mockito.when(headmasterRepositoryDAO.findAllHeadmasters()).thenReturn(headmasterList);
-        Mockito.when(securityService.insertRoleWhileCreateNewUser(
+        Mockito.when(securityService.setRoleWhileCreateNewPortalUser(
                 headmasterToSave.email(), headmasterToSave.pesel(), headmasterRole)).thenReturn(headmasterPortalUserEntity);
         Mockito.when(headmasterRepositoryDAO.insertHeadmaster(headmasterToSave))
                 .thenReturn(headmasterSaved);
@@ -132,5 +132,6 @@ class HeadmasterServiceTest {
 
         //then
         org.assertj.core.api.Assertions.assertThatCollection(headmasterListAfter).isEmpty();
+        Mockito.verify(headmasterRepositoryDAO).deleteHeadmaster(headmasterSaved1);
     }
 }

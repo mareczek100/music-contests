@@ -31,6 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -404,7 +406,7 @@ class HeadmasterControllerTest {
     }
 
     @Test
-    void headmasterSearchCompetitionByInstrumentToPutStudent() throws Exception {
+    void headmasterSearchCompetitionsByInstrumentToPutStudent() throws Exception {
         //given
         List<Instrument> instrumentList = InstrumentDomainTestData.instrumentList();
         List<InstrumentDto> instrumentDtoList = InstrumentDtoTestData.instrumentDtoList();
@@ -438,6 +440,71 @@ class HeadmasterControllerTest {
                 .andExpect(model().attribute("instrumentDTOs", instrumentDtoList))
                 .andExpect(model().attribute("competitionDto", CompetitionWithLocationDto.builder().build()))
                 .andExpect(model().attribute("cityDTOs", competitionCityList))
+                .andReturn();
+    }
+    @Test
+    void headmasterSearchAllCompetitionsWithSortingAndPaginationToPutStudent() throws Exception {
+        //given
+        int currentPage = 1;
+        Teacher headmasterTeacher = HeadmasterDomainTestData.headmasterTeacherSaved1();
+        TeacherDto headmasterTeacherDto = HeadmasterDtoTestData.headmasterTeacherDtoSaved1();
+        String headmasterTeacherEmail = headmasterTeacher.email();
+        List<Student> studentList = StudentDomainTestData.studentList().stream()
+                .map(student -> student.withTeacher(headmasterTeacher))
+                .toList();
+        List<StudentDto> studentDtoList = StudentDtoTestData.studentDtoList().stream()
+                .map(studentDto -> studentDto.withTeacher(headmasterTeacherDto))
+                .toList();
+
+        List<Competition> competitionList = CompetitionDomainTestData.competitionList();
+        List<CompetitionWithLocationDto> competitionDtoList = CompetitionDtoTestData.competitionDtoList();
+        Page<Competition> competitionListPageable = new PageImpl<>(competitionList);
+        int allPages = 1;
+        long allCompetitions = 3;
+
+        List<ClassLevel> classLevels
+                = Arrays.stream(ClassLevel.values())
+                .toList();
+
+        //when
+        Mockito.when(competitionService.findAllCompetitionsPageable(currentPage))
+                .thenReturn(competitionListPageable);
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
+                .thenReturn(competitionDtoList.get(0));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(1)))
+                .thenReturn(competitionDtoList.get(1));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(2)))
+                .thenReturn(competitionDtoList.get(2));
+        Mockito.when(teacherService.findTeacherByEmail(headmasterTeacherEmail))
+                .thenReturn(headmasterTeacher);
+        Mockito.when(studentService.findAllStudents()).thenReturn(studentList);
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(0)))
+                .thenReturn(studentDtoList.get(0));
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(1)))
+                .thenReturn(studentDtoList.get(1));
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(2)))
+                .thenReturn(studentDtoList.get(2));
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(3)))
+                .thenReturn(studentDtoList.get(3));
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(4)))
+                .thenReturn(studentDtoList.get(4));
+        Mockito.when(competitionService.findAllCompetitions()).thenReturn(competitionList);
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get(
+                                HEADMASTER_MAIN_PAGE + HEADMASTER_COMPETITION_ALL_SEARCH,
+                                currentPage)
+                        .contentType(MediaType.TEXT_HTML)
+                        .param("headmasterTeacherEmail", headmasterTeacherEmail))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("headmaster/headmaster_competition_search_all"))
+                .andExpect(model().attribute("headmasterTeacherEmail", headmasterTeacherEmail))
+                .andExpect(model().attribute("currentPage", currentPage))
+                .andExpect(model().attribute("allPages", allPages))
+                .andExpect(model().attribute("allCompetitions", allCompetitions))
+                .andExpect(model().attribute("studentDTOs", studentDtoList))
+                .andExpect(model().attribute("classLevels", classLevels))
+                .andExpect(model().attribute("competitionDTOs", competitionDtoList))
                 .andReturn();
     }
 
@@ -581,7 +648,7 @@ class HeadmasterControllerTest {
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.post(
-                                HEADMASTER_MAIN_PAGE + HEADMASTER_COMPETITION_PUT_STUDENT)
+                                HEADMASTER_MAIN_PAGE + HEADMASTER_COMPETITION_STUDENT_PUT)
                         .contentType(MediaType.TEXT_HTML)
                         .param("studentId", studentId)
                         .param("competitionId", competitionId)

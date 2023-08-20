@@ -78,6 +78,7 @@ class CompetitionResultServiceTest {
         //then
         Assertions.assertEquals(insertedCompetitionResult, competitionResultsSaved);
     }
+
     @Test
     void insertAllCompetitionResultsThrowExceptionIfThereAreNoResultsToInsert() {
         //given
@@ -88,7 +89,7 @@ class CompetitionResultServiceTest {
         Executable exception = () -> competitionResultService.insertAllCompetitionResults(competitionResultsToInsert);
 
         //then
-        Assertions.assertThrowsExactly(RuntimeException.class,exception, exceptionMessage);
+        Assertions.assertThrowsExactly(RuntimeException.class, exception, exceptionMessage);
     }
 
     @Test
@@ -110,5 +111,18 @@ class CompetitionResultServiceTest {
 
         //then
         Assertions.assertEquals(competitionResultList, competitionResultsSaved);
+    }
+
+    @Test
+    void deleteCompetitionResult() {
+        //given
+        CompetitionResult competitionResultSaved1
+                = CompetitionResultDomainTestData.competitionResultSaved1();
+
+        //when
+        competitionResultService.deleteCompetitionResult(competitionResultSaved1);
+
+        //then
+        Mockito.verify(competitionResultRepositoryDAO).deleteCompetitionResult(competitionResultSaved1);
     }
 }

@@ -28,6 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -175,6 +177,67 @@ class TeacherControllerTest {
                 .andExpect(model().attribute("competitionDto", CompetitionWithLocationDto.builder().build()))
                 .andExpect(model().attribute("cityDTOs", competitionCityList))
                 .andExpect(model().attribute("teacherEmail", teacherEmail))
+                .andReturn();
+    }
+
+    @Test
+    void teacherSearchAllCompetitionsWithSortingAndPaginationToPutStudent() throws Exception {
+        //given
+        int currentPage = 1;
+        Teacher teacher = TeacherDomainTestData.teacherSaved1();
+        String teacherEmail = teacher.email();
+        List<Student> studentList = StudentDomainTestData.studentList();
+        List<StudentDto> studentDtoList = StudentDtoTestData.studentDtoList();
+
+        List<Competition> competitionList = CompetitionDomainTestData.competitionList();
+        List<CompetitionWithLocationDto> competitionDtoList = CompetitionDtoTestData.competitionDtoList();
+        Page<Competition> competitionListPageable = new PageImpl<>(competitionList);
+        int allPages = 1;
+        long allCompetitions = 3;
+
+        List<ClassLevel> classLevels
+                = Arrays.stream(ClassLevel.values())
+                .toList();
+
+        //when
+        Mockito.when(competitionService.findAllCompetitionsPageable(currentPage))
+                .thenReturn(competitionListPageable);
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
+                .thenReturn(competitionDtoList.get(0));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(1)))
+                .thenReturn(competitionDtoList.get(1));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(2)))
+                .thenReturn(competitionDtoList.get(2));
+        Mockito.when(teacherService.findTeacherByEmail(teacherEmail))
+                .thenReturn(teacher);
+        Mockito.when(studentService.findAllStudents()).thenReturn(studentList);
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(0)))
+                .thenReturn(studentDtoList.get(0));
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(1)))
+                .thenReturn(studentDtoList.get(1));
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(2)))
+                .thenReturn(studentDtoList.get(2));
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(3)))
+                .thenReturn(studentDtoList.get(3));
+        Mockito.when(studentDtoMapper.mapFromDomainToDto(studentList.get(4)))
+                .thenReturn(studentDtoList.get(4));
+        Mockito.when(competitionService.findAllCompetitions()).thenReturn(competitionList);
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get(
+                                TEACHER_MAIN_PAGE + TEACHER_STUDENT_COMPETITIONS_ALL,
+                                currentPage)
+                        .contentType(MediaType.TEXT_HTML)
+                        .param("teacherEmail", teacherEmail))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(view().name("teacher/teacher_student_competition_all"))
+                .andExpect(model().attribute("teacherEmail", teacherEmail))
+                .andExpect(model().attribute("currentPage", currentPage))
+                .andExpect(model().attribute("allPages", allPages))
+                .andExpect(model().attribute("allCompetitions", allCompetitions))
+                .andExpect(model().attribute("studentDTOs", studentDtoList))
+                .andExpect(model().attribute("classLevels", classLevels))
+                .andExpect(model().attribute("competitionDTOs", competitionDtoList))
                 .andReturn();
     }
 

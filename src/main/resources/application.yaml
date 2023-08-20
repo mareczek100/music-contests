@@ -11,7 +11,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5430/musical_contests
+    url: jdbc:postgresql://localhost:5432/musical_contests
     username: postgres
     password: postgres
     hikari:

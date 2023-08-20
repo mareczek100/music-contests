@@ -42,7 +42,7 @@ public class HeadmasterService {
 
         RoleEntity.RoleName headmasterRole = RoleEntity.RoleName.HEADMASTER;
         MusicContestsPortalUserEntity headmasterPortalUserEntity
-                = securityService.insertRoleWhileCreateNewUser(headmaster.email(), headmaster.pesel(), headmasterRole);
+                = securityService.setRoleWhileCreateNewPortalUser(headmaster.email(), headmaster.pesel(), headmasterRole);
         String encodedPesel = headmasterPortalUserEntity.getPassword();
 
         if (!musicSchool.musicSchoolId().isEmpty()) {

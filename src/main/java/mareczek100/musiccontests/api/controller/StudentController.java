@@ -206,7 +206,7 @@ public class StudentController {
     }
 
     @PostMapping(STUDENT_RESULT_SHOW)
-    public String studentCheckCompetitionResult(
+    public String studentCheckCompetitionResultShowStudentResult(
             Model model,
             @RequestParam("competitionId") String competitionId,
             @RequestParam("studentPesel") String studentPesel
