@@ -248,7 +248,7 @@ class HeadmasterControllerTest {
     @Test
     void headmasterStudentHomePage() throws Exception {
         //given
-        String welcomeMessage = "Tutaj zgłosisz swojego ucznia do konkursu!";
+        String welcomeMessage = "Tutaj zgłosisz swojego ucznia do konkursu.";
 
         //when, then
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(

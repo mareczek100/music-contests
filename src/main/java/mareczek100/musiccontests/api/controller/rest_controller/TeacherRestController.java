@@ -23,7 +23,6 @@ import static mareczek100.musiccontests.api.controller.rest_controller.TeacherRe
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = TEACHER_REST_MAIN_PAGE)
 @AllArgsConstructor
 public class TeacherRestController implements ControllerRestSupport {
-
     public static final String TEACHER_REST_MAIN_PAGE = "/api/teacher";
 
     private final AllUsersRestUtils allUsersRestUtils;

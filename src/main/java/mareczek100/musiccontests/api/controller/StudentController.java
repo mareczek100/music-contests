@@ -1,5 +1,7 @@
 package mareczek100.musiccontests.api.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.api.dto.CompetitionResultDto;
 import mareczek100.musiccontests.api.dto.CompetitionWithLocationDto;
@@ -184,7 +186,7 @@ public class StudentController {
             @RequestParam("competitionFrom") @DateTimeFormat LocalDate competitionFrom,
             @RequestParam("competitionTo") @DateTimeFormat LocalDate competitionTo,
             @RequestParam("competitionCity") String competitionCity,
-            @RequestParam("studentPesel") String studentPesel
+            @RequestParam("studentPesel") @Valid @Pattern(regexp = "^\\d{11}$") String studentPesel
     )
     {
 

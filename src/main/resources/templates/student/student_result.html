@@ -15,7 +15,7 @@
         <button class="btn btn-info" type="submit">Wyloguj!</button>
     </div>
 </form>
-<h1 class="text-center">Tutaj sprawdzisz wyniki zakończonych konkursów!</h1><br>
+<h1 class="text-center">Tutaj sprawdzisz swoje wyniki zakończonych konkursów.</h1><br>
 <h2 class="text-center">Podaj kryteria, aby odnaleźć żądane konkursy.</h2><br>
 
 <div th:if="${#lists.isEmpty(cityDTOs)}" class="text-bg-info p-3">
@@ -53,7 +53,7 @@
                 <label for="validationStudentPesel" class="form-label">Pesel</label>
                 <input type="text" th:name="studentPesel" class="form-control" id="validationStudentPesel" required>
                 <div class="valid-feedback">Ok!</div>
-                <div class="invalid-feedback">Podaj swój numer pesel.</div>
+                <div class="invalid-feedback">Podaj swój numer pesel (11 cyfr).</div>
             </div>
         </div><p>
         <div class="d-grid gap-2 col-4 mx-auto">

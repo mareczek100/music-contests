@@ -50,6 +50,7 @@ public class MainPageController {
     private final static Boolean ACCOUNT_DELETED_SUCCESS = true;
     private final static Boolean ACCOUNT_DELETED_FAILURE = false;
     private final static String NONE_MUSIC_SCHOOL = "NONE";
+    private final static String NONE_SECOND_INSTRUMENT = "NONE";
 
     private final HeadmasterService headmasterService;
     private final TeacherService teacherService;
@@ -78,6 +79,8 @@ public class MainPageController {
                 .map(Enum::name).toList();
 
         List<MusicSchoolWithAddressDto> musicSchoolDTOs = musicSchoolService.findAllMusicSchools().stream()
+                .filter(musicSchool ->
+                        !RoleEntity.RoleName.ADMIN.name().equalsIgnoreCase(musicSchool.name()))
                 .map(musicSchoolDtoMapper::mapFromDomainToDto)
                 .toList();
 
@@ -154,6 +157,12 @@ public class MainPageController {
             Model model
     )
     {
+        String secondInstrument = studentDto.secondInstrument();
+
+        if (secondInstrument.equals(NONE_SECOND_INSTRUMENT)) {
+           studentDto = studentDto.withSecondInstrument("");
+        }
+
         StudentDto insertedStudentDto = createStudent(studentDto, teacherEmail, musicSchoolDto);
         model.addAttribute("accountCreated", ACCOUNT_CREATED_SUCCESS);
         model.addAttribute("portalUser", insertedStudentDto);

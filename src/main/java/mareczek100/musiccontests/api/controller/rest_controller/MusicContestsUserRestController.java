@@ -15,6 +15,7 @@ import mareczek100.musiccontests.api.dto.mapper.StudentDtoMapper;
 import mareczek100.musiccontests.api.dto.mapper.TeacherDtoMapper;
 import mareczek100.musiccontests.business.*;
 import mareczek100.musiccontests.domain.*;
+import mareczek100.musiccontests.infrastructure.security.RoleEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -32,7 +33,6 @@ import static mareczek100.musiccontests.api.controller.rest_controller.MusicCont
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = MUSIC_CONTESTS_USER_REST_MAIN_PAGE)
 @AllArgsConstructor
 public class MusicContestsUserRestController  {
-
     public static final String MUSIC_CONTESTS_USER_REST_MAIN_PAGE = "/api/user";
     public static final String MUSIC_CONTESTS_USER_DELETE_ACCOUNT = "/delete";
     public static final String CREATE_HEADMASTER = "/create/headmaster";
@@ -42,7 +42,6 @@ public class MusicContestsUserRestController  {
     public static final String FIND_MUSIC_SCHOOL_BY_PATRON = "/school/patron";
     public static final String FIND_ALL_MUSIC_SCHOOLS = "/school/all";
     public static final String CREATE_MUSIC_SCHOOL = "/create/school";
-
 
     private final HeadmasterService headmasterService;
     private final HeadmasterDtoMapper headmasterDtoMapper;
@@ -59,7 +58,9 @@ public class MusicContestsUserRestController  {
 
     @PostMapping(CREATE_HEADMASTER)
     @Operation(summary = "Create headmaster account.")
-    public ResponseEntity<HeadmasterDto> createHeadmaster(@RequestBody @Valid HeadmasterDto headmasterDto)
+    public ResponseEntity<HeadmasterDto> createHeadmaster(
+            @RequestBody @Valid HeadmasterDto headmasterDto
+    )
     {
         Headmaster headmaster = headmasterDtoMapper.mapFromDtoToDomain(headmasterDto);
         Headmaster insertedHeadmaster = headmasterService.insertHeadmaster(headmaster);
@@ -68,7 +69,9 @@ public class MusicContestsUserRestController  {
     }
     @PostMapping(CREATE_TEACHER)
     @Operation(summary = "Create teacher account.")
-    public ResponseEntity<TeacherDto> createTeacher(@RequestBody @Valid TeacherDto teacherDto)
+    public ResponseEntity<TeacherDto> createTeacher(
+            @RequestBody @Valid TeacherDto teacherDto
+    )
     {
         Teacher teacher = teacherDtoMapper.mapFromDtoToDomain(teacherDto);
         Teacher insertedTeacher = teacherService.insertTeacher(teacher);
@@ -77,7 +80,9 @@ public class MusicContestsUserRestController  {
     }
     @PostMapping(CREATE_STUDENT)
     @Operation(summary = "Create student account.")
-    public ResponseEntity<StudentDto> createStudent(@RequestBody @Valid StudentDto studentDto)
+    public ResponseEntity<StudentDto> createStudent(
+            @RequestBody @Valid StudentDto studentDto
+    )
     {
         Student student = studentDtoMapper.mapFromDtoToDomain(studentDto);
         Student insertedStudent = studentService.insertStudent(student);
@@ -115,6 +120,8 @@ public class MusicContestsUserRestController  {
     public MusicSchoolsDto findAllMusicSchools()
     {
         List<MusicSchoolWithAddressDto> musicSchoolDTOs = musicSchoolService.findAllMusicSchools().stream()
+                .filter(musicSchool ->
+                        !RoleEntity.RoleName.ADMIN.name().equalsIgnoreCase(musicSchool.name()))
                 .map(musicSchoolDtoMapper::mapFromDomainToDto)
                 .toList();
 

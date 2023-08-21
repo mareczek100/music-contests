@@ -10,7 +10,7 @@
             crossorigin="anonymous"></script>
 </head>
 <body class="p-3 mb-2 bg-dark-subtle text-emphasis-dark">
-<h1 class="text-center">Załóż nowe konto nauczyciela!</h1><br><br>
+<h1 class="text-center">Załóż nowe konto nauczyciela.</h1><br><br>
 <form class="row g-2 was-validated" action="#" th:object="${teacherDto}"
       th:action="@{/authentication/account/teacher}" method="POST">
     <input type="hidden" th:name="name" th:value="${portalUser.name}" class="form-control" required>

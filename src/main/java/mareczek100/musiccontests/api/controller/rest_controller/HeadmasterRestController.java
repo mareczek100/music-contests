@@ -86,7 +86,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
     @PostMapping(CREATE_COMPETITION_AT_SCHOOL)
     @Operation(summary = "Create new competition at headmaster's music school.")
     public ResponseEntity<CompetitionWithLocationDto> createCompetitionAtSchool(
-            @RequestParam("headmasterOrganizerEmail") String headmasterOrganizerEmail,
+            @RequestParam("headmasterOrganizerEmail") @Email String headmasterOrganizerEmail,
             @RequestParam("competitionName") String competitionName,
             @RequestParam("competitionInstrument") String competitionInstrument,
             @RequestParam("competitionOnline") Boolean competitionOnline,
@@ -99,7 +99,6 @@ public class HeadmasterRestController implements ControllerRestSupport {
             @RequestParam("competitionRequirementsDescription") String competitionRequirementsDescription
     )
     {
-
         CompetitionWithLocationDto competitionDto = CompetitionWithLocationDto.builder()
                 .competitionName(competitionName)
                 .competitionInstrument(competitionInstrument)
@@ -124,7 +123,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
     @Operation(summary = "Create new competition at other location.")
     public ResponseEntity<CompetitionWithLocationDto> createCompetitionAtOtherLocation(
             @RequestBody @Valid CompetitionWithLocationDto competitionDto,
-            @RequestParam("headmasterOrganizerEmail") String headmasterOrganizerEmail
+            @RequestParam("headmasterOrganizerEmail") @Email String headmasterOrganizerEmail
     )
     {
         CompetitionWithLocationDto competitionAtOtherPlace
@@ -133,12 +132,14 @@ public class HeadmasterRestController implements ControllerRestSupport {
         return ResponseEntity.status(HttpStatus.CREATED).body(competitionAtOtherPlace);
 
     }
+
     @GetMapping(FIND_ALL_COMPETITIONS)
     @Operation(summary = "Find list of all available music competitions. Sorted by instrument, without paging.")
     public ResponseEntity<CompetitionsDto> findAllAvailableCompetitions()
     {
         return allUsersRestUtils.findAllAvailableCompetitions();
     }
+
     @GetMapping(FIND_ALL_COMPETITIONS_PAGEABLE)
     @Operation(summary = "Find list of all available music competitions - 5 results per page, sorted by instrument.")
     public ResponseEntity<CompetitionsDto> findAllAvailableCompetitionsWithPagingAndSorting(
@@ -188,7 +189,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
     @PostMapping(CREATE_TEACHER_RIGHTS)
     @Operation(summary = "Create teacher's account for headmaster.")
     public ResponseEntity<TeacherDto> createHeadmasterTeachersRights(
-            @RequestParam("headmasterEmail") String headmasterEmail,
+            @RequestParam("headmasterEmail") @Email String headmasterEmail,
             @RequestParam("instrument") String instrument
     )
     {
@@ -263,7 +264,9 @@ public class HeadmasterRestController implements ControllerRestSupport {
 
     @GetMapping(FIND_ALL_SCHOOL_STUDENTS)
     @Operation(summary = "Find list of all students from headmaster's music school.")
-    public StudentsDto findAllSchoolStudents(@RequestParam("headmasterEmail") String headmasterEmail)
+    public StudentsDto findAllSchoolStudents(
+            @RequestParam("headmasterEmail") @Email String headmasterEmail
+    )
     {
         Headmaster headmaster = headmasterService.findHeadmasterByEmail(headmasterEmail);
         String musicSchoolId = headmaster.musicSchool().musicSchoolId();
@@ -278,7 +281,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
     @PostMapping(ANNOUNCE_STUDENT_TO_COMPETITION)
     @Operation(summary = "Fill in application form to announce student to competition.")
     public ResponseEntity<ApplicationFormDto> announceStudentToCompetition(
-            @RequestParam("teacherEmail") String teacherEmail,
+            @RequestParam("teacherEmail") @Email String headmasterTeacherEmail,
             @RequestParam("studentId") String studentId,
             @RequestParam("competitionId") String competitionId,
             @RequestParam("classLevel") String classLevel,
@@ -286,24 +289,24 @@ public class HeadmasterRestController implements ControllerRestSupport {
     )
     {
         return teacherRestUtils.announceStudentToCompetition(
-                teacherEmail, studentId, competitionId, classLevel, performancePieces);
+                headmasterTeacherEmail, studentId, competitionId, classLevel, performancePieces);
     }
 
 
     @GetMapping(FIND_TEACHER_APPLICATIONS)
     @Operation(summary = "Find list of teacher's applications to competition.")
     public ApplicationFormsDto findTeacherApplicationsToCompetition(
-            @RequestParam("teacherEmail") String teacherEmail,
+            @RequestParam("teacherEmail") @Email String headmasterTeacherEmail,
             @RequestParam("competitionId") String competitionId
     )
     {
-        return teacherRestUtils.findTeacherApplicationsToCompetition(teacherEmail, competitionId);
+        return teacherRestUtils.findTeacherApplicationsToCompetition(headmasterTeacherEmail, competitionId);
     }
 
     @GetMapping(FIND_ALL_TEACHERS_APPLICATIONS)
     @Operation(summary = "Find list of all applications to competition made by teachers from headmaster's music school.")
     public ApplicationFormsDto findAllTeachersApplicationsToCompetition(
-            @RequestParam("headmasterEmail") String headmasterEmail,
+            @RequestParam("headmasterEmail") @Email String headmasterEmail,
             @RequestParam("competitionId") String competitionId
     )
     {
@@ -334,7 +337,9 @@ public class HeadmasterRestController implements ControllerRestSupport {
 
     @GetMapping(FIND_HEADMASTER_COMPETITIONS)
     @Operation(summary = "Find list of available competitions created by headmaster.")
-    public ResponseEntity<CompetitionsDto> findCompetitionsCreatedByHeadmaster(@RequestParam("headmasterEmail") String headmasterEmail)
+    public ResponseEntity<CompetitionsDto> findCompetitionsCreatedByHeadmaster(
+            @RequestParam("headmasterEmail") @Email String headmasterEmail
+    )
     {
         List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
                 .filter(competition -> !competition.finished())
@@ -362,7 +367,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
     {
         List<CompetitionResultDto> resultDTOs = createCompetitionResults(competitionId, resultListDto);
 
-        if (resultDTOs.isEmpty()){
+        if (resultDTOs.isEmpty()) {
             ResponseEntity.of(ProblemDetail.forStatus(HttpStatus.BAD_REQUEST));
         }
 
@@ -377,10 +382,10 @@ public class HeadmasterRestController implements ControllerRestSupport {
     @Operation(summary = "Check teacher's students competition results.")
     public CompetitionResultsDto checkTeacherStudentsResults(
             @RequestParam("competitionId") String competitionId,
-            @RequestParam("teacherEmail") String teacherEmail
+            @RequestParam("teacherEmail") @Email String headmasterTeacherEmail
     )
     {
-        return teacherRestUtils.checkTeacherStudentsResults(competitionId, teacherEmail);
+        return teacherRestUtils.checkTeacherStudentsResults(competitionId, headmasterTeacherEmail);
     }
 
     @GetMapping(CHECK_ALL_RESULT)
@@ -460,11 +465,11 @@ public class HeadmasterRestController implements ControllerRestSupport {
         List<CompetitionResult> competitionResults = competitionResultsSupport.stream()
                 .map(competitionResultSupport ->
                         CompetitionResult.builder()
-                        .competition(competitionService.updateCompetitionAfterResults(competition))
-                        .student(studentService.findStudentById(competitionResultSupport.getStudentId()))
-                        .competitionPlace(competitionResultSupport.getCompetitionPlace())
-                        .specialAward(competitionResultSupport.getSpecialAward())
-                        .build()).toList();
+                                .competition(competitionService.updateCompetitionAfterResults(competition))
+                                .student(studentService.findStudentById(competitionResultSupport.getStudentId()))
+                                .competitionPlace(competitionResultSupport.getCompetitionPlace())
+                                .specialAward(competitionResultSupport.getSpecialAward())
+                                .build()).toList();
 
         List<CompetitionResult> insertedCompetitionResults
                 = competitionResultService.insertAllCompetitionResults(competitionResults);

@@ -133,7 +133,7 @@ public class StudentRestController implements ControllerRestSupport {
     @Operation(summary = "Find student's result in competition.")
     public ResponseEntity<CompetitionResultDto> checkStudentResult(
             @RequestParam("competitionId") String competitionId,
-            @RequestParam("studentPesel") @Pattern(regexp = "^\\d{11}$") String studentPesel
+            @RequestParam("studentPesel") @Valid @Pattern(regexp = "^\\d{11}$") String studentPesel
     )
     {
         List<CompetitionResultDto> resultDto = competitionResultService.findAllCompetitionResults().stream()

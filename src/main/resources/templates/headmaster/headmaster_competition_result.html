@@ -15,9 +15,9 @@
         <button class="btn btn-info" type="submit">Wyloguj!</button>
     </div>
 </form>
-<h1 class="text-center">Tutaj znajdziesz stworzone przez siebie konkursy!</h1>
+<h1 class="text-center">Tutaj znajdziesz stworzone przez siebie konkursy.</h1>
 <div th:if="${#lists.isEmpty(competitionDTOs)}">
-    <h1 class="text-center">Podaj adres email i wybierz konkurs, do którego opublikujesz wyniki!</h1><br>
+    <h1 class="text-center">Podaj adres email i wybierz konkurs, do którego opublikujesz wyniki.</h1><br>
     <div class="col-md-4 offset-md-4">
         <form class="row g-3 was-validated" th:action="@{/headmaster/competition/result}" method="POST">
             <input type="text" th:name="headmasterEmail" class="form-control" required>

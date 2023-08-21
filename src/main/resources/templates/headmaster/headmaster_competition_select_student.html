@@ -15,10 +15,10 @@
         <button class="btn btn-info" type="submit">Wyloguj!</button>
     </div>
 </form>
-<h1 class="text-center">Tutaj wybierzesz konkurs i zgłosisz swojego ucznia!</h1><br>
+<h1 class="text-center">Tutaj wybierzesz konkurs i zgłosisz swojego ucznia.</h1><br>
 <h2 class="text-center">Wypełnij formularz zgłoszenia</h2>
 <div th:if="${#lists.isEmpty(competitionDTOs)}" class="text-bg-info p-3">
-    <h4 class="text-center">Brak konkursów z podanymi kryteriami!</h4>
+    <h4 class="text-center">Brak konkursów z podanymi kryteriami.</h4>
 </div><br>
 <div th:unless="${#lists.isEmpty(competitionDTOs)}">
     <form class="row g-3 was-validated" th:action="@{/headmaster/competition/student/put}" method="POST">

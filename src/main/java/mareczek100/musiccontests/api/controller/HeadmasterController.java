@@ -1,6 +1,7 @@
 package mareczek100.musiccontests.api.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.api.dto.*;
 import mareczek100.musiccontests.api.dto.dto_class_support.CompetitionResultListDto;
@@ -128,7 +129,7 @@ public class HeadmasterController {
 
     @GetMapping(HEADMASTER_COMPETITION_TEACHER)
     public String headmasterCreateTeacherRightsHomePage(
-            @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail,
+            @RequestParam("headmasterTeacherEmail") @Email String headmasterTeacherEmail,
             Model model
     )
     {
@@ -362,10 +363,10 @@ public class HeadmasterController {
     @GetMapping(HEADMASTER_COMPETITION_STUDENT_CANCEL)
     public String headmasterCancelStudentApplicationForm(
             Model model,
-            @RequestParam("headmasterTeacherEmail") String headmasterTeacherEmail
+            @RequestParam("headmasterTeacherEmail") @Email String headmasterTeacherEmail
     )
     {
-
+        teacherService.findTeacherByEmail(headmasterTeacherEmail);
         List<String> cityDTOs = competitionService.findAllCompetitions().stream()
                 .filter(competition -> !competition.finished())
                 .map(Competition::competitionLocation)
