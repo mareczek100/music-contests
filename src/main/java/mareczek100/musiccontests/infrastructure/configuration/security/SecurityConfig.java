@@ -27,8 +27,10 @@ import static mareczek100.musiccontests.api.controller.TeacherController.TEACHER
 @EnableWebSecurity
 public class SecurityConfig {
     private static final String ALL_SUBPAGES = "/**";
-    private static final String IMAGES = "/images/**";
+    private static final String IMAGES = "/images";
     private static final String REST_API_HOME = "/api";
+    private static final String REST_API_CONTRACT = "/swagger-ui";
+    private static final String REST_API_DOCS = "/v3/api-docs";
 
 
     @Bean
@@ -42,7 +44,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers(MUSIC_CONTESTS_AUTHENTICATION + ALL_SUBPAGES).permitAll()
                                 .requestMatchers(MUSIC_CONTESTS_ERROR).authenticated()
-                                .requestMatchers(IMAGES).authenticated()
+                                .requestMatchers(IMAGES + ALL_SUBPAGES).authenticated()
                                 .requestMatchers(ADMIN_MAIN_PAGE + ALL_SUBPAGES)
                                 .hasAuthority(RoleEntity.RoleName.ADMIN.name())
                                 .requestMatchers(HEADMASTER_MAIN_PAGE + ALL_SUBPAGES)
@@ -51,7 +53,9 @@ public class SecurityConfig {
                                 .hasAnyAuthority(RoleEntity.RoleName.TEACHER.name(), RoleEntity.RoleName.ADMIN.name())
                                 .requestMatchers(STUDENT_MAIN_PAGE + ALL_SUBPAGES)
                                 .hasAnyAuthority(RoleEntity.RoleName.STUDENT.name(), RoleEntity.RoleName.ADMIN.name())
-                                .requestMatchers(REST_API_HOME + ALL_SUBPAGES).permitAll())
+                                .requestMatchers(REST_API_HOME + ALL_SUBPAGES).permitAll()
+                                .requestMatchers(REST_API_CONTRACT + ALL_SUBPAGES).permitAll()
+                                .requestMatchers(REST_API_DOCS + ALL_SUBPAGES).permitAll())
                 .formLogin(formLogin ->
                         formLogin
                                 .usernameParameter("username")

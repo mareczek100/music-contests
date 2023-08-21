@@ -95,7 +95,9 @@ Wystawione rest api jest natomiast ogólnie dostępne, aby zobaczyć całą funk
 
 # NIEZBĘDNE DO DZIAŁANIA
 -Aplikacja konsumuje inne api - Instrument Storage - bazę instrumentów, również dostępne na moim git-hubie:
+
 https://github.com/mareczek100/instrument-storage
+
 Najlepiej najpierw uruchomić Instrument Storage (bo tworzy sieć w dockerze), a potem Music Contests,
 bo się do tej sieci przy tworzeniu kontenerów podpina.
 
@@ -110,13 +112,19 @@ LINKI STARTOWE
 *MUSIC CONTESTS
 - lokalnie:
   http://localhost:8080/music-contests/authentication/login
+
   http://localhost:8080/music-contests/swagger-ui/index.html
+
+  http://localhost:8080/music-contests/admin - portal administratora (po zalogowaniu)
 
 - docker:
   http://localhost:9090/music-contests/authentication/login
+
   http://localhost:9090/music-contests/swagger-ui/index.html
 
-DB: jdbc:postgresql://localhost:5432/musical_contests
+  http://localhost:9090/music-contests/admin - portal administratora (po zalogowaniu)
+
+DB port: 8000
 
 *INSTRUMENT STORAGE
 - lokalnie:
@@ -125,7 +133,7 @@ DB: jdbc:postgresql://localhost:5432/musical_contests
 - docker:
   http://localhost:9092/instrument-storage/swagger-ui/index.html
 
-DB: jdbc:postgresql://localhost:5432/instrument_storage
+DB port: 8002
 
 # Uwagi:
 Sama aplikacja jest pisana w języku angielskim, kod oraz wszystkie komunikaty błędów, nazwy encji, pól itd., 

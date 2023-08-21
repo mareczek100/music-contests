@@ -38,7 +38,7 @@ public class MusicContestsUserRestController  {
     public static final String CREATE_HEADMASTER = "/create/headmaster";
     public static final String CREATE_TEACHER = "/create/teacher";
     public static final String CREATE_STUDENT = "/create/student";
-    public static final String FIND_MUSIC_SCHOOL_BY_ID = "/school";
+    public static final String FIND_MUSIC_SCHOOL_BY_ID = "/school/id";
     public static final String FIND_MUSIC_SCHOOL_BY_PATRON = "/school/patron";
     public static final String FIND_ALL_MUSIC_SCHOOLS = "/school/all";
     public static final String CREATE_MUSIC_SCHOOL = "/create/school";
