@@ -12,6 +12,7 @@ public interface ControllerRestSupport {
     String FIND_AVAILABLE_CLASS_LEVELS = "/classes";
     String FIND_TEACHER_APPLICATIONS = "/competition/applications";
     String ANNOUNCE_STUDENT_TO_COMPETITION = "/competition/announce";
+    String ANNOUNCE_STUDENT_UPDATE = "/competition/update/{applicationFormId}";
     String ANNOUNCE_STUDENT_CANCEL = "/competition/cancel";
     String CHECK_RESULT = "/results";
 }

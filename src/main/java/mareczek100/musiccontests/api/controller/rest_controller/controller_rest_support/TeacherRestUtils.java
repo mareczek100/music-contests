@@ -106,6 +106,33 @@ public class TeacherRestUtils {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(studentApplicationForm);
     }
+    public ResponseEntity<?> updateStudentApplicationForm(
+            String applicationFormId,
+            String classLevel,
+            String performancePieces
+    )
+    {
+        ApplicationForm existingApplicationForm = applicationFormService.findAllApplicationForms().stream()
+                .filter(applicationForm -> applicationFormId.equals(applicationForm.applicationFormId()))
+                .findAny().orElseThrow(() ->
+                        new RuntimeException("Application form [%s] doesn't exists!".formatted(applicationFormId)));
+
+        if (!OffsetDateTime.now().isBefore(existingApplicationForm.competition().applicationDeadline())){
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(
+                    HttpStatus.REQUEST_TIMEOUT, "Too late! It is after announce deadline, " +
+                            "You can't update Your student application to competition [%s]."
+                                    .formatted(existingApplicationForm.competition().name())
+            )).build();
+        }
+
+        applicationFormService.insertApplicationForm(
+                existingApplicationForm
+                        .withClassLevel(ClassLevel.valueOf(classLevel))
+                        .withPerformancePieces(performancePieces)
+        );
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
 
     public ApplicationFormsDto findTeacherApplicationsToCompetition(

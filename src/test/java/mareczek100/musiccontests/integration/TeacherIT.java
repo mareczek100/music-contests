@@ -248,6 +248,32 @@ public class TeacherIT extends RestAssuredITConfig
         Assertions.assertThat(applicationFormDto.classLevel().name()).isEqualTo(classLevel);
         Assertions.assertThat(applicationFormDto.performancePieces()).isEqualTo(performancePieces);
     }
+    @Test
+    void thatUpdateAnnounceStudentToCompetitionWithNewPerformancePiecesWorksCorrectly() {
+        //given
+        String teacherEmail = "nauczyciel1@mejl.com";
+        Teacher teacherHeadmasterThatHasStudents = teacherService.findTeacherByEmail(teacherEmail);
+        CompetitionWithLocationDto competition
+                = findAllAvailableCompetitions().competitionDtoList().stream().findAny().orElseThrow();
+        String competitionId = competition.competitionId();
+        StudentDto studentDto
+                = findAllTeacherStudents(teacherEmail).StudentDtoList().stream().findAny().orElseThrow();
+        String studentId = studentDto.studentId();
+        String classLevel = findAllClassLevels().classLevelList().stream().findAny().orElseThrow().name();
+        String performancePieces = "some test performance pieces";
+        ApplicationFormDto existingApplicationFormDto = announceStudentToCompetition(
+                teacherHeadmasterThatHasStudents.email(), studentId, competitionId, classLevel, performancePieces);
+
+        String newClassLevel = findAllClassLevels().classLevelList().stream().findAny().orElseThrow().name();
+        String newPerformancePieces = "some updated performance pieces";
+
+        //when
+        Response response = updateStudentApplicationForm(
+                existingApplicationFormDto.applicationFormId(), newClassLevel, newPerformancePieces);
+
+        //then
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
 
     @Test
     void thatFindTeacherApplicationsToCompetitionWorksCorrectly() {

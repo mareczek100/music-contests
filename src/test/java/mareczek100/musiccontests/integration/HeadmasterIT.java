@@ -26,7 +26,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static mareczek100.musiccontests.api.dto.CompetitionWithLocationDto.DATE_TIME_FORMAT;
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class HeadmasterIT extends RestAssuredITConfig
@@ -124,13 +127,17 @@ public class HeadmasterIT extends RestAssuredITConfig
         competitionParameters.put("competitionSecondaryDegree",
                 competitionToSaveDto.competitionSecondaryDegree());
         competitionParameters.put("competitionBeginning",
-                competitionToSaveDto.competitionBeginning().toString());
+                competitionToSaveDto.competitionBeginning().format(
+                        DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         competitionParameters.put("competitionEnd",
-                competitionToSaveDto.competitionEnd().toString());
+                competitionToSaveDto.competitionEnd().format(
+                        DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         competitionParameters.put("competitionResultAnnouncement",
-                competitionToSaveDto.competitionResultAnnouncement().toString());
+                competitionToSaveDto.competitionResultAnnouncement().format(
+                        DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         competitionParameters.put("competitionApplicationDeadline",
-                competitionToSaveDto.competitionApplicationDeadline().toString());
+                competitionToSaveDto.competitionApplicationDeadline().format(
+                        DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         competitionParameters.put("competitionRequirementsDescription",
                 competitionToSaveDto.competitionRequirementsDescription());
 
@@ -159,6 +166,44 @@ public class HeadmasterIT extends RestAssuredITConfig
         //then
         Assertions.assertThat(competitionToSaveDto).usingRecursiveComparison()
                 .ignoringFields("competitionId").isEqualTo(competitionAtOtherLocation);
+    }
+    @Test
+    void thatUpdateExistingCompetitionToNewOneWorksCorrectly() {
+        //given
+        CompetitionWithLocationDto existingCompetition
+                = findAllAvailableCompetitions().competitionDtoList().stream().findAny().orElseThrow();
+        Headmaster headmaster = headmasterService.findAllHeadmasters().stream().findAny().orElseThrow();
+        String organizerEmail = headmaster.email();
+        CompetitionWithLocationRestDto newCompetitionToSaveDto = CompetitionDtoTestData.competitionToUpdateDto();
+
+        CompetitionWithLocationDto competitionToUpdateDto = CompetitionWithLocationDto.builder()
+                .competitionId(existingCompetition.competitionId())
+                .competitionName(newCompetitionToSaveDto.competitionName())
+                .competitionInstrument(newCompetitionToSaveDto.competitionInstrument())
+                .competitionOnline(newCompetitionToSaveDto.competitionOnline())
+                .competitionPrimaryDegree(newCompetitionToSaveDto.competitionPrimaryDegree())
+                .competitionSecondaryDegree(newCompetitionToSaveDto.competitionSecondaryDegree())
+                .competitionBeginning(newCompetitionToSaveDto.competitionBeginning())
+                .competitionEnd(newCompetitionToSaveDto.competitionEnd())
+                .competitionResultAnnouncement(newCompetitionToSaveDto.competitionResultAnnouncement())
+                .competitionApplicationDeadline(newCompetitionToSaveDto.competitionApplicationDeadline())
+                .competitionRequirementsDescription(newCompetitionToSaveDto.competitionRequirementsDescription())
+                .competitionLocationName(newCompetitionToSaveDto.competitionLocationName())
+                .addressCountry(newCompetitionToSaveDto.addressCountry())
+                .addressCity(newCompetitionToSaveDto.addressCity())
+                .addressPostalCode(newCompetitionToSaveDto.addressPostalCode())
+                .addressStreet(newCompetitionToSaveDto.addressStreet())
+                .addressBuildingNumber(newCompetitionToSaveDto.addressBuildingNumber())
+                .addressAdditionalInfo(newCompetitionToSaveDto.addressAdditionalInfo())
+                .build();
+
+        //when
+        CompetitionWithLocationDto updatedCompetitionWithNewLocation
+                = createCompetitionAtOtherLocation(competitionToUpdateDto, organizerEmail);
+
+        //then
+        Assertions.assertThat(newCompetitionToSaveDto).usingRecursiveComparison()
+                .ignoringFields("competitionId").isEqualTo(updatedCompetitionWithNewLocation);
     }
 
     @Test
@@ -557,6 +602,33 @@ public class HeadmasterIT extends RestAssuredITConfig
     }
 
     @Test
+    void thatUpdateAnnounceStudentToCompetitionWithNewPerformancePiecesWorksCorrectly() {
+        //given
+        String headmasterEmail = "dyrektor3@mejl.com";
+        Headmaster headmasterThatHasStudents = headmasterService.findHeadmasterByEmail(headmasterEmail);
+        CompetitionWithLocationDto competition
+                = findAllAvailableCompetitions().competitionDtoList().stream().findAny().orElseThrow();
+        String competitionId = competition.competitionId();
+        StudentDto studentDto
+                = findAllTeacherStudents(headmasterEmail).StudentDtoList().stream().findAny().orElseThrow();
+        String studentId = studentDto.studentId();
+        String classLevel = findAllClassLevels().classLevelList().stream().findAny().orElseThrow().name();
+        String performancePieces = "some test performance pieces";
+        ApplicationFormDto existingApplicationFormDto = announceStudentToCompetition(
+                headmasterThatHasStudents.email(), studentId, competitionId, classLevel, performancePieces);
+
+        String newClassLevel = findAllClassLevels().classLevelList().stream().findAny().orElseThrow().name();
+        String newPerformancePieces = "some updated performance pieces";
+
+        //when
+        Response response = updateStudentApplicationForm(
+                existingApplicationFormDto.applicationFormId(), newClassLevel, newPerformancePieces);
+
+        //then
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
     void thatAnnounceStudentToCompetitionCancelWorksCorrectly() {
         //given
         String headmasterEmail = "dyrektor3@mejl.com";
@@ -599,7 +671,7 @@ public class HeadmasterIT extends RestAssuredITConfig
         announceStudentToCompetition(
                 headmasterThatHasStudents.email(), studentId1, competitionId, classLevel, performancePieces);
 
-        String problemDetailMessage = "Sorry, student [%s] [%s] isn't announced to competition [%s]!"
+        String exceptionMessage = "Sorry, student [%s] [%s] isn't announced to competition [%s]!"
                 .formatted(studentDto2.name(), studentDto2.surname(), competitionDto.competitionName());
 
         //when
@@ -608,7 +680,7 @@ public class HeadmasterIT extends RestAssuredITConfig
         );
 
         //then
-        Assertions.assertThat(response.asString()).contains(problemDetailMessage);
+        Assertions.assertThat(response.asString()).contains(exceptionMessage);
     }
 
     @Test

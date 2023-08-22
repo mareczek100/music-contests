@@ -225,12 +225,12 @@ public interface HeadmasterRestControllerITSupport {
     }
 
     default StudentsDto findAllTeacherStudents(
-            String teacherEmail
+            String headmasterEmail
     )
     {
         return requestSpecification()
                 .given()
-                .param("teacherEmail", teacherEmail)
+                .param("headmasterEmail", headmasterEmail)
                 .when()
                 .get(HEADMASTER_REST_MAIN_PAGE + FIND_ALL_TEACHER_STUDENTS)
                 .then()
@@ -240,12 +240,12 @@ public interface HeadmasterRestControllerITSupport {
                 .as(StudentsDto.class);
     }
     default Response findAllTeacherStudentsResponseMessageIfNoStudents(
-            String teacherEmail
+            String headmasterEmail
     )
     {
         return requestSpecification()
                 .given()
-                .param("teacherEmail", teacherEmail)
+                .param("headmasterEmail", headmasterEmail)
                 .when()
                 .get(HEADMASTER_REST_MAIN_PAGE + FIND_ALL_TEACHER_STUDENTS)
                 .then()
@@ -296,7 +296,7 @@ public interface HeadmasterRestControllerITSupport {
     }
 
     default ApplicationFormDto announceStudentToCompetition(
-            String teacherEmail,
+            String headmasterEmail,
             String studentId,
             String competitionId,
             String classLevel,
@@ -306,7 +306,7 @@ public interface HeadmasterRestControllerITSupport {
         return requestSpecification()
                 .given()
                 .queryParams(Map.of(
-                        "teacherEmail", teacherEmail,
+                        "headmasterEmail", headmasterEmail,
                         "studentId", studentId,
                         "competitionId", competitionId,
                         "classLevel", classLevel,
@@ -321,7 +321,7 @@ public interface HeadmasterRestControllerITSupport {
                 .as(ApplicationFormDto.class);
     }
     default Response announceStudentToCompetitionResponseMessageIfItIsAfterDeadline(
-            String teacherEmail,
+            String headmasterEmail,
             String studentId,
             String competitionId,
             String classLevel,
@@ -331,7 +331,7 @@ public interface HeadmasterRestControllerITSupport {
         return requestSpecification()
                 .given()
                 .queryParams(Map.of(
-                        "teacherEmail", teacherEmail,
+                        "headmasterEmail", headmasterEmail,
                         "studentId", studentId,
                         "competitionId", competitionId,
                         "classLevel", classLevel,
@@ -345,16 +345,36 @@ public interface HeadmasterRestControllerITSupport {
                 .extract()
                 .response();
     }
+    default Response updateStudentApplicationForm(
+            String applicationFormId,
+            String classLevel,
+            String performancePieces
+    )
+    {
+        return requestSpecification()
+                .given()
+                .queryParams(Map.of(
+                        "classLevel", classLevel,
+                        "performancePieces", performancePieces
+                ))
+                .when()
+                .patch(HEADMASTER_REST_MAIN_PAGE + ANNOUNCE_STUDENT_UPDATE, applicationFormId)
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value())
+                .and()
+                .extract()
+                .response();
+    }
 
     default ApplicationFormsDto findTeacherApplicationsToCompetition(
-            String teacherEmail,
+            String headmasterEmail,
             String competitionId
     )
     {
         return requestSpecification()
                 .given()
                 .params(Map.of(
-                        "teacherEmail", teacherEmail,
+                        "headmasterEmail", headmasterEmail,
                         "competitionId", competitionId
                 ))
                 .when()
@@ -384,7 +404,6 @@ public interface HeadmasterRestControllerITSupport {
                 .as(ApplicationFormsDto.class);
 
     }
-
     default Response announceStudentToCompetitionCancel(
             String competitionId,
             String studentId
@@ -501,13 +520,13 @@ public interface HeadmasterRestControllerITSupport {
 
     default CompetitionResultsDto checkTeacherStudentsResults(
             String competitionId,
-            String teacherEmail
+            String headmasterEmail
     )
     {
         return requestSpecification()
                 .given()
                 .param("competitionId", competitionId)
-                .param("teacherEmail", teacherEmail)
+                .param("headmasterEmail", headmasterEmail)
                 .when()
                 .get(HEADMASTER_REST_MAIN_PAGE + CHECK_RESULT)
                 .then()

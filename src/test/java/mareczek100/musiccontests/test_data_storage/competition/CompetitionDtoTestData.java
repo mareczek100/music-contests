@@ -2,6 +2,7 @@ package mareczek100.musiccontests.test_data_storage.competition;
 
 import mareczek100.musiccontests.api.dto.CompetitionWithLocationDto;
 import mareczek100.musiccontests.api.dto.HeadmasterDto;
+import mareczek100.musiccontests.api.dto.dto_rest_support.CompetitionWithLocationRestDto;
 import mareczek100.musiccontests.api.dto.dto_rest_support.CompetitionsDto;
 import mareczek100.musiccontests.test_data_storage.headmaster.HeadmasterDtoTestData;
 
@@ -201,6 +202,29 @@ public class CompetitionDtoTestData {
                 .addressStreet("Krakowska")
                 .addressBuildingNumber("20/20")
                 .addressAdditionalInfo("Wejście od tyłu budynku")
+                .build();
+    }
+    public static CompetitionWithLocationRestDto competitionToUpdateDto() {
+        return CompetitionWithLocationRestDto.builder()
+                .competitionId(null)
+                .competitionName("updatedName1")
+                .competitionInstrument("updatedCompetitionInstrument")
+                .competitionOnline(false)
+                .competitionPrimaryDegree(true)
+                .competitionSecondaryDegree(false)
+                .competitionBeginning(beginDateTime())
+                .competitionEnd(endDateTime())
+                .competitionResultAnnouncement(resultsDateTime())
+                .competitionApplicationDeadline(deadlineDateTime())
+                .competitionRequirementsDescription("Updated competition requirements description.")
+                .competitionFinished(false)
+                .competitionLocationName("Updated location name")
+                .addressCountry("Polska")
+                .addressCity("Warszawa")
+                .addressPostalCode("00-000")
+                .addressStreet("Updated street")
+                .addressBuildingNumber("20/20")
+                .addressAdditionalInfo("")
                 .build();
     }
 

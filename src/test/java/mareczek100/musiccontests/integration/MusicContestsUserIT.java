@@ -243,7 +243,7 @@ public class MusicContestsUserIT extends RestAssuredITConfig implements MusicCon
     void thatDeleteMusicContestsUserAccountThrowsExceptionIfBadFormatEmailProvided() {
         //given
         String badInputEmail = "bad email input";
-        String exceptionMessage = "Error occurred: bad input.";
+        String exceptionMessage = "must be a well-formed email address";
 
         //when
         Response response = deleteMusicContestsUserThrowsExceptionIfBadInput(badInputEmail);

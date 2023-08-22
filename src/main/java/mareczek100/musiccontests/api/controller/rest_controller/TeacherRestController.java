@@ -126,6 +126,17 @@ public class TeacherRestController implements ControllerRestSupport {
                 teacherEmail, studentId, competitionId, classLevel, performancePieces);
     }
 
+    @PatchMapping(ANNOUNCE_STUDENT_UPDATE)
+    @Operation(summary = "Update student's application form, change class level and pieces to perform.")
+    public ResponseEntity<?> updateStudentApplicationFormPerformancePieces(
+            @PathVariable("applicationFormId") String applicationFormId,
+            @RequestParam("classLevel") String classLevel,
+            @RequestParam("performancePieces") String performancePieces
+    )
+    {
+        return teacherRestUtils.updateStudentApplicationForm(
+                applicationFormId, classLevel, performancePieces);
+    }
 
     @GetMapping(FIND_TEACHER_APPLICATIONS)
     @Operation(summary = "Find list of teacher's applications to competition.")

@@ -169,7 +169,7 @@ public class StudentIT extends RestAssuredITConfig
         competitionParameters.put("competitionCity", "competitionCity");
         competitionParameters.put("studentPesel", badPesel);
 
-        String errorMessage = "Error occurred: bad input.";
+        String errorMessage = "studentPesel: must match \\\"^\\\\d{11}$\\\"";
 
         //when
         Response response
@@ -202,7 +202,7 @@ public class StudentIT extends RestAssuredITConfig
         CompetitionWithLocationDto competition
                 = findAllAvailableCompetitions().competitionDtoList().stream().findAny().orElseThrow();
 
-        String errorMessage = "Error occurred: bad input.";
+        String errorMessage = "studentPesel: must match \\\"^\\\\d{11}$\\\"";
 
         //when
         Response response

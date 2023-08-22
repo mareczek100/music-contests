@@ -42,10 +42,12 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
 import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.*;
+import static mareczek100.musiccontests.api.dto.CompetitionWithLocationDto.DATE_TIME_FORMAT;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 @ActiveProfiles("test")
 @AutoConfigureMockMvc(addFilters = false)
@@ -125,10 +127,14 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
         multiValueMap.add("competitionOnline", competitionToSaveDto.competitionOnline().toString());
         multiValueMap.add("competitionPrimaryDegree", competitionToSaveDto.competitionPrimaryDegree().toString());
         multiValueMap.add("competitionSecondaryDegree", competitionToSaveDto.competitionSecondaryDegree().toString());
-        multiValueMap.add("competitionBeginning", competitionToSaveDto.competitionBeginning().toString());
-        multiValueMap.add("competitionEnd", competitionToSaveDto.competitionEnd().toString());
-        multiValueMap.add("competitionResultAnnouncement", competitionToSaveDto.competitionResultAnnouncement().toString());
-        multiValueMap.add("competitionApplicationDeadline", competitionToSaveDto.competitionApplicationDeadline().toString());
+        multiValueMap.add("competitionBeginning", competitionToSaveDto.competitionBeginning()
+                .format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+        multiValueMap.add("competitionEnd", competitionToSaveDto.competitionEnd()
+                .format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+        multiValueMap.add("competitionResultAnnouncement", competitionToSaveDto.competitionResultAnnouncement()
+                .format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
+        multiValueMap.add("competitionApplicationDeadline", competitionToSaveDto.competitionApplicationDeadline()
+                .format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         multiValueMap.add("competitionRequirementsDescription", competitionToSaveDto.competitionRequirementsDescription());
 
         //when
@@ -202,6 +208,68 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
                         Matchers.is(competitionToSaveDto.competitionPrimaryDegree())))
                 .andExpect(jsonPath("$.competitionLocationName",
                         Matchers.is(competitionToSaveDto.competitionLocationName())))
+                .andReturn();
+
+        mvcResult.getResponse().setCharacterEncoding("UTF-8");
+
+        Assertions.assertEquals(mvcResult.getResponse().getContentAsString(), competitionSavedDtoJson);
+    }
+    @Test
+    void updateExistingCompetition() throws Exception {
+        //given
+        Headmaster newCompetitionOrganizer = HeadmasterDomainTestData.headmasterSaved1();
+        String organizerEmail = newCompetitionOrganizer.email();
+        CompetitionWithLocationRestDto newCompetitionToSaveDto = CompetitionDtoTestData.competitionToUpdateDto();
+        CompetitionWithLocationDto competitionSavedDto
+                = CompetitionDtoTestData.competitionAtOtherLocationSavedDto1();
+        Competition competitionToSave = CompetitionDomainTestData.competitionAtOtherLocationToSave1();
+        Competition competitionSaved = CompetitionDomainTestData.competitionAtOtherLocationSaved1();
+        String existingCompetitionId = competitionSaved.competitionId();
+
+        CompetitionWithLocationDto updatedCompetitionDto = CompetitionWithLocationDto.builder()
+                .competitionName(newCompetitionToSaveDto.competitionName())
+                .competitionPrimaryDegree(newCompetitionToSaveDto.competitionPrimaryDegree())
+                .competitionLocationName(newCompetitionToSaveDto.competitionLocationName())
+                .build();
+
+        Competition updatedCompetition = competitionSaved
+                .withName(updatedCompetitionDto.competitionName())
+                .withPrimaryDegree(updatedCompetitionDto.competitionPrimaryDegree())
+                .withCompetitionLocation(CompetitionLocation.builder()
+                        .name(updatedCompetitionDto.competitionName())
+                        .build());
+
+        //when
+        Mockito.when(competitionService.findCompetitionById(existingCompetitionId))
+                .thenReturn(competitionSaved);
+        Mockito.when(headmasterService.findHeadmasterByEmail(organizerEmail))
+                .thenReturn(newCompetitionOrganizer);
+        Mockito.when(competitionDtoMapper.mapFromDtoToDomain(
+                        Mockito.any(CompetitionWithLocationDto.class)))
+                .thenReturn(competitionToSave);
+        Mockito.when(competitionService.insertCompetition(
+                        competitionToSave.withHeadmaster(newCompetitionOrganizer)))
+                .thenReturn(updatedCompetition);
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(updatedCompetition))
+                .thenReturn(updatedCompetitionDto);
+        String competitionToSaveDtoJson = objectMapper.writeValueAsString(newCompetitionToSaveDto);
+        String competitionSavedDtoJson = objectMapper.writeValueAsString(updatedCompetitionDto);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.put(
+                                HEADMASTER_REST_MAIN_PAGE + UPDATE_COMPETITION_WITH_NEW_LOCATION,
+                                existingCompetitionId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(competitionToSaveDtoJson)
+                        .param("headmasterOrganizerEmail", organizerEmail))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.competitionName",
+                        Matchers.is(newCompetitionToSaveDto.competitionName())))
+                .andExpect(jsonPath("$.competitionPrimaryDegree",
+                        Matchers.is(newCompetitionToSaveDto.competitionPrimaryDegree())))
+                .andExpect(jsonPath("$.competitionLocationName",
+                        Matchers.is(newCompetitionToSaveDto.competitionLocationName())))
                 .andReturn();
 
         mvcResult.getResponse().setCharacterEncoding("UTF-8");
@@ -358,7 +426,6 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
     }
     @Test
     void findAllCompetitionStudentsEmptyListResponseNotFoundStatus() throws Exception {
-
         //given
         String competitionId = "9d7af18c-f2c1-40ea-a8b8-f8f88bd65dfe";
 
@@ -421,7 +488,6 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
 
         org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
                 .isEqualTo(studentsDtoListJson);
-
     }
 
 
@@ -549,8 +615,6 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
         org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
                 .isEqualTo(resultListDtoSavedJson);
     }
-
-
 
     @Test
     void checkAllCompetitionResults() throws Exception {

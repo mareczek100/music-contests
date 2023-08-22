@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.*;
 import org.springframework.lang.NonNull;
@@ -15,16 +17,20 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.webjars.NotFoundException;
 
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice(annotations = RestController.class)
 public class ExceptionRestController extends ResponseEntityExceptionHandler {
 
     private static final Map<Class<?>, HttpStatus> EXCEPTION_STATUS = Map.of(
+            RuntimeException.class, HttpStatus.BAD_REQUEST,
             ConstraintViolationException.class, HttpStatus.BAD_REQUEST,
             DataIntegrityViolationException.class, HttpStatus.BAD_REQUEST,
+            DateTimeParseException.class, HttpStatus.BAD_REQUEST,
             EntityNotFoundException.class, HttpStatus.NOT_FOUND,
             NotFoundException.class, HttpStatus.NOT_FOUND
     );
@@ -56,7 +62,10 @@ public class ExceptionRestController extends ResponseEntityExceptionHandler {
         return ResponseEntity
                 .status(httpStatus)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(ErrorId.builder().errorId(errorId).build());
+                .body(ErrorId.builder()
+                        .errorId(errorId)
+                        .errorMessage(ex.getMessage())
+                        .build());
     }
 
     private HttpStatus getHttpStatusFromException(Class<? extends Exception> exceptionClass) {
@@ -64,6 +73,6 @@ public class ExceptionRestController extends ResponseEntityExceptionHandler {
     }
 
     @Builder
-    private record ErrorId(UUID errorId) {
+    private record ErrorId(UUID errorId, String errorMessage) {
     }
 }

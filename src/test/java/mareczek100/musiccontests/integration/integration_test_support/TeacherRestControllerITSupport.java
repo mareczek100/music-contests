@@ -181,6 +181,27 @@ public interface TeacherRestControllerITSupport {
                 .as(ApplicationFormDto.class);
     }
 
+    default Response updateStudentApplicationForm(
+            String applicationFormId,
+            String classLevel,
+            String performancePieces
+    )
+    {
+        return requestSpecification()
+                .given()
+                .queryParams(Map.of(
+                        "classLevel", classLevel,
+                        "performancePieces", performancePieces
+                ))
+                .when()
+                .patch(TEACHER_REST_MAIN_PAGE + ANNOUNCE_STUDENT_UPDATE, applicationFormId)
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value())
+                .and()
+                .extract()
+                .response();
+    }
+
     default ApplicationFormsDto findTeacherApplicationsToCompetition(
             String teacherEmail,
             String competitionId

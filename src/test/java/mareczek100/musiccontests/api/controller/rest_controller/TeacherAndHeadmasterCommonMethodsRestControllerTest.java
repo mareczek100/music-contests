@@ -50,7 +50,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import static mareczek100.musiccontests.api.controller.rest_controller.TeacherRestController.TEACHER_REST_MAIN_PAGE;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -381,8 +380,8 @@ class TeacherAndHeadmasterCommonMethodsRestControllerTest implements ControllerR
                 .andExpect(status().isBadRequest())
                 .andReturn();
 
-        org.assertj.core.api.Assertions.assertThat(
-                Objects.requireNonNull(mvcResult.getModelAndView()).toString()).contains(errorMessage);
+        org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
+                .contains(errorMessage);
     }
     @Test
     void announceStudentToCompetitionCancelResponseProblemDetailMessageIfCompetitionStartsInLessThan2Hours() throws Exception {
