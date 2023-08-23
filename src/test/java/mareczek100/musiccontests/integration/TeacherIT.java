@@ -195,6 +195,26 @@ public class TeacherIT extends RestAssuredITConfig
     }
 
     @Test
+    void thatFindAllFinishedCompetitionsWorksCorrectly() {
+        //given
+        CompetitionWithLocationDto competitionDto
+                = findAllAvailableCompetitions().competitionDtoList().stream().findAny().orElseThrow();
+        Competition competitionToUpdate = competitionDtoMapper.mapFromDtoToDomain(competitionDto);
+        CompetitionLocation competitionLocation = competitionLocationService.insertCompetitionLocation(
+                competitionToUpdate.competitionLocation());
+        Competition competitionUpdated = competitionService.updateCompetitionAfterResults(
+                competitionToUpdate.withCompetitionLocation(competitionLocation));
+        CompetitionWithLocationDto competitionFinished = competitionDtoMapper.mapFromDomainToDto(competitionUpdated);
+
+        //when
+        CompetitionsDto finishedCompetitions = findAllFinishedCompetitions();
+
+        //then
+        Assertions.assertThatCollection(finishedCompetitions.competitionDtoList()).isNotEmpty();
+        Assertions.assertThat(finishedCompetitions.competitionDtoList()).contains(competitionFinished);
+    }
+
+    @Test
     void thatFindAllTeacherStudentsWorksCorrectly() {
         //given
         String teacher = "nauczyciel1@mejl.com";

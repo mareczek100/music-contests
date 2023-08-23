@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -87,7 +86,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
     }
 
     @PostMapping(CREATE_COMPETITION_AT_SCHOOL)
-    @Operation(summary = "Create new competition at headmaster's music school. Date format: yyyy-MM-dd HH:mm")
+    @Operation(summary = "Create new competition at headmaster's music school. Date-time format: yyyy-MM-dd HH:mm")
     public ResponseEntity<CompetitionWithLocationDto> createCompetitionAtSchool(
             @RequestParam("headmasterOrganizerEmail") @Email String headmasterOrganizerEmail,
             @RequestParam("competitionName") String competitionName,
@@ -133,12 +132,32 @@ public class HeadmasterRestController implements ControllerRestSupport {
     @PostMapping(CREATE_COMPETITION_AT_OTHER_LOCATION)
     @Operation(summary = "Create new competition at other location.")
     public ResponseEntity<CompetitionWithLocationDto> createCompetitionAtOtherLocation(
-            @RequestBody @Valid CompetitionWithLocationDto competitionDto,
+            @RequestBody @Valid CompetitionWithLocationRestDto competitionDto,
             @RequestParam("headmasterOrganizerEmail") @Email String headmasterOrganizerEmail
     )
     {
+        CompetitionWithLocationDto competitionAtOtherLocationDto = CompetitionWithLocationDto.builder()
+                .competitionName(competitionDto.competitionName())
+                .competitionInstrument(competitionDto.competitionInstrument())
+                .competitionOnline(competitionDto.competitionOnline())
+                .competitionPrimaryDegree(competitionDto.competitionPrimaryDegree())
+                .competitionSecondaryDegree(competitionDto.competitionSecondaryDegree())
+                .competitionBeginning(competitionDto.competitionBeginning())
+                .competitionEnd(competitionDto.competitionEnd())
+                .competitionResultAnnouncement(competitionDto.competitionResultAnnouncement())
+                .competitionApplicationDeadline(competitionDto.competitionApplicationDeadline())
+                .competitionRequirementsDescription(competitionDto.competitionRequirementsDescription())
+                .competitionLocationName(competitionDto.competitionLocationName())
+                .addressCountry(competitionDto.addressCountry())
+                .addressCity(competitionDto.addressCity())
+                .addressPostalCode(competitionDto.addressPostalCode())
+                .addressStreet(competitionDto.addressStreet())
+                .addressBuildingNumber(competitionDto.addressBuildingNumber())
+                .addressAdditionalInfo(competitionDto.addressAdditionalInfo())
+                .build();
+
         CompetitionWithLocationDto competitionAtOtherPlace
-                = createCompetitionAtOtherPlace(competitionDto, headmasterOrganizerEmail);
+                = createCompetitionAtOtherPlace(competitionAtOtherLocationDto, headmasterOrganizerEmail);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(competitionAtOtherPlace);
 
@@ -222,15 +241,22 @@ public class HeadmasterRestController implements ControllerRestSupport {
     }
 
     @GetMapping(FIND_FINISHED_COMPETITIONS_BY_FILTERS)
-    @Operation(summary = "Find list of finished music competitions by filters.")
+    @Operation(summary = "Find list of finished music competitions by filters. Date format: yyyy-MM-dd.")
     public CompetitionsDto findFinishedCompetitionsByFilters(
-            @RequestParam("competitionDateFrom") @DateTimeFormat LocalDate competitionDateFrom,
-            @RequestParam("competitionDateTo") @DateTimeFormat LocalDate competitionDateTo,
+            @RequestParam("competitionDateFrom") @DateTimeFormat String competitionDateFrom,
+            @RequestParam("competitionDateTo") @DateTimeFormat String competitionDateTo,
             @RequestParam("competitionCity") String competitionCity
     )
     {
         return teacherRestUtils.findFinishedCompetitionsByFilters(
                 competitionDateFrom, competitionDateTo, competitionCity);
+    }
+
+    @GetMapping(FIND_FINISHED_COMPETITIONS)
+    @Operation(summary = "Find list of all finished music competitions.")
+    public CompetitionsDto findFinishedCompetitionsByFilters()
+    {
+        return teacherRestUtils.findAllFinishedCompetitions();
     }
 
     @PostMapping(CREATE_TEACHER_RIGHTS)
@@ -436,7 +462,7 @@ public class HeadmasterRestController implements ControllerRestSupport {
 
 
     @GetMapping(CHECK_RESULT)
-    @Operation(summary = "Check teacher's students competition results.")
+    @Operation(summary = "Check headmaster's students competition results.")
     public CompetitionResultsDto checkTeacherStudentsResults(
             @RequestParam("competitionId") String competitionId,
             @RequestParam("headmasterEmail") @Email String headmasterTeacherEmail
@@ -457,6 +483,9 @@ public class HeadmasterRestController implements ControllerRestSupport {
                 .map(competitionResultDtoMapper::mapFromDomainToDto)
                 .toList();
 
+        if (resultDTOs.isEmpty()) {
+            throw new RuntimeException("No results!");
+        }
 
         return CompetitionResultsDto.builder().competitionResultDtoList(resultDTOs).build();
     }

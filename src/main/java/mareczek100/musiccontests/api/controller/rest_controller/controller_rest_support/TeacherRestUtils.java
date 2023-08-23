@@ -26,6 +26,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class TeacherRestUtils {
@@ -85,7 +86,7 @@ public class TeacherRestUtils {
         Teacher teacher = teacherService.findTeacherByEmail(teacherEmail);
         Student student = studentService.findStudentById(studentId);
 
-        if (!OffsetDateTime.now().isBefore(competition.applicationDeadline())){
+        if (!OffsetDateTime.now().isBefore(competition.applicationDeadline())) {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(
                     HttpStatus.REQUEST_TIMEOUT, "Too late! It is after announce deadline, " +
                             "You can't no longer put Your student to competition [%s].".formatted(competition.name())
@@ -106,6 +107,7 @@ public class TeacherRestUtils {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(studentApplicationForm);
     }
+
     public ResponseEntity<?> updateStudentApplicationForm(
             String applicationFormId,
             String classLevel,
@@ -117,7 +119,7 @@ public class TeacherRestUtils {
                 .findAny().orElseThrow(() ->
                         new RuntimeException("Application form [%s] doesn't exists!".formatted(applicationFormId)));
 
-        if (!OffsetDateTime.now().isBefore(existingApplicationForm.competition().applicationDeadline())){
+        if (!OffsetDateTime.now().isBefore(existingApplicationForm.competition().applicationDeadline())) {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(
                     HttpStatus.REQUEST_TIMEOUT, "Too late! It is after announce deadline, " +
                             "You can't update Your student application to competition [%s]."
@@ -156,11 +158,13 @@ public class TeacherRestUtils {
     }
 
     public CompetitionsDto findFinishedCompetitionsByFilters(
-            LocalDate competitionDateFrom,
-            LocalDate competitionDateTo,
+            String dateFrom,
+            String dateTo,
             String competitionCity
     )
     {
+        LocalDate competitionDateFrom = LocalDate.parse(dateFrom);
+        LocalDate competitionDateTo = LocalDate.parse(dateTo);
 
         List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
                 .filter(Competition::finished)
@@ -170,6 +174,23 @@ public class TeacherRestUtils {
                 .map(competitionDtoMapper::mapFromDomainToDto)
                 .toList();
 
+        if (competitionDTOs.isEmpty()) {
+            throw new RuntimeException("No finished competitions by these filters!");
+        }
+
+
+        return CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
+    }
+    public CompetitionsDto findAllFinishedCompetitions()
+    {
+        List<CompetitionWithLocationDto> competitionDTOs = competitionService.findAllCompetitions().stream()
+                .filter(Competition::finished)
+                .map(competitionDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        if (competitionDTOs.isEmpty()) {
+            throw new RuntimeException("No finished competitions by these filters!");
+        }
 
         return CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
     }
@@ -222,6 +243,9 @@ public class TeacherRestUtils {
                 .map(competitionResultDtoMapper::mapFromDomainToDto)
                 .toList();
 
+        if (resultDTOs.isEmpty()) {
+            throw new RuntimeException("No results!");
+        }
 
         return CompetitionResultsDto.builder().competitionResultDtoList(resultDTOs).build();
     }

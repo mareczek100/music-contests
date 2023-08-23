@@ -147,7 +147,7 @@ class TeacherAndHeadmasterCommonMethodsRestControllerTest implements ControllerR
         //when
         Mockito.when(competitionService.findAllCompetitions()).thenReturn(competitionList);
         Mockito.when(teacherRestUtils.findFinishedCompetitionsByFilters(
-                Mockito.any(LocalDate.class), Mockito.any(LocalDate.class),
+                Mockito.anyString(), Mockito.anyString(),
                         Mockito.anyString())).thenReturn(competitionsDto);
         Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
                 .thenReturn(competitionDtoList.get(0));
@@ -164,6 +164,43 @@ class TeacherAndHeadmasterCommonMethodsRestControllerTest implements ControllerR
                         .param("competitionDateFrom", competitionDateFrom.toString())
                         .param("competitionDateTo", competitionDateTo.toString())
                         .param("competitionCity", competitionCity)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.competitionDtoList[0].competitionFinished",
+                        Matchers.is(competitionFinishedDto.competitionFinished())))
+                .andReturn();
+
+        mvcResult.getResponse().setCharacterEncoding("UTF-8");
+
+        org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
+                .isEqualTo(competitionsDtoJson);
+    }
+    @Test
+    void findAllFinishedCompetitions() throws Exception {
+        //given
+        CompetitionWithLocationDto competitionFinishedDto
+                = CompetitionDtoTestData.competitionAtOrganizerSchoolSavedDto1().withCompetitionFinished(true);
+        List<Competition> competitionList = CompetitionDomainTestData.competitionList().stream()
+                .map(competition -> competition.withFinished(true)).toList();
+        List<CompetitionWithLocationDto> competitionDtoList = CompetitionDtoTestData.competitionDtoList().stream()
+                .map(competitionDto -> competitionDto.withCompetitionFinished(true)).toList();
+        CompetitionsDto competitionsDto = CompetitionsDto.builder().competitionDtoList(competitionDtoList).build();
+
+        //when
+        Mockito.when(competitionService.findAllCompetitions()).thenReturn(competitionList);
+        Mockito.when(teacherRestUtils.findAllFinishedCompetitions()).thenReturn(competitionsDto);
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
+                .thenReturn(competitionDtoList.get(0));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(1)))
+                .thenReturn(competitionDtoList.get(1));
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(2)))
+                .thenReturn(competitionDtoList.get(2));
+
+        String competitionsDtoJson = objectMapper.writeValueAsString(competitionsDto);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
+                                TEACHER_REST_MAIN_PAGE + FIND_FINISHED_COMPETITIONS)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.competitionDtoList[0].competitionFinished",

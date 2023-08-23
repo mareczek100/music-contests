@@ -124,6 +124,18 @@ public interface TeacherRestControllerITSupport {
                 .extract()
                 .as(CompetitionsDto.class);
     }
+
+    default CompetitionsDto findAllFinishedCompetitions()
+    {
+        return requestSpecification()
+                .when()
+                .get(TEACHER_REST_MAIN_PAGE + FIND_FINISHED_COMPETITIONS)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and()
+                .extract()
+                .as(CompetitionsDto.class);
+    }
     default StudentsDto findAllTeacherStudents(
             String teacherEmail
     )

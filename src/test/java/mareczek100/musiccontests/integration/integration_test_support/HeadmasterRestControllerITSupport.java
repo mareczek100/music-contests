@@ -159,6 +159,17 @@ public interface HeadmasterRestControllerITSupport {
                 .extract()
                 .as(CompetitionsDto.class);
     }
+    default CompetitionsDto findAllFinishedCompetitions()
+    {
+        return requestSpecification()
+                .when()
+                .get(HEADMASTER_REST_MAIN_PAGE + FIND_FINISHED_COMPETITIONS)
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .and()
+                .extract()
+                .as(CompetitionsDto.class);
+    }
 
     default TeacherDto createHeadmasterTeacherRightsCorrectly(
             String headmasterEmail,

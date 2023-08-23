@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-
 import static mareczek100.musiccontests.api.controller.rest_controller.TeacherRestController.TEACHER_REST_MAIN_PAGE;
 
 @Validated
@@ -92,15 +90,22 @@ public class TeacherRestController implements ControllerRestSupport {
     }
 
     @GetMapping(FIND_FINISHED_COMPETITIONS_BY_FILTERS)
-    @Operation(summary = "Find list of finished music competitions by filters.")
+    @Operation(summary = "Find list of finished music competitions by filters. Date format: yyyy-MM-dd.")
     public CompetitionsDto findFinishedCompetitionsByFilters(
-            @RequestParam("competitionDateFrom") @DateTimeFormat LocalDate competitionDateFrom,
-            @RequestParam("competitionDateTo") @DateTimeFormat LocalDate competitionDateTo,
+            @RequestParam("competitionDateFrom") @DateTimeFormat String competitionDateFrom,
+            @RequestParam("competitionDateTo") @DateTimeFormat String competitionDateTo,
             @RequestParam("competitionCity") String competitionCity
     )
     {
         return teacherRestUtils.findFinishedCompetitionsByFilters(
                 competitionDateFrom, competitionDateTo, competitionCity);
+    }
+
+    @GetMapping(FIND_FINISHED_COMPETITIONS)
+    @Operation(summary = "Find list of all finished music competitions.")
+    public CompetitionsDto findFinishedCompetitionsByFilters()
+    {
+        return teacherRestUtils.findAllFinishedCompetitions();
     }
 
     @GetMapping(FIND_ALL_TEACHER_STUDENTS)
