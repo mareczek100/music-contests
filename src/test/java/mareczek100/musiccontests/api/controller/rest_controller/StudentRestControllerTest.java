@@ -37,8 +37,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
-import static mareczek100.musiccontests.api.controller.rest_controller.StudentRestController.FIND_STUDENT_COMPETITIONS;
-import static mareczek100.musiccontests.api.controller.rest_controller.StudentRestController.STUDENT_REST_MAIN_PAGE;
+import static mareczek100.musiccontests.api.controller.rest_controller.StudentRestController.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,10 +97,47 @@ class StudentRestControllerTest implements ControllerRestSupport {
 
         //then
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
-                                STUDENT_REST_MAIN_PAGE + FIND_STUDENT_COMPETITIONS)
+                                STUDENT_REST_MAIN_PAGE + FIND_STUDENT_COMPETITIONS_BY_FILTERS)
                         .param("competitionDateFrom", competitionDateFrom.toString())
                         .param("competitionDateTo", competitionDateTo.toString())
                         .param("competitionCity", competitionCity)
+                        .param("studentPesel", studentPesel)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.competitionDtoList[0].competitionFinished",
+                        Matchers.is(competitionFinishedDto.competitionFinished())))
+                .andReturn();
+
+        mvcResult.getResponse().setCharacterEncoding("UTF-8");
+
+        org.assertj.core.api.Assertions.assertThat(mvcResult.getResponse().getContentAsString())
+                .isEqualTo(competitionsDtoJson);
+    }
+    @Test
+    void findAllFinishedStudentCompetitions() throws Exception {
+        //given
+        String studentPesel = "13333333333";
+        List<CompetitionResult> competitionResultList = CompetitionResultDomainTestData.competitionResultListSaved();
+        CompetitionWithLocationDto competitionFinishedDto
+                = CompetitionDtoTestData.competitionAtOrganizerSchoolSavedDto1().withCompetitionFinished(true);
+        List<Competition> competitionList = CompetitionDomainTestData.competitionList().stream()
+                .map(competition -> competition.withFinished(true))
+                .limit(1L).toList();
+        List<CompetitionWithLocationDto> competitionDtoList = CompetitionDtoTestData.competitionDtoList().stream()
+                .map(competitionDto -> competitionDto.withCompetitionFinished(true))
+                .limit(1L).toList();
+        CompetitionsDto competitionsDto = CompetitionsDto.builder().competitionDtoList(competitionDtoList).build();
+
+        //when
+        Mockito.when(competitionResultService.findAllCompetitionResults()).thenReturn(competitionResultList);
+        Mockito.when(competitionDtoMapper.mapFromDomainToDto(competitionList.get(0)))
+                .thenReturn(competitionDtoList.get(0));
+
+        String competitionsDtoJson = objectMapper.writeValueAsString(competitionsDto);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(
+                                STUDENT_REST_MAIN_PAGE + FIND_STUDENT_COMPETITIONS)
                         .param("studentPesel", studentPesel)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())

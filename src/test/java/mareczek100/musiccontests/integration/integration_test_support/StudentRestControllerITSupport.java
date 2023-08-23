@@ -9,9 +9,14 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
-import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.*;
-import static mareczek100.musiccontests.api.controller.rest_controller.StudentRestController.FIND_STUDENT_COMPETITIONS;
-import static mareczek100.musiccontests.api.controller.rest_controller.StudentRestController.STUDENT_REST_MAIN_PAGE;
+import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.CHECK_RESULT;
+import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.FIND_ALL_CITIES;
+import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.FIND_ALL_COMPETITIONS;
+import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.FIND_ALL_COMPETITIONS_PAGEABLE;
+import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.FIND_ALL_INSTRUMENTS;
+import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.FIND_AVAILABLE_COMPETITIONS_BY_FILTERS;
+import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.FIND_AVAILABLE_COMPETITIONS_BY_INSTRUMENT;
+import static mareczek100.musiccontests.api.controller.rest_controller.StudentRestController.*;
 
 public interface StudentRestControllerITSupport {
 
@@ -109,6 +114,21 @@ public interface StudentRestControllerITSupport {
                 .given()
                 .params(parameters)
                 .when()
+                .get(STUDENT_REST_MAIN_PAGE + FIND_STUDENT_COMPETITIONS_BY_FILTERS)
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .and()
+                .extract()
+                .response();
+    }
+    default Response thatFindAllFinishedStudentCompetitionsResponseMessageIfNoCompetitions(
+            String studentPesel
+    )
+    {
+        return requestSpecification()
+                .given()
+                .param("studentPesel", studentPesel)
+                .when()
                 .get(STUDENT_REST_MAIN_PAGE + FIND_STUDENT_COMPETITIONS)
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value())
@@ -124,7 +144,7 @@ public interface StudentRestControllerITSupport {
                 .given()
                 .params(parameters)
                 .when()
-                .get(STUDENT_REST_MAIN_PAGE + FIND_STUDENT_COMPETITIONS)
+                .get(STUDENT_REST_MAIN_PAGE + FIND_STUDENT_COMPETITIONS_BY_FILTERS)
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .and()

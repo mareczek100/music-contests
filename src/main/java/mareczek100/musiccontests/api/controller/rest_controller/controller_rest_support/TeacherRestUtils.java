@@ -189,7 +189,7 @@ public class TeacherRestUtils {
                 .toList();
 
         if (competitionDTOs.isEmpty()) {
-            throw new RuntimeException("No finished competitions by these filters!");
+            throw new RuntimeException("No finished competitions right now!");
         }
 
         return CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();

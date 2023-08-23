@@ -120,7 +120,6 @@ public class StudentIT extends RestAssuredITConfig
                 .usingRecursiveFieldByFieldElementComparatorOnFields(
                         "competitionInstrument", "competitionOnline", "competitionPrimaryDegree",
                         "competitionSecondaryDegree", "addressCity").contains(competition);
-
     }
     @Test
     void thatFindAllAvailableCompetitionsByInstrumentWorksCorrectly() {
@@ -154,6 +153,20 @@ public class StudentIT extends RestAssuredITConfig
         //when
         Response response
                 = thatFindFinishedStudentCompetitionsByFiltersResponseMessageIfNoSuchCompetitions(competitionParameters);
+
+        //then
+        Assertions.assertThat(response.asPrettyString()).contains(problemDetailMessage);
+    }
+    @Test
+    void thatFindAllFinishedStudentCompetitionsResponseMessageIfNoSuchCompetitions() {
+        //given
+        Student student = StudentDomainTestData.studentToSave1();
+
+        String problemDetailMessage = "There is no finished competitions in which You participated!";
+
+        //when
+        Response response
+                = thatFindAllFinishedStudentCompetitionsResponseMessageIfNoCompetitions(student.pesel());
 
         //then
         Assertions.assertThat(response.asPrettyString()).contains(problemDetailMessage);

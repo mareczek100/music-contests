@@ -36,7 +36,8 @@ import static mareczek100.musiccontests.api.controller.rest_controller.StudentRe
 public class StudentRestController implements ControllerRestSupport {
 
     public static final String STUDENT_REST_MAIN_PAGE = "/api/student";
-    public static final String FIND_STUDENT_COMPETITIONS = "/competitions/student";
+    public static final String FIND_STUDENT_COMPETITIONS_BY_FILTERS = "/competitions/student";
+    public static final String FIND_STUDENT_COMPETITIONS = "/competitions/student/all";
 
     private final CompetitionDtoMapper competitionDtoMapper;
     private final CompetitionResultService competitionResultService;
@@ -98,15 +99,17 @@ public class StudentRestController implements ControllerRestSupport {
 
     }
 
-    @GetMapping(FIND_STUDENT_COMPETITIONS)
-    @Operation(summary = "Find competitions in which student participated.")
+    @GetMapping(FIND_STUDENT_COMPETITIONS_BY_FILTERS)
+    @Operation(summary = "Find competitions by filters in which student participated. Date format: yyyy-MM-dd.")
     public ResponseEntity<CompetitionsDto> findFinishedStudentCompetitionsByFilters(
-            @RequestParam("competitionDateFrom") @DateTimeFormat LocalDate competitionDateFrom,
-            @RequestParam("competitionDateTo") @DateTimeFormat LocalDate competitionDateTo,
+            @RequestParam("competitionDateFrom") @DateTimeFormat String dateFrom,
+            @RequestParam("competitionDateTo") @DateTimeFormat String dateTo,
             @RequestParam("competitionCity") String competitionCity,
             @RequestParam("studentPesel") @Valid @Pattern(regexp = "^\\d{11}$") String studentPesel
     )
     {
+        LocalDate competitionDateFrom = LocalDate.parse(dateFrom);
+        LocalDate competitionDateTo = LocalDate.parse(dateTo);
 
         List<CompetitionWithLocationDto> competitionDTOs = competitionResultService.findAllCompetitionResults().stream()
                 .filter(competitionResult -> competitionResult.competition().finished())
@@ -122,6 +125,29 @@ public class StudentRestController implements ControllerRestSupport {
         if (competitionDTOs.isEmpty()){
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
                     "No such finished competitions in which You participated!")).build();
+        }
+
+        CompetitionsDto competitionsDto = CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();
+
+        return ResponseEntity.ok(competitionsDto);
+    }
+    @GetMapping(FIND_STUDENT_COMPETITIONS)
+    @Operation(summary = "Find all competitions in which student participated.")
+    public ResponseEntity<CompetitionsDto> findAllFinishedStudentCompetitions(
+            @RequestParam("studentPesel") @Valid @Pattern(regexp = "^\\d{11}$") String studentPesel
+    )
+    {
+        List<CompetitionWithLocationDto> competitionDTOs = competitionResultService.findAllCompetitionResults().stream()
+                .filter(competitionResult -> competitionResult.competition().finished())
+                .filter(competitionResult ->
+                        BCrypt.checkpw(studentPesel, competitionResult.student().pesel()))
+                .map(CompetitionResult::competition)
+                .map(competitionDtoMapper::mapFromDomainToDto)
+                .toList();
+
+        if (competitionDTOs.isEmpty()){
+            return ResponseEntity.of(ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
+                    "There is no finished competitions in which You participated!")).build();
         }
 
         CompetitionsDto competitionsDto = CompetitionsDto.builder().competitionDtoList(competitionDTOs).build();

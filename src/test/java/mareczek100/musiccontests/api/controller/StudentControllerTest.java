@@ -252,7 +252,7 @@ class StudentControllerTest {
     }
 
     @Test
-    void studentCheckCompetitionResultHomePage() throws Exception {
+    void studentCheckCompetitionResultsHomePage() throws Exception {
         //given
         List<Competition> competitionList = CompetitionDomainTestData.competitionList().stream()
                 .map(competition -> competition.withFinished(true)).toList();
