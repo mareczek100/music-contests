@@ -43,7 +43,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(MUSIC_CONTESTS_AUTHENTICATION + ALL_SUBPAGES).permitAll()
-                                .requestMatchers(MUSIC_CONTESTS_ERROR).authenticated()
+                                .requestMatchers(MUSIC_CONTESTS_ERROR).permitAll()
+                                .requestMatchers(IMAGES + "/error.jpg").permitAll()
                                 .requestMatchers(IMAGES + ALL_SUBPAGES).authenticated()
                                 .requestMatchers(ADMIN_MAIN_PAGE + ALL_SUBPAGES)
                                 .hasAuthority(RoleEntity.RoleName.ADMIN.name())
