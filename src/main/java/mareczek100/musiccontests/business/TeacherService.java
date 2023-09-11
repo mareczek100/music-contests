@@ -5,10 +5,10 @@ import mareczek100.musiccontests.business.dao.HeadmasterRepositoryDAO;
 import mareczek100.musiccontests.business.dao.TeacherRepositoryDAO;
 import mareczek100.musiccontests.domain.MusicSchool;
 import mareczek100.musiccontests.domain.Teacher;
-import mareczek100.musiccontests.infrastructure.security.MusicContestsPortalUserEntity;
 import mareczek100.musiccontests.infrastructure.security.RoleEntity;
 import mareczek100.musiccontests.infrastructure.security.SecurityService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +23,7 @@ public class TeacherService {
     private final HeadmasterRepositoryDAO headmasterRepositoryDAO;
     private final MusicSchoolService musicSchoolService;
     private final SecurityService securityService;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional
@@ -33,15 +34,14 @@ public class TeacherService {
         if (headmasterRepositoryDAO.findHeadmasterByEmail(teacher.email()).isPresent()) {
             return teacherRepositoryDAO.insertTeacher(teacher);
         }
+
         RoleEntity.RoleName teacherRole = RoleEntity.RoleName.TEACHER;
-        MusicContestsPortalUserEntity teacherPortalUserEntity
-                = securityService.setRoleWhileCreateNewPortalUser(teacher.email(), teacher.pesel(), teacherRole);
-        String encodedPesel = teacherPortalUserEntity.getPassword();
+        securityService.setRoleWhileCreateNewPortalUser(teacher.email(), teacher.password(), teacherRole);
+        String encodedPesel = passwordEncoder.encode(teacher.pesel());
+
         MusicSchool musicSchool = teacher.musicSchool();
         if (!musicSchool.musicSchoolId().isEmpty()) {
-            return teacherRepositoryDAO.insertTeacher(teacher
-                    .withMusicSchool(musicSchool)
-                    .withPesel(encodedPesel));
+            return teacherRepositoryDAO.insertTeacher(teacher.withPesel(encodedPesel));
         }
 
         MusicSchool insertedMusicSchool = musicSchoolService.insertMusicSchool(musicSchool);

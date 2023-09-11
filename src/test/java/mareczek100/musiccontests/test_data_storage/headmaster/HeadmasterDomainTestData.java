@@ -13,6 +13,7 @@ public class HeadmasterDomainTestData {
                 .surname("surname")
                 .email("headmaster@music-school.com")
                 .pesel("11111111111")
+                .password("HeadmasterPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .build();
     }
@@ -23,6 +24,7 @@ public class HeadmasterDomainTestData {
                 .surname("surname")
                 .email("headmaster@music-school.com")
                 .pesel("$2a$12$ia8DouTyUNpjcPWUIXWG9.GVHnCMCpEe1Zgnhw8OTd3cy.QFXA/8.")
+                .password("HeadmasterPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .build();
         //11111111111

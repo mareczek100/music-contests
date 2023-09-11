@@ -97,6 +97,7 @@ public class MainPageController {
             @RequestParam("surname") String surname,
             @RequestParam("email") @Email String email,
             @RequestParam("pesel") @Valid @Pattern(regexp = "^\\d{11}$") String pesel,
+            @RequestParam("password") @Valid @Pattern(regexp = "^[A-Z](.{7,})$") String password,
             @RequestParam("role") String role
     )
     {
@@ -107,6 +108,7 @@ public class MainPageController {
                 .surname(surname)
                 .email(email.strip())
                 .pesel(pesel)
+                .password(password)
                 .role(roleName)
                 .build();
 
@@ -138,11 +140,12 @@ public class MainPageController {
     @PostMapping(MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_ACCOUNT_TEACHER)
     public String loginCreateTeacherAccountProcess(
             @Valid @ModelAttribute TeacherDto teacherDto,
+            @Valid @RequestParam ("teacherPassword") String teacherPassword,
             @Valid @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
             Model model
     )
     {
-        TeacherDto insertedTeacherDto = createTeacher(teacherDto, musicSchoolDto);
+        TeacherDto insertedTeacherDto = createTeacher(teacherDto, teacherPassword, musicSchoolDto);
         model.addAttribute("accountCreated", ACCOUNT_CREATED_SUCCESS);
         model.addAttribute("portalUser", insertedTeacherDto);
 
@@ -153,6 +156,7 @@ public class MainPageController {
     public String loginCreateStudentAccountProcess(
             @Valid @ModelAttribute StudentDto studentDto,
             @ModelAttribute("musicSchoolDto") MusicSchoolWithAddressDto musicSchoolDto,
+            @Valid @RequestParam ("studentPassword") String studentPassword,
             @RequestParam("teacherEmail") @Email String teacherEmail,
             Model model
     )
@@ -163,7 +167,7 @@ public class MainPageController {
            studentDto = studentDto.withSecondInstrument("");
         }
 
-        StudentDto insertedStudentDto = createStudent(studentDto, teacherEmail, musicSchoolDto);
+        StudentDto insertedStudentDto = createStudent(studentDto, teacherEmail, studentPassword, musicSchoolDto);
         model.addAttribute("accountCreated", ACCOUNT_CREATED_SUCCESS);
         model.addAttribute("portalUser", insertedStudentDto);
 
@@ -300,6 +304,7 @@ public class MainPageController {
                 .surname(portalUser.getSurname())
                 .email(portalUser.getEmail())
                 .pesel(portalUser.getPesel())
+                .password(portalUser.getPassword())
                 .build();
 
         HeadmasterDto headmasterDto;
@@ -336,6 +341,7 @@ public class MainPageController {
     }
 
     private TeacherDto createTeacher(TeacherDto teacherDto,
+                                     String teacherPassword,
                                      MusicSchoolWithAddressDto musicSchoolDto
     )
     {
@@ -349,7 +355,7 @@ public class MainPageController {
             teacher = teacherDtoMapper.mapFromDtoToDomain(teacherDto.withMusicSchool(musicSchoolDto));
         }
 
-        Teacher insertedTeacher = teacherService.insertTeacher(teacher);
+        Teacher insertedTeacher = teacherService.insertTeacher(teacher.withPassword(teacherPassword));
         return teacherDtoMapper.mapFromDomainToDto(insertedTeacher);
     }
 
@@ -384,6 +390,7 @@ public class MainPageController {
 
     private StudentDto createStudent(StudentDto studentDto,
                                      String teacherEmail,
+                                     String studentPassword,
                                      MusicSchoolWithAddressDto musicSchoolDto
     )
     {
@@ -398,7 +405,10 @@ public class MainPageController {
             student = studentDtoMapper.mapFromDtoToDomain(studentDto.withMusicSchool(musicSchoolDto));
         }
 
-        Student insertedStudent = studentService.insertStudent(student.withTeacher(teacherByEmail));
+        Student insertedStudent = studentService.insertStudent(student
+                .withTeacher(teacherByEmail)
+                .withPassword(studentPassword)
+        );
         return studentDtoMapper.mapFromDomainToDto(insertedStudent);
     }
 }

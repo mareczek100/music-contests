@@ -10,6 +10,8 @@ import mareczek100.musiccontests.api.dto.dto_class_support.CompetitionResultList
 import mareczek100.musiccontests.api.dto.dto_rest_support.*;
 import mareczek100.musiccontests.api.dto.mapper.*;
 import mareczek100.musiccontests.business.*;
+import mareczek100.musiccontests.business.dao.HeadmasterRepositoryDAO;
+import mareczek100.musiccontests.business.dao.TeacherRepositoryDAO;
 import mareczek100.musiccontests.domain.*;
 import mareczek100.musiccontests.test_data_storage.application_form.ApplicationFormDomainTestData;
 import mareczek100.musiccontests.test_data_storage.application_form.ApplicationFormDtoTestData;
@@ -45,6 +47,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static mareczek100.musiccontests.api.controller.rest_controller.HeadmasterRestController.*;
 import static mareczek100.musiccontests.api.dto.CompetitionWithLocationDto.DATE_TIME_FORMAT;
@@ -62,9 +65,13 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
     @MockBean
     private final TeacherService teacherService;
     @MockBean
+    private final TeacherRepositoryDAO teacherRepositoryDAO;
+    @MockBean
     private final TeacherDtoMapper teacherDtoMapper;
     @MockBean
     private final HeadmasterService headmasterService;
+    @MockBean
+    private final HeadmasterRepositoryDAO headmasterRepositoryDAO;
     @MockBean
     private final HeadmasterDtoMapper headmasterDtoMapper;
     @MockBean
@@ -93,8 +100,10 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
         Assertions.assertNotNull(competitionService);
         Assertions.assertNotNull(competitionDtoMapper);
         Assertions.assertNotNull(teacherService);
+        Assertions.assertNotNull(teacherRepositoryDAO);
         Assertions.assertNotNull(teacherDtoMapper);
         Assertions.assertNotNull(headmasterService);
+        Assertions.assertNotNull(headmasterRepositoryDAO);
         Assertions.assertNotNull(headmasterDtoMapper);
         Assertions.assertNotNull(studentService);
         Assertions.assertNotNull(studentDtoMapper);
@@ -289,10 +298,12 @@ class HeadmasterRestControllerTest implements ControllerRestSupport {
         Teacher headmasterTeacherSaved1 = HeadmasterDomainTestData.headmasterTeacherSaved1().withInstrument(instrumentName);
 
         //when
-        Mockito.when(headmasterService.findHeadmasterByEmail(headmasterEmail))
-                .thenReturn(headmaster);
-        Mockito.when(teacherService.findAllTeachers())
-                .thenReturn(Collections.emptyList());
+        Mockito.when(headmasterService.findHeadmasterByEmail(headmasterEmail)).thenReturn(headmaster);
+        Mockito.when(teacherService.findAllTeachers()).thenReturn(Collections.emptyList());
+        Mockito.when(headmasterRepositoryDAO.findHeadmasterByEmail(headmasterTeacherToSave1.email()))
+                        .thenReturn(Optional.of(headmaster));
+        Mockito.when(teacherRepositoryDAO.insertTeacher(headmasterTeacherToSave1))
+                        .thenReturn(headmasterTeacherSaved1);
         Mockito.when(teacherService.insertTeacher(headmasterTeacherToSave1))
                 .thenReturn(headmasterTeacherSaved1);
         Mockito.when(teacherDtoMapper.mapFromDomainToDto(headmasterTeacherSaved1))

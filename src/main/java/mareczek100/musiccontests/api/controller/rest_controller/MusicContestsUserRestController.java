@@ -3,6 +3,7 @@ package mareczek100.musiccontests.api.controller.rest_controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.api.dto.HeadmasterDto;
 import mareczek100.musiccontests.api.dto.MusicSchoolWithAddressDto;
@@ -59,33 +60,36 @@ public class MusicContestsUserRestController  {
     @PostMapping(CREATE_HEADMASTER)
     @Operation(summary = "Create headmaster account.")
     public ResponseEntity<HeadmasterDto> createHeadmaster(
-            @RequestBody @Valid HeadmasterDto headmasterDto
+            @RequestBody @Valid HeadmasterDto headmasterDto,
+            @RequestParam("password") @Valid @Pattern(regexp = "^[A-Z](.{7,})$") String password
     )
     {
         Headmaster headmaster = headmasterDtoMapper.mapFromDtoToDomain(headmasterDto);
-        Headmaster insertedHeadmaster = headmasterService.insertHeadmaster(headmaster);
+        Headmaster insertedHeadmaster = headmasterService.insertHeadmaster(headmaster.withPassword(password));
         HeadmasterDto insertedHeadmasterDto = headmasterDtoMapper.mapFromDomainToDto(insertedHeadmaster);
         return ResponseEntity.status(HttpStatus.CREATED).body(insertedHeadmasterDto);
     }
     @PostMapping(CREATE_TEACHER)
     @Operation(summary = "Create teacher account.")
     public ResponseEntity<TeacherDto> createTeacher(
-            @RequestBody @Valid TeacherDto teacherDto
+            @RequestBody @Valid TeacherDto teacherDto,
+            @RequestParam("password") @Valid @Pattern(regexp = "^[A-Z](.{7,})$") String password
     )
     {
         Teacher teacher = teacherDtoMapper.mapFromDtoToDomain(teacherDto);
-        Teacher insertedTeacher = teacherService.insertTeacher(teacher);
+        Teacher insertedTeacher = teacherService.insertTeacher(teacher.withPassword(password));
         TeacherDto insertedTeacherDto = teacherDtoMapper.mapFromDomainToDto(insertedTeacher);
         return ResponseEntity.status(HttpStatus.CREATED).body(insertedTeacherDto);
     }
     @PostMapping(CREATE_STUDENT)
     @Operation(summary = "Create student account.")
     public ResponseEntity<StudentDto> createStudent(
-            @RequestBody @Valid StudentDto studentDto
+            @RequestBody @Valid StudentDto studentDto,
+            @RequestParam("password") @Valid @Pattern(regexp = "^[A-Z](.{7,})$") String password
     )
     {
         Student student = studentDtoMapper.mapFromDtoToDomain(studentDto);
-        Student insertedStudent = studentService.insertStudent(student);
+        Student insertedStudent = studentService.insertStudent(student.withPassword(password));
         StudentDto insertedStudentDto = studentDtoMapper.mapFromDomainToDto(insertedStudent);
         return ResponseEntity.status(HttpStatus.CREATED).body(insertedStudentDto);
     }

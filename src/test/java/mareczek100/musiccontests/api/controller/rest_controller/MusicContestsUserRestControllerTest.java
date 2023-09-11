@@ -120,6 +120,7 @@ class MusicContestsUserRestControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(
                                 MUSIC_CONTESTS_USER_REST_MAIN_PAGE + CREATE_HEADMASTER)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("password", headmasterToSave1.password())
                         .content(headmasterToSaveDtoJson))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
@@ -159,6 +160,7 @@ class MusicContestsUserRestControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(
                                 MUSIC_CONTESTS_USER_REST_MAIN_PAGE + CREATE_TEACHER)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("password", teacherToSave1.password())
                         .content(teacherToSaveDtoJson))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
@@ -198,6 +200,7 @@ class MusicContestsUserRestControllerTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(
                                 MUSIC_CONTESTS_USER_REST_MAIN_PAGE + CREATE_STUDENT)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("password", studentToSave1.password())
                         .content(studentToSaveDtoJson))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())

@@ -168,6 +168,7 @@ class MainPageControllerTest {
         multiValueMap.add("surname", headmasterDtoToSave.surname());
         multiValueMap.add("email", headmasterDtoToSave.email());
         multiValueMap.add("pesel", headmasterDtoToSave.pesel());
+        multiValueMap.add("password", "ValidPassword");
         multiValueMap.add("role", RoleEntity.RoleName.HEADMASTER.name());
 
         //when
@@ -211,6 +212,7 @@ class MainPageControllerTest {
                 .surname("surname")
                 .email("teacher.email@email.com")
                 .pesel("01234567890")
+                .password("ValidPassword")
                 .role(RoleEntity.RoleName.TEACHER)
                 .build();
 
@@ -219,6 +221,7 @@ class MainPageControllerTest {
         multiValueMap.add("surname", portalUserDto.getSurname());
         multiValueMap.add("email", portalUserDto.getEmail());
         multiValueMap.add("pesel", portalUserDto.getPesel());
+        multiValueMap.add("password", portalUserDto.getPassword());
         multiValueMap.add("role", portalUserDto.getRole().name());
 
         //when
@@ -258,6 +261,7 @@ class MainPageControllerTest {
         TeacherDto teacherDtoSaved = TeacherDtoTestData.teacherDtoSaved1();
         MusicSchool musicSchoolExisted = MusicSchoolDomainTestData.musicSchoolSaved1();
         String musicSchoolId = musicSchoolExisted.musicSchoolId();
+        String teacherPassword = "TeacherPassword";
 
         //when
         Mockito.when(musicSchoolService.findMusicSchoolById(musicSchoolId)).thenReturn(musicSchoolExisted);
@@ -270,6 +274,7 @@ class MainPageControllerTest {
         //then
         mockMvc.perform(post(
                         MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_ACCOUNT_TEACHER)
+                        .param("teacherPassword", teacherPassword)
                         .flashAttr("musicSchoolDto", musicSchoolDto)
                         .flashAttr("teacherDto", teacherDtoToSave)
                         .contentType(MediaType.TEXT_HTML))
@@ -295,6 +300,7 @@ class MainPageControllerTest {
                 .surname("surname")
                 .email("teacher.email@email.com")
                 .pesel("01234567890")
+                .password("ValidPassword")
                 .role(RoleEntity.RoleName.STUDENT)
                 .build();
 
@@ -303,6 +309,7 @@ class MainPageControllerTest {
         multiValueMap.add("surname", portalUserDto.getSurname());
         multiValueMap.add("email", portalUserDto.getEmail());
         multiValueMap.add("pesel", portalUserDto.getPesel());
+        multiValueMap.add("password", portalUserDto.getPassword());
         multiValueMap.add("role", portalUserDto.getRole().name());
 
         //when
@@ -359,6 +366,7 @@ class MainPageControllerTest {
         StudentDto studentDtoSaved = StudentDtoTestData.studentDtoSaved1();
         MusicSchool musicSchoolExisted = MusicSchoolDomainTestData.musicSchoolSaved1();
         String musicSchoolId = musicSchoolExisted.musicSchoolId();
+        String studentPassword = "StudentPassword";
 
         //when
         Mockito.when(teacherService.findTeacherByEmail(teacherEmail)).thenReturn(teacher);
@@ -373,6 +381,7 @@ class MainPageControllerTest {
         mockMvc.perform(post(
                         MUSIC_CONTESTS_AUTHENTICATION + MUSIC_CONTESTS_ACCOUNT_STUDENT)
                         .param("teacherEmail", teacherEmail)
+                        .param("studentPassword", studentPassword)
                         .flashAttr("musicSchoolDto", musicSchoolDto)
                         .flashAttr("studentDto", studentDtoToSave)
                         .contentType(MediaType.TEXT_HTML))

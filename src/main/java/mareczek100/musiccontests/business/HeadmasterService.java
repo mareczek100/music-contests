@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import mareczek100.musiccontests.business.dao.HeadmasterRepositoryDAO;
 import mareczek100.musiccontests.domain.Headmaster;
 import mareczek100.musiccontests.domain.MusicSchool;
-import mareczek100.musiccontests.infrastructure.security.MusicContestsPortalUserEntity;
 import mareczek100.musiccontests.infrastructure.security.RoleEntity;
 import mareczek100.musiccontests.infrastructure.security.SecurityService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +22,7 @@ public class HeadmasterService {
     private final HeadmasterRepositoryDAO headmasterRepositoryDAO;
     private final MusicSchoolService musicSchoolService;
     private final SecurityService securityService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Headmaster insertHeadmaster(Headmaster headmaster)
@@ -41,9 +42,9 @@ public class HeadmasterService {
         }
 
         RoleEntity.RoleName headmasterRole = RoleEntity.RoleName.HEADMASTER;
-        MusicContestsPortalUserEntity headmasterPortalUserEntity
-                = securityService.setRoleWhileCreateNewPortalUser(headmaster.email(), headmaster.pesel(), headmasterRole);
-        String encodedPesel = headmasterPortalUserEntity.getPassword();
+        securityService.setRoleWhileCreateNewPortalUser(headmaster.email(), headmaster.password(), headmasterRole);
+
+        String encodedPesel = passwordEncoder.encode(headmaster.pesel());
 
         if (!musicSchool.musicSchoolId().isEmpty()) {
             return headmasterRepositoryDAO.insertHeadmaster(headmaster

@@ -18,6 +18,7 @@ public class StudentDomainTestData {
                 .surname("surname1")
                 .email("student1@music-school.com")
                 .pesel("13333333333")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -35,6 +36,7 @@ public class StudentDomainTestData {
                 .surname("surname1")
                 .email("student1@music-school.com")
                 .pesel("$2a$12$/iK7.k0Weo3rpCdRlvaDouun/6nHI75KTPVMptxeg8KY3ov.vqTvC")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -43,7 +45,7 @@ public class StudentDomainTestData {
                 .secondInstrument("obój")
                 .teacher(TeacherDomainTestData.teacherSaved1())
                 .build();
-        //pesel 13333333333
+        //13333333333
     }
 
     public static Student studentToSave2() {
@@ -53,6 +55,7 @@ public class StudentDomainTestData {
                 .surname("surname2")
                 .email("student2@music-school.com")
                 .pesel("33333333332")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -70,6 +73,7 @@ public class StudentDomainTestData {
                 .surname("surname2")
                 .email("student2@music-school.com")
                 .pesel("$2a$12$b/IcsSSIyzsDNR93EhzElutbCoV7b7fZScZTVEfs6lss7NhiHdjIC")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -88,6 +92,7 @@ public class StudentDomainTestData {
                 .surname("surname3")
                 .email("student3@music-school.com")
                 .pesel("33333333333")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -105,6 +110,7 @@ public class StudentDomainTestData {
                 .surname("surname3")
                 .email("student3@music-school.com")
                 .pesel("$2a$12$X8YYtELB8O0CKBMhWgT4cOiYsA4KMy3TUQOwdy8hIDd077Bq6mHJS")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -123,6 +129,7 @@ public class StudentDomainTestData {
                 .surname("surname4")
                 .email("student4@music-school.com")
                 .pesel("43333333333")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -140,6 +147,7 @@ public class StudentDomainTestData {
                 .surname("surname4")
                 .email("student4@music-school.com")
                 .pesel("$2a$12$JOvKXxmRzgI5EvUsbGhCs.1y2HJIwTPpxSO9QdbPaYiAsha.sMyba")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -158,6 +166,7 @@ public class StudentDomainTestData {
                 .surname("surname5")
                 .email("student5@music-school.com")
                 .pesel("53333333333")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)
@@ -175,6 +184,7 @@ public class StudentDomainTestData {
                 .surname("surname5")
                 .email("student5@music-school.com")
                 .pesel("$2a$12$4Dh/bAeEus0eJyv9/SAZ/OOCMVLstIvZdLjD.emdh8J/oCIGfrXu.")
+                .password("StudentPassword")
                 .classYear(ClassLevel.FIRST)
                 .educationDuration(EducationProgram.FOUR_YEAR)
                 .musicSchoolDegree(Degree.FIRST)

@@ -20,6 +20,9 @@ public class MusicContestsPortalUserDto {
     @Pattern(regexp = "^\\d{11}$")
     private String pesel;
 
+    @Pattern(regexp = "^[A-Z](.{7,})$")
+    private String password;
+
     private RoleEntity.RoleName role;
 
 }

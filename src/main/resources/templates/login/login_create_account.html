@@ -73,9 +73,19 @@
             <div class="invalid-feedback">Wybierz swoją szkołę, jeśli znajduje się na liście.</div>
         </div>
     </div><p>
-        <div class="text-center">
+    <div class="text-center col-md-4 offset-md-4">
+    <div>
+        <label for="validationPassword" class="form-label">Hasło do konta</label>
+        <input type="text" th:name="password" class="form-control" id="validationPassword"
+               placeholder="Tutaj wpisz swoje hasło" required>
+        <div class="valid-feedback">Upewnij się, że hasło zaczyna się od wielkiej litery i ma długość min. 8 znaków.</div>
+        <div class="invalid-feedback">Podaj hasło, dzięki któremu będziesz mógł się logować na portalu
+            (Musi posiadać minimum 8 znaków i zaczynać się od wielkiej litery!).</div>
+    </div><br>
+        <div>
             <button class="btn btn-primary" type="submit">Przechodzę dalej!</button>
         </div>
+    </div>
 </form>
 </body>
 </html>

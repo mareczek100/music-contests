@@ -53,6 +53,7 @@ public class MusicContestsUserIT extends RestAssuredITConfig implements MusicCon
     void thatCreateHeadmasterWorksCorrectly() {
         //given
         HeadmasterDto headmasterDto = HeadmasterDtoTestData.headmasterDtoToSave1();
+        String password = "Password";
         List<Headmaster> allHeadmastersBefore = headmasterService.findAllHeadmasters();
         MusicSchoolWithAddressDto schoolDtoToSave = MusicSchoolDtoTestData.musicSchoolDtoToSave1();
         MusicSchoolWithAddressDto musicSchoolWithAddress
@@ -60,7 +61,7 @@ public class MusicContestsUserIT extends RestAssuredITConfig implements MusicCon
 
         //when
         HeadmasterDto insertedHeadmasterDto
-                = createHeadmaster(headmasterDto.withMusicSchool(musicSchoolWithAddress));
+                = createHeadmaster(headmasterDto.withMusicSchool(musicSchoolWithAddress), password);
         Headmaster insertedHeadmaster = headmasterDtoMapper.mapFromDtoToDomain(insertedHeadmasterDto);
         List<Headmaster> allHeadmastersAfter = headmasterService.findAllHeadmasters();
 
@@ -76,12 +77,14 @@ public class MusicContestsUserIT extends RestAssuredITConfig implements MusicCon
     void thatCreateTeacherWorksCorrectly() {
         //given
         TeacherDto teacherDto = TeacherDtoTestData.teacherDtoToSave1();
+        String password = "Password";
         List<Teacher> allTeachersBefore = teacherService.findAllTeachers();
         MusicSchoolWithAddressDto musicSchoolWithAddressDto
                 = findAllMusicSchools().musicSchoolDtoList().stream().findAny().orElseThrow();
 
         //when
-        TeacherDto insertedTeacherDto = createTeacher(teacherDto.withMusicSchool(musicSchoolWithAddressDto));
+        TeacherDto insertedTeacherDto
+                = createTeacher(teacherDto.withMusicSchool(musicSchoolWithAddressDto), password);
         Teacher insertedTeacher = teacherDtoMapper.mapFromDtoToDomain(insertedTeacherDto);
         List<Teacher> allTeachersAfter = teacherService.findAllTeachers();
 
@@ -95,16 +98,18 @@ public class MusicContestsUserIT extends RestAssuredITConfig implements MusicCon
     {
         //given
         StudentDto studentDto = StudentDtoTestData.studentDtoToSave1();
+        String password = "Password";
         List<Student> allStudentsBefore = studentService.findAllStudents();
         MusicSchoolWithAddressDto musicSchoolWithAddressDto
                 = findAllMusicSchools().musicSchoolDtoList().stream().findAny().orElseThrow();
         TeacherDto teacherDto = TeacherDtoTestData.teacherDtoToSave1();
-        TeacherDto insertedTeacherDto = createTeacher(teacherDto.withMusicSchool(musicSchoolWithAddressDto));
+        TeacherDto insertedTeacherDto
+                = createTeacher(teacherDto.withMusicSchool(musicSchoolWithAddressDto), password);
 
         //when
         StudentDto insertedStudentDto = createStudent(studentDto
                 .withMusicSchool(musicSchoolWithAddressDto)
-                .withTeacher(insertedTeacherDto));
+                .withTeacher(insertedTeacherDto), password);
         Student insertedStudent = studentDtoMapper.mapFromDtoToDomain(insertedStudentDto);
         List<Student> allStudentsAfter = studentService.findAllStudents();
 

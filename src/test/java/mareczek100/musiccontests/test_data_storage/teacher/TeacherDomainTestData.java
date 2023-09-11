@@ -14,6 +14,7 @@ public class TeacherDomainTestData {
                 .surname("surname1")
                 .email("teacher1@music-school.com")
                 .pesel("12222222222")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("fortepian")
                 .build();
@@ -26,6 +27,7 @@ public class TeacherDomainTestData {
                 .surname("surname1")
                 .email("teacher1@music-school.com")
                 .pesel("$2a$12$vLrVnyg4X6iKXsH19Ah6qOpJWu5VP3UQzFOhhV/9c5Cd7Dz948ANO")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("fortepian")
                 .build();
@@ -39,6 +41,7 @@ public class TeacherDomainTestData {
                 .surname("surname2")
                 .email("teacher2@music-school.com")
                 .pesel("22222222222")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("perkusja")
                 .build();
@@ -51,6 +54,7 @@ public class TeacherDomainTestData {
                 .surname("surname2")
                 .email("teacher2@music-school.com")
                 .pesel("$2a$12$yy4SBwg.qgW5grrIN9dibun3PyLgL/ArNuIyk4mcLbkD/eMTOujqS")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("perkusja")
                 .build();
@@ -64,6 +68,7 @@ public class TeacherDomainTestData {
                 .surname("surname3")
                 .email("teacher3@music-school.com")
                 .pesel("32222222222")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("ksylofon")
                 .build();
@@ -76,6 +81,7 @@ public class TeacherDomainTestData {
                 .surname("surname3")
                 .email("teacher3@music-school.com")
                 .pesel("$2a$12$kAcFf4iaEJF/8fFRwzW/8e18cgWOFLjerTKd8zfQtIbla/NYJrm5y")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("ksylofon")
                 .build();
@@ -89,6 +95,7 @@ public class TeacherDomainTestData {
                 .surname("surname4")
                 .email("teacher4@music-school.com")
                 .pesel("42222222222")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("cymbały")
                 .build();
@@ -101,6 +108,7 @@ public class TeacherDomainTestData {
                 .surname("surname4")
                 .email("teacher4@music-school.com")
                 .pesel("$2a$12$xlhA1mKsr6WCD3URQzrpJO.uikc85sUqZbEQw4tGbyqKBrUTJvqJa")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("cymbały")
                 .build();
@@ -114,6 +122,7 @@ public class TeacherDomainTestData {
                 .surname("surname5")
                 .email("teacher5@music-school.com")
                 .pesel("52222222222")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("gitara")
                 .build();
@@ -126,6 +135,7 @@ public class TeacherDomainTestData {
                 .surname("surname5")
                 .email("teacher5@music-school.com")
                 .pesel("$2a$12$RGu/loqWswRuaQaVy6PZkeAKeRDupatBjVZtVj4cMiI3rcaDijRQK")
+                .password("TeacherPassword")
                 .musicSchool(MusicSchoolDomainTestData.musicSchoolSaved1())
                 .instrument("gitara")
                 .build();

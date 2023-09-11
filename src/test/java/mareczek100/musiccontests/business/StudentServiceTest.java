@@ -1,12 +1,10 @@
 package mareczek100.musiccontests.business;
 
 import mareczek100.musiccontests.business.dao.StudentRepositoryDAO;
-import mareczek100.musiccontests.domain.MusicSchool;
 import mareczek100.musiccontests.domain.Student;
 import mareczek100.musiccontests.infrastructure.security.MusicContestsPortalUserEntity;
 import mareczek100.musiccontests.infrastructure.security.RoleEntity;
 import mareczek100.musiccontests.infrastructure.security.SecurityService;
-import mareczek100.musiccontests.test_data_storage.music_school.MusicSchoolDomainTestData;
 import mareczek100.musiccontests.test_data_storage.student.StudentDomainTestData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
@@ -32,6 +28,8 @@ class StudentServiceTest {
     private MusicSchoolService musicSchoolService;
     @Mock
     private SecurityService securityService;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
     private StudentService studentService;
 
@@ -40,30 +38,32 @@ class StudentServiceTest {
         Assertions.assertNotNull(studentRepositoryDAO);
         Assertions.assertNotNull(musicSchoolService);
         Assertions.assertNotNull(securityService);
+        Assertions.assertNotNull(passwordEncoder);
         Assertions.assertNotNull(studentService);
     }
 
     @Test
     void insertStudent() {
         //given
-        String newStudentPesel = "new pesel number";
-        MusicSchool musicSchool = MusicSchoolDomainTestData.musicSchoolSaved2();
-        Student studentToSave = StudentDomainTestData.studentToSave1().withPesel(newStudentPesel);
+        Student studentToSave = StudentDomainTestData.studentToSave1();
         Student studentSaved = StudentDomainTestData.studentSaved1();
-        List<Student> studentList = List.of(studentSaved.withMusicSchool(musicSchool));
+        String encodedPesel = studentSaved.pesel();
+        List<Student> studentList = Collections.emptyList();
+
         RoleEntity.RoleName studentRole = RoleEntity.RoleName.STUDENT;
         MusicContestsPortalUserEntity studentPortalUserEntity
                 = MusicContestsPortalUserEntity.builder()
                 .userId(UUID.fromString("0c7e85f7-4fe6-470b-8247-2d35e22809fb"))
                 .userName(studentToSave.email())
-                .password(studentToSave.pesel())
+                .password(studentToSave.password())
                 .build();
 
         //when
         Mockito.when(studentRepositoryDAO.findAllStudents()).thenReturn(studentList);
         Mockito.when(securityService.setRoleWhileCreateNewPortalUser(
-                studentToSave.email(), studentToSave.pesel(), studentRole)).thenReturn(studentPortalUserEntity);
-        Mockito.when(studentRepositoryDAO.insertStudent(studentToSave))
+                studentToSave.email(), studentToSave.password(), studentRole)).thenReturn(studentPortalUserEntity);
+        Mockito.when(passwordEncoder.encode(studentToSave.pesel())).thenReturn(encodedPesel);
+        Mockito.when(studentRepositoryDAO.insertStudent(studentToSave.withPesel(encodedPesel)))
                 .thenReturn(studentSaved);
         Student insertedStudent = studentService.insertStudent(studentToSave);
 

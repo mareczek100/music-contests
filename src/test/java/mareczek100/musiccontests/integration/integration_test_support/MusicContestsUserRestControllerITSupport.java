@@ -15,10 +15,11 @@ public interface MusicContestsUserRestControllerITSupport {
 
     RequestSpecification requestSpecification();
 
-    default HeadmasterDto createHeadmaster(HeadmasterDto headmasterDto){
+    default HeadmasterDto createHeadmaster(HeadmasterDto headmasterDto, String password){
         return requestSpecification()
                 .given()
                 .body(headmasterDto)
+                .queryParam("password", password)
                 .when()
                 .post(MUSIC_CONTESTS_USER_REST_MAIN_PAGE + CREATE_HEADMASTER)
                 .then()
@@ -29,10 +30,11 @@ public interface MusicContestsUserRestControllerITSupport {
                 .extract()
                 .as(HeadmasterDto.class);
     }
-    default TeacherDto createTeacher(TeacherDto teacherDto){
+    default TeacherDto createTeacher(TeacherDto teacherDto, String password){
         return requestSpecification()
                 .given()
                 .body(teacherDto)
+                .queryParam("password", password)
                 .when()
                 .post(MUSIC_CONTESTS_USER_REST_MAIN_PAGE + CREATE_TEACHER)
                 .then()
@@ -43,10 +45,11 @@ public interface MusicContestsUserRestControllerITSupport {
                 .extract()
                 .as(TeacherDto.class);
     }
-    default StudentDto createStudent(StudentDto studentDto){
+    default StudentDto createStudent(StudentDto studentDto, String password){
         return requestSpecification()
                 .given()
                 .body(studentDto)
+                .queryParam("password", password)
                 .when()
                 .post(MUSIC_CONTESTS_USER_REST_MAIN_PAGE + CREATE_STUDENT)
                 .then()

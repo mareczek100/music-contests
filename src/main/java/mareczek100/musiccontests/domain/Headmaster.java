@@ -12,6 +12,7 @@ public record Headmaster(String headmasterId,
                          String surname,
                          String email,
                          String pesel,
+                         String password,
                          MusicSchool musicSchool,
                          Set<Competition> competitions) {
 }

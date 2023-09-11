@@ -2,12 +2,10 @@ package mareczek100.musiccontests.business;
 
 import mareczek100.musiccontests.business.dao.HeadmasterRepositoryDAO;
 import mareczek100.musiccontests.domain.Headmaster;
-import mareczek100.musiccontests.domain.MusicSchool;
 import mareczek100.musiccontests.infrastructure.security.MusicContestsPortalUserEntity;
 import mareczek100.musiccontests.infrastructure.security.RoleEntity;
 import mareczek100.musiccontests.infrastructure.security.SecurityService;
 import mareczek100.musiccontests.test_data_storage.headmaster.HeadmasterDomainTestData;
-import mareczek100.musiccontests.test_data_storage.music_school.MusicSchoolDomainTestData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,11 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
 class HeadmasterServiceTest {
@@ -32,6 +28,9 @@ class HeadmasterServiceTest {
     private MusicSchoolService musicSchoolService;
     @Mock
     private SecurityService securityService;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @InjectMocks
     private HeadmasterService headmasterService;
 
@@ -40,17 +39,17 @@ class HeadmasterServiceTest {
         Assertions.assertNotNull(headmasterRepositoryDAO);
         Assertions.assertNotNull(musicSchoolService);
         Assertions.assertNotNull(securityService);
+        Assertions.assertNotNull(passwordEncoder);
         Assertions.assertNotNull(headmasterService);
     }
 
     @Test
     void insertHeadmaster() {
         //given
-        String newHeadmasterPesel = "new pesel number";
-        MusicSchool musicSchool = MusicSchoolDomainTestData.musicSchoolSaved2();
-        Headmaster headmasterToSave = HeadmasterDomainTestData.headmasterToSave1().withPesel(newHeadmasterPesel);
+        Headmaster headmasterToSave = HeadmasterDomainTestData.headmasterToSave1();
         Headmaster headmasterSaved = HeadmasterDomainTestData.headmasterSaved1();
-        List<Headmaster> headmasterList = List.of(headmasterSaved.withMusicSchool(musicSchool));
+        String encodedPesel = headmasterSaved.pesel();
+        List<Headmaster> headmasterList = Collections.emptyList();
         RoleEntity.RoleName headmasterRole = RoleEntity.RoleName.HEADMASTER;
         MusicContestsPortalUserEntity headmasterPortalUserEntity
                 = MusicContestsPortalUserEntity.builder()
@@ -62,8 +61,9 @@ class HeadmasterServiceTest {
         //when
         Mockito.when(headmasterRepositoryDAO.findAllHeadmasters()).thenReturn(headmasterList);
         Mockito.when(securityService.setRoleWhileCreateNewPortalUser(
-                headmasterToSave.email(), headmasterToSave.pesel(), headmasterRole)).thenReturn(headmasterPortalUserEntity);
-        Mockito.when(headmasterRepositoryDAO.insertHeadmaster(headmasterToSave))
+                headmasterToSave.email(), headmasterToSave.password(), headmasterRole)).thenReturn(headmasterPortalUserEntity);
+        Mockito.when(passwordEncoder.encode(headmasterToSave.pesel())).thenReturn(encodedPesel);
+        Mockito.when(headmasterRepositoryDAO.insertHeadmaster(headmasterToSave.withPesel(encodedPesel)))
                 .thenReturn(headmasterSaved);
         Headmaster insertedHeadmaster = headmasterService.insertHeadmaster(headmasterToSave);
 
